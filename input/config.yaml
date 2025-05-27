@@ -7,7 +7,7 @@ folders:
 files:
   source_financial_indicators: financial_indicators.csv
   source_largest_companies: largest_companies.csv
-  merged_table: merged_table
+  merged_table: merged_table.csv
 
 largest_company_dataset:
   Rank: Rank

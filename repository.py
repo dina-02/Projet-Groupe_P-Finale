@@ -51,8 +51,6 @@ class Repository:
         self.merged_data = pd.read_csv(merged_file, sep=',')
         self.largest_companies = pd.read_csv(largest_file, sep=',')
 
-        print(f"merged_data.shape = {self.merged_data.shape}")
-        print(f"largest_companies.shape = {self.largest_companies.shape}")
 
 if __name__ == "__main__":
     import os
@@ -63,10 +61,6 @@ if __name__ == "__main__":
     config = get_serialized_data(config_path)
 
     repo = Repository(config=config, output_path="output")
-
     repo.get_data()
-
-    print("✅ Merged table:")
-    print(repo.merged_data.head(), end="\n\n")
 
 

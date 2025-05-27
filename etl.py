@@ -99,7 +99,7 @@ class Etl:
         os.makedirs(output_folder, exist_ok=True)
 
         for name, df in export.items():
-            csv_path = os.path.join(output_folder, f"{name}.csv")
+            csv_path = os.path.join(output_folder, f"{name}")
             df.to_csv(csv_path, index=False)
             print(f" Exporté vers CSV : {csv_path}")
 
