@@ -1,0 +1,17 @@
+Country,Interest Rate (%),Inflation Rate (%),Banking Sector Assets (% of GDP),Stock Market Capitalization (% of GDP),Corporate Tax Rate (%),GDP (USD Trillions)
+China,2.5,1.8,280,85,25.0,17.7
+United States,5.25,3.4,215,160,21.0,25.5
+United Kingdom,4.5,2.6,420,120,19.0,3.1
+Japan,-0.1,0.7,350,130,23.2,4.9
+Germany,4.25,2.4,270,65,29.9,4.3
+France,4.0,2.8,250,70,25.8,3.0
+Canada,5.0,3.2,230,75,26.5,2.0
+India,6.5,5.9,160,95,30.0,3.7
+Italy,3.75,1.9,190,50,27.8,2.1
+Spain,3.5,2.0,200,55,25.0,1.6
+Switzerland,1.75,1.2,520,225,14.9,0.8
+Brazil,10.75,3.7,110,55,34.0,2.0
+Russia,16.0,6.8,90,40,20.0,1.8
+South Korea,3.5,3.4,150,105,25.0,1.7
+Australia,4.35,4.1,190,115,30.0,1.9
+Mexico,11.25,5.5,100,50,30.0,1.5

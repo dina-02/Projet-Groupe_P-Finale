@@ -1,0 +1,19 @@
+folders:
+  input_folder: input
+  output_folder: output
+  sqlite_db: output.sqlite
+  sqlite_table: financial_data
+
+files:
+  source_financial_indicators: financial_indicators.csv
+  source_largest_companies: largest_companies.csv
+  merged_table: merged_table
+
+largest_company_dataset:
+  Rank: Rank
+
+etl_main_parameters:
+  to_sqlite: true
+  drop_all_tables: true
+  to_csv: true
+
