@@ -103,24 +103,9 @@ class Etl:
             df.to_csv(csv_path, index=False)
             print(f" Exporté vers CSV : {csv_path}")
 
-    def sort_countries_by_total_assets(self):
-        """
-        merged_table trié en fonction des mean assets (à changer).
-        """
-        if self.df_merged.empty:
-            raise ValueError("Le DataFrame df_merged est vide. Lancez extract() et transform() avant.")
-
-        sorted_df = self.df_merged.sort_values(
-            by="Mean Total Assest in (USD Millions)",  # garder la faute ici??? Prévenir Loane
-            ascending=False
-        )
-
-        return sorted_df
-
 if __name__ == "__main__":
     config = get_config()
     etl = Etl(config=config, input_dir="input", sqlite_path="output/output.sqlite")
     etl.extract()
     etl.transform()
     etl.load()
-

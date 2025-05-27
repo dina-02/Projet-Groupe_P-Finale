@@ -4,16 +4,43 @@ folders:
   sqlite_db: output.sqlite
   sqlite_table: financial_data
 
-files:
+files_csv:
   source_financial_indicators: financial_indicators.csv
   source_largest_companies: largest_companies.csv
   merged_table: merged_table.csv
+
+files_sql:
+  source_financial_indicators: financial_indicators
+  source_largest_companies: largest_companies
+  merged_table: merged_table
 
 largest_company_dataset:
   Rank: Rank
 
 etl_main_parameters:
-  to_sqlite: true
+  to_sqlite: false
   drop_all_tables: true
   to_csv: true
 
+columns:
+  largest_companies:
+    - Rank : Rank
+    - Company : Company
+    - Industry : Industry
+    - Revenue in (USD Million) : Revenue
+    - Net Income in (USD Millions) : Net_Income
+    - Total Assest in (USD Millions) : Total_Asset
+    - Headquarters: Country
+
+  merged_table:
+    - Headquarters: Country
+    - Mean Revenue in (USD Million): Mean_Income
+    - Mean Net Income in (USD Millions): Mean_Income
+    - Mean Total Asset in (USD Millions): Mean_Total_Asset
+    - Interest Rate (%): Interest_Rate
+    - Banking Sector Assets (% of GDP): Banking_Sector_Asset
+    - Corporate Tax Rate (%): Corporate_Tax_Rate
+    - GDP (USD Trillions): GDP
+
+drop_columns_merged_table:
+  - Country
