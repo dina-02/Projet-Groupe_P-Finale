@@ -2,7 +2,7 @@ def summary_statistics_gdp(df):
     """
     Affiche les statistiques descriptives uniquement pour la colonne du PIB.
     """
-    column = "GDP (USD Trillions)"
+    column = "GDP_USD_Trillion"
 
     print(f"\nRésumé statistique pour : {column}")
     print(f"- Moyenne : {df[column].mean()}")
