@@ -17,7 +17,7 @@ class Model:
         self.load_columns()
         self.load_new_columns()
 
-    def load_columns(self):
+    def load_columns(self): #voir comment raccourcir
 
         self.col_merged = self.config['rename_merged_table']
 
@@ -39,7 +39,7 @@ class Model:
         self.col_company = self.col['Company']
         self.col_country = self.col['Headquarters']
 
-    def load_new_columns(self):
+    def load_new_columns(self): #voir comment raccourcir
         self.countries_financial_summary_table = self.config['countries_financial_summary_table']
 
         self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
@@ -52,7 +52,7 @@ class Model:
         self.asset_efficiency = self.firms_financial_summary_table['asset_efficiency']
         self.return_on_assets = self.firms_financial_summary_table['return_on_assets']
 
-    def compute(self):
+    def compute(self): #a voir
         df = self.repo.merged_data.copy()
 
         col_gdp = df[self.col_gdp_merged]

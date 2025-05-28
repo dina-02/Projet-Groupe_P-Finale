@@ -50,7 +50,6 @@ class Main:
                 with st.expander(self.streamlit_widgets_config["expander_data"][selected_dataset]["label"]):
                     st.dataframe(df)
 
-                #dans view
                 if chart_type == "ROA vs Efficiency":
                     seuil_roa = st.slider("Filtrer ROA max", 0, 6000, 1000)
                     seuil_eff = st.slider("Filtrer efficacité max", 0, 6000, 1000)
