@@ -18,7 +18,8 @@ class Main:
 
     def run(self):
         self.repo.get_data()
-        df_merged = self.model.get_new_table()
+        df_get_new_table = self.model.get_new_table()
+        df_get_another_new_table = self.model.get_another_new_table()
 
         data = self.config['data']
 
@@ -43,15 +44,32 @@ class Main:
 
         if go:
 
-            if selected_dataset == 'merged_table':
-                df_plot = self.model.get_inflation_vs_interest()
-                self.view.plotly_inflation_vs_interest(df_plot)
+            # if selected_dataset == 'merged_table':
+            #     df_plot = self.model.get_inflation_vs_interest()
+            #     self.view.plotly_inflation_vs_interest(df_plot)
+            #
+            # exp_df = st.expander(
+            #     self.streamlit_widgets_config["expander_data"]["label"]
+            # )
+            # with st.expander('je commence a fatiguer la'): ##
+            #     st.dataframe(df_merged)
 
-            exp_df = st.expander(
-                self.streamlit_widgets_config["expander_data"]["label"]
-            )
-            with st.expander('je commence a fatiguer la'):
-                st.dataframe(df_merged)
+            if selected_dataset == 'get_new_table':
+                df = self.model.get_new_table()
+
+            elif selected_dataset == 'get_another_new_table':
+                df= self.model.get_another_new_table()
+
+            # exp_df = st.expander(
+            #     self.streamlit_widgets_config["expander_data"]["label"]
+            # )
+                with st.expander('new test'):
+                    st.dataframe(df)
+
+
+
+
+
 
 if __name__ == "__main__":
     app = Main()

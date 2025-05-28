@@ -92,11 +92,11 @@ class Model:
         return df[[self.col_country_merged, 'Average Contribution to Public Finances (% of GDP)']]
 
     def get_return_on_assets(self):
-        df = self.repo.merged_data.copy()
+        df = self.repo.largest_companies.copy()
 
         df['Return on Assets'] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
 
-        return df[[self.col_country, 'Return on Assets']]
+        return df[[self.col_company, 'Return on Assets']]
 
     def get_average_ROA_per_country(self):
         df = self.repo.merged_data.copy()
@@ -122,12 +122,12 @@ class Model:
 
         return df
 
-    def get_another_new_table(self):
+    def get_another_new_table(self): #changer nom
 
         df = self.get_asset_efficiency()
         df2 = self.get_return_on_assets()
 
-        df = df2.merge(df, on=self.col_country)
+        df = df2.merge(df, on=self.col_company)
 
         return df
 

@@ -57,8 +57,8 @@ drop_columns_merged_table:
   - Country
 
 data:
-  merged_table: merged_table.csv
-  largest_companies: largest_companies.csv
+  get_new_table: get_new_table
+  get_another_new_table: get_another_new_table
 
 streamlit:
   settings:
