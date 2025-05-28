@@ -34,6 +34,7 @@ columns:
 
   merged_table:
     - Headquarters: Country
+    - Mean Rank
     - Mean Revenue in (USD Million): Mean_Income
     - Mean Net Income in (USD Millions): Mean_Income
     - Mean Total Asset in (USD Millions): Mean_Total_Asset
@@ -42,5 +43,6 @@ columns:
     - Corporate Tax Rate (%): Corporate_Tax_Rate
     - GDP (USD Trillions): GDP
 
-drop_columns_merged_table:
-  - Country
+drop_columns_largest_companies:
+  - Rank
+

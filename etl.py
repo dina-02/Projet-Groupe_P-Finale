@@ -5,7 +5,7 @@ import pandas as pd
 from constants import config_file
 from helpers import get_serialized_data
 from constants import financial_indicators_path, largest_companies_path
-
+from helpers_export import dataframes_to_db
 
 def get_config():
     config_full_path = os.path.join(os.getcwd(), config_file)
@@ -48,64 +48,62 @@ class Etl:
 
         df = self.df_largest_companies.copy()
 
+        df.drop(self.config['drop_columns_largest_companies'], axis = 1, inplace = True)
+
         df_mean = (df.groupby('Headquarters', as_index = False)
-                                                .mean(numeric_only =True)
-                                                )
+                                                .mean(numeric_only =True))
 
         renamed_columns = {
-            col: f"Mean {col}" for col in df_mean.columns if col != "Headquarters"
-        }
+            col: f'Mean {col}' for col in df_mean.columns if col != 'Headquarters'}
+
         df_mean.rename(columns = renamed_columns, inplace = True)
 
-        df_mean.drop(columns = ['Mean Rank'], inplace=True)
-        self.df_largest_companies_aggregated = df_mean
 
+        self.df_largest_companies_aggregated = df_mean
 
     def merge_data(self):
 
         self.df_merged = pd.merge(
             self.df_largest_companies_aggregated,
             self.df_financial_indicators,
-            how="left",
-            left_on="Headquarters",
-            right_on="Country"
+            how = 'left',
+            left_on = 'Headquarters',
+            right_on = 'Country'
         )
 
-        self.df_merged.drop(columns=['Country'], inplace = True)
+        #self.df_merged.drop(self.config['columns']['drop_columns_merged_table'], inplace = True)
 
-    # def load(self) -> None:
-    #
-    #     export = {
-    #         self.config['files']['merged_table']: self.df_merged,
-    #         self.config['files']['source_largest_companies']: self.df_largest_companies
-    #     }
-    #
-    #     print(self.sqlite_path)
-    #     if self.config["etl_main_parameters"]["to_sqlite"]:
-    #         dataframes_to_db(
-    #             export,
-    #             db_path=self.sqlite_path,
-    #             drop_all_tables=self.config["etl_main_parameters"]["drop_all_tables"],
-    #         )
-    #         print(f"Export file to SQLite: {self.sqlite_path}")
 
     def load(self) -> None:
-        export = {
-            self.config['files']['merged_table']: self.df_merged,
-            self.config['files']['source_largest_companies']: self.df_largest_companies
+
+        export_sql = {
+            self.config['files_sql']['merged_table']: self.df_merged,
+            self.config['files_sql']['source_largest_companies']: self.df_largest_companies
         }
 
-        output_folder = self.config["folders"]["output_folder"]
-        os.makedirs(output_folder, exist_ok=True)
+        export_csv = {
+            self.config['files_csv']['merged_table']: self.df_merged,
+            self.config['files_csv']['source_largest_companies']: self.df_largest_companies
+        }
 
-        for name, df in export.items():
-            csv_path = os.path.join(output_folder, f"{name}")
-            df.to_csv(csv_path, index=False)
-            print(f" Exporté vers CSV : {csv_path}")
+        if self.config['etl_main_parameters']['to_sqlite']:
+            dataframes_to_db(
+                export_sql,
+                db_path=self.sqlite_path,
+                drop_all_tables=self.config['etl_main_parameters']['drop_all_tables'],
+            )
 
-if __name__ == "__main__":
+        if self.config['etl_main_parameters']['to_csv']:
+            output_folder = self.config['folders']['output_folder']
+            os.makedirs(output_folder, exist_ok = True)
+
+            for name, df in export_csv.items():
+                csv_path = os.path.join(output_folder, f'{name}')
+                df.to_csv(csv_path, index = False)
+
+if __name__ == '__main__':
     config = get_config()
-    etl = Etl(config=config, input_dir="input", sqlite_path="output/output.sqlite")
+    etl = Etl(config = config, input_dir = 'input', sqlite_path = 'output/output.sqlite')
     etl.extract()
     etl.transform()
     etl.load()
