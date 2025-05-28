@@ -1,6 +1,8 @@
 import streamlit as st
 import mplfinance as mpf
 import matplotlib.pyplot as plt
+import plotly.express as px
+
 
 class View:
     def __init__(self, config: dict):
@@ -27,15 +29,19 @@ class View:
 
     ## à continuer pour l'export
 
-    def plot_inflation_vs_interest(self, df):
-        fig, ax = plt.subplots()
-        ax.scatter(df[df.columns[0]], df[df.columns[1]], color='blue', marker='o')
+    def plotly_inflation_vs_interest(self, df):
+        fig = px.scatter(
+            df,
+            x=df.columns[0],  # Inflation
+            y=df.columns[1],  # Interest
+            text=df.columns[2],  # Country
+            title="Relation entre inflation et taux d’intérêt",
+            labels={
+                df.columns[0]: "Inflation Rate (%)",
+                df.columns[1]: "Interest Rate (%)"
+            }
+        )
+        fig.update_traces(marker=dict(size=12, color='blue'), textposition='top center')
+        fig.update_layout(width=700, height=500)
 
-        ax.set_xlabel("Inflation Rate (%)")
-        ax.set_ylabel("Interest Rate (%)")
-        ax.set_title("Relation entre inflation et taux d’intérêt")
-
-        for i, label in enumerate(df[df.columns[2]]):
-            ax.annotate(label, (df.iloc[i, 0], df.iloc[i, 1]), fontsize=8)
-
-        st.pyplot(fig)
+        st.plotly_chart(fig)
