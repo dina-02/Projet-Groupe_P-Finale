@@ -96,9 +96,11 @@ class Model:
 
     def get_average_contribution_to_public_finances(self):
         df = self.repo.merged_data.copy()
-        ### *100000 je pense
-        df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] * df[self.col_mean_revenue_merged]) / df[
-                                                self.col_gdp_merged] * 1000000) * 100
+
+        df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] / 100) * df[
+                                                  self.col_mean_revenue_merged]
+                                                      / (df[self.col_gdp_merged] * 1_000_000)
+                                              ) * 100
 
         return df[[self.col_country_merged,self.average_contrib_to_pub_fin]]
 
