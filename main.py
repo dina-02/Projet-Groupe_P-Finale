@@ -12,16 +12,8 @@ if __name__ == "__main__":
     etl.transform()
     etl.load()
 
-    try:
-        sorted_df = etl.sort_countries_by_total_assets()
-        print("Pays triés par actifs totaux moyens (ordre décroissant) :")
-        print(sorted_df)
-    except Exception as e:
-        print("Erreur lors du tri :", e)
 
-print("Pays triés par actifs totaux moyens (ordre décroissant) :")
-print(sorted_df)
-summary_statistics_gdp(sorted_df)
+    sorted_df = etl.sort_countries_by_total_assets()
+    plot_total_assets_by_country(sorted_df)
 
-plot_total_assets_by_country(sorted_df)
 
