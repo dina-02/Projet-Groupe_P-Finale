@@ -111,6 +111,10 @@ class Model:
         df['Average ROA'] = df[[self.col_company, 'Return on Assets']].groupby('Country').mean()
         return df[self.col_country_merged, 'Average ROA']
 
+    def get_inflation_vs_interest(self):
+        df = self.repo.merged_data.copy()
+        return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
+
 
 if __name__ == '__main__':
     from constants import config_file
