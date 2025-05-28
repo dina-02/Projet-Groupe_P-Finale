@@ -45,7 +45,7 @@ class Main:
 
             if selected_dataset == 'merged_table':
                 df_plot = self.model.get_inflation_vs_interest()
-                self.view.plot_inflation_vs_interest(df_plot)
+                self.view.plotly_inflation_vs_interest(df_plot)
 
             exp_df = st.expander(
                 self.streamlit_widgets_config["expander_data"]["label"]
