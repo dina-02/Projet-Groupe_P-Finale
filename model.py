@@ -109,6 +109,12 @@ class Model:
         df = self.repo.merged_data.copy()
         return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
 
+    def get_roa_vs_efficiency(self):
+        df = self.repo.largest_companies.copy()
+        df['Return on Assets'] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
+        df['Asset Efficiency'] = df[self.col_revenue] / df[self.col_total_asset]
+        return df[[self.col_company, 'Return on Assets', 'Asset Efficiency']]
+
     def get_new_table(self):  #changer le nom je manque d'inspi
 
         df2 = self.get_revenue_to_gdp()

@@ -70,7 +70,7 @@ streamlit:
       label: 'inaf'
     ticker_radio:
       label: Ticker
-      items: ['a voir', 'a voir2', 'a voir3', 'a voir4']
+      items: ['a voir', 'ROA vs Efficiency', 'a voir3', 'a voir4']
     start_label:
       label: Vas-y
     expander_data:
