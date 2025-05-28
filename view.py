@@ -6,15 +6,15 @@ def plot_total_assets_by_country(df):
     Affiche le graphique (à finir).
     """
 
-    df_sorted = df.sort_values("Mean Total Assest in (USD Millions)", ascending=False)
+    df_sorted = df.sort_values("Total_Asset", ascending=False)
 
     top_15 = df_sorted.head(15)
 
     plt.figure(figsize=(12, 6))
     sns.barplot(
         data=top_15,
-        x="Headquarters",
-        y="Mean Total Assest in (USD Millions)",
+        x="Country",
+        y="Total_Asset",
         palette="Blues",
         alpha=0.8
     )

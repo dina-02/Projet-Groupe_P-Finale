@@ -24,25 +24,28 @@ etl_main_parameters:
 
 columns:
   largest_companies:
-    - Rank : Rank
-    - Company : Company
-    - Industry : Industry
-    - Revenue in (USD Million) : Revenue
-    - Net Income in (USD Millions) : Net_Income
-    - Total Assest in (USD Millions) : Total_Asset
-    - Headquarters: Country
+    Rank : Rank
+    Company : Company
+    Industry : Industry
+    Revenue in (USD Million) : Revenue
+    Net Income in (USD Millions) : Net_Income
+    Total Assest in (USD Millions) : Total_Asset
+    Headquarters: Country
 
-  merged_table:
-    - Headquarters: Country
-    - Mean Rank
-    - Mean Revenue in (USD Million): Mean_Income
-    - Mean Net Income in (USD Millions): Mean_Income
-    - Mean Total Asset in (USD Millions): Mean_Total_Asset
-    - Interest Rate (%): Interest_Rate
-    - Banking Sector Assets (% of GDP): Banking_Sector_Asset
-    - Corporate Tax Rate (%): Corporate_Tax_Rate
-    - GDP (USD Trillions): GDP
+rename_merged_table:
+  Headquarters: Country
+  Mean Revenue in (USD Million): Mean_Revenue
+  Mean Net Income in (USD Millions): Mean_Income
+  Mean Total Asset in (USD Millions): Mean_Total_Asset
+  Interest Rate (%): Interest_Rate_Pct
+  Stock Market Capitalization (% of GDP): Stock_market_Capitalization
+  Banking Sector Assets (% of GDP): Banking_Sector_Asset
+  Corporate Tax Rate (%): Corporate_Tax_Rate
+  GDP (USD Trillions): GDP_USD_Trillion
 
 drop_columns_largest_companies:
   - Rank
+
+drop_columns_merged_table:
+  - Country
 

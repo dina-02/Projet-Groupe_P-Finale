@@ -1,5 +1,4 @@
 import os
-
 import pandas as pd
 
 from constants import config_file
@@ -33,6 +32,7 @@ class Etl:
         self.clean_data()
         self.aggregate_data()
         self.merge_data()
+        self.sort_countries_by_total_assets()
 
     def clean_data(self):
 
@@ -44,22 +44,24 @@ class Etl:
             df.dropna(how='all', inplace=True)
             df.drop_duplicates(inplace=True)
 
+
     def aggregate_data(self):
+
+        self.df_largest_companies.rename(self.config['columns']['largest_companies'], inplace=True)
 
         df = self.df_largest_companies.copy()
 
+        df.rename(columns=self.config['columns']['largest_companies'], inplace = True)
+
         df.drop(self.config['drop_columns_largest_companies'], axis = 1, inplace = True)
 
-        df_mean = (df.groupby('Headquarters', as_index = False)
+        df_mean = (df.groupby('Country', as_index = False)
                                                 .mean(numeric_only =True))
 
-        renamed_columns = {
-            col: f'Mean {col}' for col in df_mean.columns if col != 'Headquarters'}
-
-        df_mean.rename(columns = renamed_columns, inplace = True)
-
+        df_mean.rename(columns = self.config['rename_merged_table'], inplace = True)
 
         self.df_largest_companies_aggregated = df_mean
+
 
     def merge_data(self):
 
@@ -67,12 +69,18 @@ class Etl:
             self.df_largest_companies_aggregated,
             self.df_financial_indicators,
             how = 'left',
-            left_on = 'Headquarters',
-            right_on = 'Country'
+            on = 'Country'
         )
 
-        #self.df_merged.drop(self.config['columns']['drop_columns_merged_table'], inplace = True)
+        self.df_merged.rename(columns=self.config['rename_merged_table'], inplace = True)
 
+    def sort_countries_by_total_assets(self):
+        self.df_merged.sort_values(
+            by = 'Total_Asset',
+            ascending = False,
+            inplace = True
+        )
+        return self.df_merged
 
     def load(self) -> None:
 
