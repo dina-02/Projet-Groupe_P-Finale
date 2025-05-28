@@ -46,6 +46,10 @@ class Main:
                 with st.expander("Tableau - Données par pays"):
                     st.dataframe(df)
 
+                if chart_type == "Contribution vs ROA":
+                    df_plot = self.model.get_contribution_vs_roa()
+                    self.view.plot_contribution_vs_roa(df_plot)
+
                 #Faudra faire l'ajout des graphs avec données par pays ici
 
             elif selected_dataset == "Firms Summary Table":
