@@ -15,6 +15,8 @@ class Model:
         print(biggest_sector.head())
         return biggest_sector
 
+    ####
+
 if __name__ == '__main__':
     from constants import config_file
     from helpers import get_serialized_data
