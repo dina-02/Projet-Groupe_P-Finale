@@ -52,6 +52,7 @@ class Model:
 
     #changer pour ne pas utiliser les noms directement
 
+#je pense que c'est a enlever
     def get_biggest_sector(self):
         df = self.repo.largest_companies.copy()
 
@@ -104,30 +105,31 @@ class Model:
 
         return df[[self.col_country_merged, 'Average ROA']]
 
+    def get_inflation_vs_interest(self):
+        df = self.repo.merged_data.copy()
+        return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
+
     def get_new_table(self):  #changer le nom je manque d'inspi
-        #df1 = self.get_tax_burden()
+
         df2 = self.get_revenue_to_gdp()
         df3 = self.get_real_interest_rate()
         df4 = self.get_average_contribution_to_public_finances()
         df5 = self.get_average_ROA_per_country()
 
-        print("df2 countries:", set(df2[self.col_country_merged]))
-        print("df3 countries:", set(df3[self.col_country_merged]))
-        print("df4 countries:", set(df4[self.col_country_merged]))
-        print("df5 countries:", set(df5[self.col_country_merged]))
-
-        #df = df1.merge(df2, on = self.col_country_merged)
         df = df2.merge(df3, on = self.col_country_merged)
         df = df.merge(df4, on = self.col_country_merged)
         df = df.merge(df5, on = self.col_country_merged)
 
         return df
 
+    def get_another_new_table(self):
 
+        df = self.get_asset_efficiency()
+        df2 = self.get_return_on_assets()
 
-    def get_inflation_vs_interest(self):
-        df = self.repo.merged_data.copy()
-        return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
+        df = df2.merge(df, on=self.col_country)
+
+        return df
 
 
 if __name__ == '__main__':
