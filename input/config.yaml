@@ -85,7 +85,7 @@ streamlit:
       Firms Summary Table: 'Tabeau des entreprises - Visualisation des données'
     ticker_radio:
       label: Choix du graphique
-      items: ['a voir', 'a voir2', 'a voir3', 'a voir4']
+      items: ['a voir', 'ROA vs Efficiency', 'a voir3', 'a voir4']
     expander_data:
       Financial Summary Table:
         label: 'Tableau - Donées par pays'
