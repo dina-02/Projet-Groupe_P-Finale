@@ -1,27 +1,29 @@
-import seaborn as sns
-import matplotlib.pyplot as plt
+import streamlit as st
+import mplfinance as mpf
 
-def plot_total_assets_by_country(df):
-    """
-    Affiche le graphique (à finir).
-    """
+class View:
+    def __init__(self,config: dict):
+        self.config = config
+        self.streamlit_settings = self.config['streamlit']['settings']
 
-    df_sorted = df.sort_values("Mean_Total_Asset", ascending=False)
+        st.set_page_config(
+            page_title=self.streamlit_settings['page_title'],
+            #page_icoon=self.streamlit_settings['page_icon']
+            initial_sidebar_state=self.streamlit_settings['initial_sidebar_state'],
+            #menu_items=self.streamlit_settings['menu_items']
+        )
 
-    top_15 = df_sorted.head(15)
+        self.repo = None
+        self.model = None
+        self.fig = None
+        self.ax = None
 
-    plt.figure(figsize=(12, 6))
-    sns.barplot(
-        data=top_15,
-        x="Country",
-        y="Mean_Total_Asset",
-        palette="Blues",
-        alpha=0.8
-    )
+    def set_repository(self, repo):
+        self.repo = repo
 
-    plt.title("Mean Total Assets in (USD Millions) Per Countries", fontsize=14)
-    plt.xlabel("Countries (Headquarters)")
-    plt.ylabel("Mean Total Assets in (millions USD)")
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
+    def compute_chart(self, chart_type: str):
+        st.bar_chart(self.repo.merged_data.set_index('Country'))
+
+    ## a continuer pour l'export
+
+

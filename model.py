@@ -18,14 +18,20 @@ class Model:
 
     def load_columns(self):
 
-        self.col_gdp_merged = self.config['rename_merged_table']['GDP (USD Trillions)']
-        self.col_revenue_merged = self.config['rename_merged_table']['Mean Net Income in (USD Millions)']
-        self.col_tax_rate_merged = self.config['rename_merged_table']['Corporate Tax Rate (%)']
-        self.col_country_merged = self.config['rename_merged_table']['Headquarters']
+        self.col_merged = self.config['rename_merged_table']
 
-        self.col_revenue = self.config['columns']['largest_companies']['Revenue in (USD Million)']
-        self.col_net_income = self.config['columns']['largest_companies']['Net Income in (USD Millions)']
-        self.col_industry = self.config['columns']['largest_companies']['Industry']
+        self.col_gdp_merged = self.col_merged['GDP (USD Trillions)']
+        self.col_revenue_merged = self.col_merged['Mean Net Income in (USD Millions)']
+        self.col_tax_rate_merged = self.col_merged['Corporate Tax Rate (%)']
+        self.col_country_merged = self.col_merged['Headquarters']
+        self.col_inflation = self.col_merged['Inflation Rate (%)']
+        self.col_interest = self.col_merged['Interest Rate (%)']
+
+        self.col = self.config['columns']['largest_companies']
+
+        self.col_revenue = self.col['Revenue in (USD Million)']
+        self.col_net_income = self.col['Net Income in (USD Millions)']
+        self.col_industry = self.col['Industry']
 
     def compute(self):
         df = self.repo.merged_data.copy()
@@ -38,6 +44,8 @@ class Model:
         self.max = col_gdp.max()
         self.std = col_gdp.std()
         self.quantile = col_gdp.quantile([0.25, 0.5, 0.75])
+
+    #changer pour ne pas utiliser les noms directement
 
     def get_biggest_sector(self):
         df = self.repo.largest_companies.copy()
@@ -53,7 +61,7 @@ class Model:
 
         df['Tax Burden (%)'] = (df[self.col_tax_rate_merged] * df[self.col_revenue_merged] / df[self.col_gdp_merged] * 1000000) * 100
 
-        return df[[self.col_country_merged, 'Tax Burden(%)']]
+        return df[[self.col_country_merged, 'Tax Burden (%)']]
 
     def get_revenue_to_gdp(self):
         df = self.repo.merged_data.copy()
@@ -61,6 +69,23 @@ class Model:
         df['Revenue to GDP (%)'] = df[self.col_revenue_merged]/(df[self.col_gdp_merged] * 1000000) * 100
 
         return df[[self.col_country_merged, 'Revenue to GDP (%)']]
+
+    def get_real_interest_rate(self):
+        df = self.repo.merged_data.copy()
+
+        df['Real Interest Rate (%)'] = df[self.col_inflation] - df[self.col_interest]
+
+        return df[[self.col_country_merged, 'Real Interest Rate (%)']]
+
+    def get_new_table(self): #changer le nom je manque d'inspi
+        df1 = self.get_tax_burden()
+        df2 = self.get_revenue_to_gdp()
+        df3 = self.get_real_interest_rate()
+
+        df = df1.merge(df2, on = self.col_country_merged)
+        df = df.merge(df3, on = self.col_country_merged)
+
+        return df
 
 
 if __name__ == '__main__':
@@ -74,8 +99,6 @@ if __name__ == '__main__':
 
     model = Model(config = config, repo = repo)
     model.get_biggest_sector()
-
-
 
 
 

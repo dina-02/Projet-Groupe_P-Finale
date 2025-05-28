@@ -1,8 +1,14 @@
 import os.path
 import pandas as pd
 from sqlalchemy import create_engine
+from helpers import get_serialized_data
+from constants import config_file
 
 ##marche
+
+def get_config():
+    config_full_path = os.path.join(os.getcwd(), config_file)
+    return get_serialized_data(config_full_path)
 
 class Repository:
     def __init__(self, config: dict, database_path: str = None, output_path: str = None) -> None:
