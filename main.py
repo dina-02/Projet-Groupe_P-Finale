@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
 print("Pays triés par actifs totaux moyens (ordre décroissant) :")
 print(sorted_df)
+summary_statistics_gdp(sorted_df)
 
 plot_total_assets_by_country(sorted_df)
 
-summary_statistics_gdp(sorted_df)
