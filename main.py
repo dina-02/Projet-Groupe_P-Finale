@@ -58,8 +58,8 @@ class Main:
                     st.dataframe(df)
 
                 if chart_type == "ROA vs Efficiency":
-                    seuil_roa = st.slider("Filtrer ROA max", 0, 6000, 1000)
-                    seuil_eff = st.slider("Filtrer efficacité max", 0, 6000, 1000)
+                    seuil_roa = st.slider("Filtrer ROA max", 0, 100, 10)
+                    seuil_eff = st.slider("Filtrer efficacité max", 0, 100, 10)
 
                     df_plot = self.model.get_roa_vs_efficiency()
                     df_plot = df_plot[
