@@ -77,5 +77,26 @@ class View:
         fig.update_layout(width=800, height=500)
         st.plotly_chart(fig)
 
+    def plot_contribution_vs_roa(self, df):
+        fig = px.scatter(
+            df,
+            x="Average Contribution to Public Finances (% of GDP)",
+            y="Average ROA",
+            text="Country",
+            title="ROA moyen vs Contribution publique par pays",
+            labels={
+                "Average Contribution to Public Finances (% of GDP)": "Contribution publique (% PIB)",
+                "Average ROA": "ROA moyen (%)"
+            }
+        )
+        fig.update_traces(marker=dict(size=12, color='darkred'), textposition='top center')
+        fig.update_layout(width=800, height=600)
+        st.plotly_chart(fig)
+
+        st.markdown("Ce graphique permet de visualiser les différences de modèles économiques entre pays. On observe que certains pays comme la Chine ou les États-Unis bénéficient de champions nationaux très rentables mais peu taxés, tandis que la France semble illustrer un modèle économique redistributif dans lequel des entreprises peu rentables soutiennent malgré tout significativement les recettes publiques. Cela met en évidence des arbitrages entre efficacité économique et politique fiscale.")
+
+
+
+
 
 

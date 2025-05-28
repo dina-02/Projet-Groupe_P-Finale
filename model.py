@@ -131,6 +131,13 @@ class Model:
         df = df.sort_values(by=self.return_on_assets, ascending=False).head(10)
         return df
 
+    def get_contribution_vs_roa(self):
+        df_roa = self.get_average_ROA_per_country()
+        df_contrib = self.get_average_contribution_to_public_finances()
+
+        df = pd.merge(df_roa, df_contrib, on=self.col_country_merged)
+        return df
+
     def get_country_financial_summary(self):
 
         df2 = self.get_revenue_to_gdp()
