@@ -98,7 +98,7 @@ class Model:
         df = self.repo.merged_data.copy()
         ### *100000 je pense
         df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] * df[self.col_mean_revenue_merged]) / df[
-                                                self.col_gdp_merged]) * 100
+                                                self.col_gdp_merged] * 1000000) * 100
 
         return df[[self.col_country_merged,self.average_contrib_to_pub_fin]]
 
