@@ -15,6 +15,7 @@ class Model:
         self.mean = None
 
         self.load_columns()
+        self.load_new_columns()
 
     def load_columns(self):
 
@@ -38,6 +39,21 @@ class Model:
         self.col_company = self.col['Company']
         self.col_country = self.col['Headquarters']
 
+    def load_new_columns(self):
+
+        self.countries_financial_summary_table=self.config['countries_financial_summary_table']
+
+        self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
+        self.real_interest_rate=self.countries_financial_summary_table['real_interest_rate']
+        self.average_contrib_to_pub_fin=self.countries_financial_summary_table['average_contrib_to_pub_fin']
+        self.average_roa = self.countries_financial_summary_table['average_roa']
+
+        self.firms_financial_summary_table=self.config['firms_financial_summary_table']
+
+        self.asset_efficiency=self.firms_financial_summary_table['asset_efficiency']
+        self.return_on_assets=self.firms_financial_summary_table['return_on_assets']
+
+
     def compute(self):
         df = self.repo.merged_data.copy()
 
@@ -50,66 +66,63 @@ class Model:
         self.std = col_gdp.std()
         self.quantile = col_gdp.quantile([0.25, 0.5, 0.75])
 
-    #changer pour ne pas utiliser les noms directement
-
-#je pense que c'est a enlever
-    def get_biggest_sector(self):
-        df = self.repo.largest_companies.copy()
-
-        df['Profit Margin (%)'] = df[self.col_net_income] / df[self.col_revenue] * 100
-        biggest_sector = df.groupby(self.col_industry, as_index=False)['Profit Margin (%)'].mean().sort_values(by = 'Profit Margin (%)', ascending = False)
-
-        print(biggest_sector.head())
-        return biggest_sector
+    # def get_biggest_sector(self):
+    #     df = self.repo.largest_companies.copy()
+    #
+    #     df[self.revenue_to_gdp] = df[self.col_net_income] / df[self.col_revenue] * 100
+    #     biggest_sector = df.groupby(self.col_industry, as_index=False)[self.revenue_to_gdp].mean().sort_values(by = 'Profit Margin (%)', ascending = False)
+    #
+    #     print(biggest_sector.head())
+    #     return biggest_sector
 
     def get_revenue_to_gdp(self):
         df = self.repo.merged_data.copy()
 
-        df['Revenue to GDP (%)'] = df[self.col_mean_revenue_merged]/(df[self.col_gdp_merged] * 1000000) * 100
+        df[self.revenue_to_gdp] = df[self.col_mean_revenue_merged]/(df[self.col_gdp_merged] * 1000000) * 100
 
-        return df[[self.col_country_merged, 'Revenue to GDP (%)']]
+        return df[[self.col_country_merged, self.revenue_to_gdp]]
 
     def get_real_interest_rate(self):
         df = self.repo.merged_data.copy()
 
-        df['Real Interest Rate (%)'] = df[self.col_inflation] - df[self.col_interest]
+        df[self.real_interest_rate] = df[self.col_inflation] - df[self.col_interest]
 
-        return df[[self.col_country_merged, 'Real Interest Rate (%)']]
+        return df[[self.col_country_merged, self.real_interest_rate]]
 
     def get_asset_efficiency(self):
         df = self.repo.largest_companies.copy()
 
-        df['Asset Efficiency'] = df[self.col_revenue] / df[self.col_total_asset]
+        df[self.asset_efficiency] = df[self.col_revenue] / df[self.col_total_asset]
 
-        return df[[self.col_company, 'Asset Efficiency']]
+        return df[[self.col_company, self.asset_efficiency]]
 
     def get_average_contribution_to_public_finances(self):
         df = self.repo.merged_data.copy()
         ### *100000 je pense
-        df['Average Contribution to Public Finances (% of GDP)'] = ((df[self.col_tax_rate_merged] * df[self.col_mean_revenue_merged]) / df[
+        df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] * df[self.col_mean_revenue_merged]) / df[
                                                 self.col_gdp_merged]) * 100
 
-        return df[[self.col_country_merged, 'Average Contribution to Public Finances (% of GDP)']]
+        return df[[self.col_country_merged,self.average_contrib_to_pub_fin]]
 
     def get_return_on_assets(self):
         df = self.repo.largest_companies.copy()
 
-        df['Return on Assets'] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
+        df[self.return_on_assets] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
 
-        return df[[self.col_company, 'Return on Assets']]
+        return df[[self.col_company, self.return_on_assets]]
 
     def get_average_ROA_per_country(self):
         df = self.repo.merged_data.copy()
 
-        df['Average ROA'] = (df[self.col_net_income_merged] / df[self.col_total_asset_merged]) * 100
+        df[self.average_roa] = (df[self.col_net_income_merged] / df[self.col_total_asset_merged]) * 100
 
-        return df[[self.col_country_merged, 'Average ROA']]
+        return df[[self.col_country_merged, self.average_roa]]
 
     def get_inflation_vs_interest(self):
         df = self.repo.merged_data.copy()
         return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
 
-    def get_new_table(self):  #changer le nom je manque d'inspi
+    def get_country_financial_summary(self):
 
         df2 = self.get_revenue_to_gdp()
         df3 = self.get_real_interest_rate()
@@ -122,7 +135,7 @@ class Model:
 
         return df
 
-    def get_another_new_table(self): #changer nom
+    def get_firms_financial_summary(self):
 
         df = self.get_asset_efficiency()
         df2 = self.get_return_on_assets()
@@ -138,11 +151,11 @@ if __name__ == '__main__':
     import os
 
     config = get_serialized_data(os.path.join(os.getcwd(), config_file))
-    repo = Repository(config=config, output_path = 'output')
+    repo = Repository(config=config, output_path = output_path, database_path=database_path)
     repo.get_data()
 
     model = Model(config = config, repo = repo)
-    model.get_biggest_sector()
+    #model.get_biggest_sector()
 
 
 

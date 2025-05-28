@@ -18,8 +18,8 @@ class Main:
 
     def run(self):
         self.repo.get_data()
-        df_get_new_table = self.model.get_new_table()
-        df_get_another_new_table = self.model.get_another_new_table()
+        df_get_country_financial_summary = self.model.get_country_financial_summary()
+        df_get_firms_financial_summary = self.model.get_firms_financial_summary()
 
         data = self.config['data']
 
@@ -54,23 +54,19 @@ class Main:
             # with st.expander('je commence a fatiguer la'): ##
             #     st.dataframe(df_merged)
 
-            if selected_dataset == 'get_new_table':
-                df = self.model.get_new_table()
+            if selected_dataset == 'Financial Summary Table':
+                df = self.model.get_country_financial_summary()
                 with st.expander('new test'):
                     st.dataframe(df)
 
-            elif selected_dataset == 'get_another_new_table':
-                df= self.model.get_another_new_table()
+            elif selected_dataset == 'Firms Summary Table':
+                df= self.model.get_firms_financial_summary()
 
             # exp_df = st.expander(
             #     self.streamlit_widgets_config["expander_data"]["label"]
             # )
                 with st.expander('new test'):
                     st.dataframe(df)
-
-
-
-
 
 
 if __name__ == "__main__":

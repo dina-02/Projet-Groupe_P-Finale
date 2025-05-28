@@ -56,9 +56,21 @@ drop_columns_largest_companies:
 drop_columns_merged_table:
   - Country
 
+countries_financial_summary_table:
+  revenue_to_gdp: Revenue to GDP (%)
+  real_interest_rate: Real Interest Rate (%)
+  average_contrib_to_pub_fin: Average Contribution to Public Finances (% of GDP)
+  average_roa: Average ROA
+
+firms_financial_summary_table:
+  asset_efficiency: Asset Efficiency
+  return_on_assets: Return on Assets
+
+
+
 data:
-  get_new_table: get_new_table
-  get_another_new_table: get_another_new_table
+  Financial Summary Table: Financial Summary Table
+  Firms Summary Table:  Firms Summary Table
 
 streamlit:
   settings:
@@ -69,7 +81,7 @@ streamlit:
     start_button:
       label: 'inaf'
     ticker_radio:
-      label: Ticker
+      label: Get data
       items: ['a voir', 'a voir2', 'a voir3', 'a voir4']
     start_label:
       label: Vas-y
@@ -78,7 +90,4 @@ streamlit:
     widgets:
     title:
       label: OUF
-
-
-
 
