@@ -18,7 +18,7 @@ largest_company_dataset:
   Rank: Rank
 
 etl_main_parameters:
-  to_sqlite: false
+  to_sqlite: false ##voir pourquoi c'est faux
   drop_all_tables: true
   to_csv: true
 

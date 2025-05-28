@@ -1,5 +1,5 @@
 import pandas as pd
-from constants import config_file
+from constants import config_file, output_path, database_path
 from repository import Repository
 
 class Model:
@@ -56,12 +56,12 @@ class Model:
         print(biggest_sector.head())
         return biggest_sector
 
-    def get_tax_burden(self):
-        df = self.repo.merged_data.copy()
-
-        df['Tax Burden (%)'] = (df[self.col_tax_rate_merged] * df[self.col_revenue_merged] / df[self.col_gdp_merged] * 1000000) * 100
-
-        return df[[self.col_country_merged, 'Tax Burden (%)']]
+    # def get_tax_burden(self):
+    #     df = self.repo.merged_data.copy()
+    #
+    #     df['Tax Burden (%)'] = (df[self.col_tax_rate_merged] * df[self.col_revenue_merged] / df[self.col_gdp_merged] * 1000000) * 100
+    #
+    #     return df[[self.col_country_merged, 'Tax Burden (%)']]
 
     def get_revenue_to_gdp(self):
         df = self.repo.merged_data.copy()
