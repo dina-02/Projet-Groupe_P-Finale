@@ -56,6 +56,8 @@ class Main:
 
             if selected_dataset == 'get_new_table':
                 df = self.model.get_new_table()
+                with st.expander('new test'):
+                    st.dataframe(df)
 
             elif selected_dataset == 'get_another_new_table':
                 df= self.model.get_another_new_table()
