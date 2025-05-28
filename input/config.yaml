@@ -32,12 +32,19 @@ columns:
     Total Assest in (USD Millions) : Total_Asset
     Headquarters: Country
 
+  largest_companies_aggregated:
+    Headquarters: Country
+    Revenue: Mean_Revenue
+    Net_Income: Mean_Income
+    Total_Asset: Mean_Total_Asset
+
 rename_merged_table:
   Headquarters: Country
   Mean Revenue in (USD Million): Mean_Revenue
   Mean Net Income in (USD Millions): Mean_Income
   Mean Total Asset in (USD Millions): Mean_Total_Asset
   Interest Rate (%): Interest_Rate_Pct
+  Inflation Rate (%): Inflation_Rate_Pct
   Stock Market Capitalization (% of GDP): Stock_market_Capitalization
   Banking Sector Assets (% of GDP): Banking_Sector_Asset
   Corporate Tax Rate (%): Corporate_Tax_Rate

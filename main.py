@@ -1,5 +1,4 @@
-from etl import Etl, get_config
-from view import plot_total_assets_by_country
+
 
 from etl import Etl, get_config
 from view import plot_total_assets_by_country

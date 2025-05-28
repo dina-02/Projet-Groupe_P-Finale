@@ -44,6 +44,7 @@ class Etl:
             df.dropna(how='all', inplace=True)
             df.drop_duplicates(inplace=True)
 
+        self.df_largest_companies.rename(columns=self.config['columns']['largest_companies'], inplace=True)
 
     def aggregate_data(self):
 
@@ -51,17 +52,15 @@ class Etl:
 
         df = self.df_largest_companies.copy()
 
-        df.rename(columns=self.config['columns']['largest_companies'], inplace = True)
-
         df.drop(self.config['drop_columns_largest_companies'], axis = 1, inplace = True)
+
 
         df_mean = (df.groupby('Country', as_index = False)
                                                 .mean(numeric_only =True))
 
-        df_mean.rename(columns = self.config['rename_merged_table'], inplace = True)
+        df_mean.rename(columns = self.config['columns']['largest_companies_aggregated'], inplace = True)
 
         self.df_largest_companies_aggregated = df_mean
-
 
     def merge_data(self):
 
@@ -76,7 +75,7 @@ class Etl:
 
     def sort_countries_by_total_assets(self):
         self.df_merged.sort_values(
-            by = 'Total_Asset',
+            by = 'Mean_Total_Asset',
             ascending = False,
             inplace = True
         )
