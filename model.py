@@ -125,6 +125,10 @@ class Model:
 
 
 
+    def get_inflation_vs_interest(self):
+        df = self.repo.merged_data.copy()
+        return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
+
 
 if __name__ == '__main__':
     from constants import config_file

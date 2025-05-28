@@ -12,13 +12,12 @@ class Main:
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
         self.view = View(self.config)
-        self.repo = Repository(self.config, None, 'output') #changer en rajoutant les outputs dans le fichier constants
+        self.repo = Repository(self.config, None, 'output')
         self.model = Model(self.config, self.repo)
         self.view.set_repository(self.repo)
 
     def run(self):
         self.repo.get_data()
-
         df_merged = self.model.get_new_table()
 
         data = self.config['data']
@@ -34,8 +33,6 @@ class Main:
             self.streamlit_widgets_config['ticker_radio']['items']
         )
 
-        #save_results c'est pour plus tard
-
         st.subheader(
             self.streamlit_widgets_config["title"]["label"].format(
                 selected_dataset, dataset_info
@@ -45,6 +42,11 @@ class Main:
         go = st.button(self.streamlit_widgets_config["start_button"]["label"])
 
         if go:
+
+            if selected_dataset == 'merged_table':
+                df_plot = self.model.get_inflation_vs_interest()
+                self.view.plot_inflation_vs_interest(df_plot)
+
             exp_df = st.expander(
                 self.streamlit_widgets_config["expander_data"]["label"]
             )
@@ -52,6 +54,5 @@ class Main:
                 st.dataframe(df_merged)
 
 if __name__ == "__main__":
-
     app = Main()
     app.run()
