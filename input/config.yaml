@@ -72,20 +72,25 @@ data:
 
 streamlit:
   settings:
-    page_title: "J'ai sommeil"
+    page_title: "Groupe_P"
     initial_sidebar_state: collapsed
 
   widgets:
     start_button:
-      label: 'inaf'
+      label: 'Afficher'
+    selected_dataset:
+      label: Choix des données
+    subheader_titles:
+      Financial Summary Table: 'Tableau pays - Visualisation des données'
+      Firms Summary Table: 'Tabeau des entreprises - Visualisation des données'
     ticker_radio:
-      label: Ticker
+      label: Choix du graphique
       items: ['a voir', 'a voir2', 'a voir3', 'a voir4']
-    start_label:
-      label: Vas-y
     expander_data:
-      label: YAS
-    widgets:
+      Financial Summary Table:
+        label: 'Tableau - Donées par pays'
+      Firms Summary Table:
+        label: 'Tableau - Données par entreprise'
     title:
       label: OUF
 

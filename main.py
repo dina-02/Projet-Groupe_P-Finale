@@ -12,73 +12,45 @@ class Main:
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
         self.view = View(self.config)
-        self.repo = Repository(self.config, None, 'output')
+        self.repo = Repository(self.config, None, 'output') #changer
+        self.repo.get_data()
         self.model = Model(self.config, self.repo)
         self.view.set_repository(self.repo)
 
     def run(self):
-        self.repo.get_data()
-        df_get_new_table = self.model.get_country_financial_summary()
-        df_get_another_new_table = self.model.get_firms_financial_summary()
 
         data = self.config['data']
 
         selected_dataset = st.sidebar.radio(
-            self.streamlit_widgets_config['ticker_radio']['label'], data.keys()
+            self.streamlit_widgets_config['selected_dataset']['label'], data.keys()
         )
-
-        dataset_info = data[selected_dataset]
 
         chart_type = st.sidebar.radio(
             self.streamlit_widgets_config['ticker_radio']['label'],
-            list(data.keys())
-        )
-
-        chart_type = st.sidebar.radio(
-            "Choix du graphique",
             self.streamlit_widgets_config['ticker_radio']['items']
         )
 
-        st.subheader(f"{selected_dataset} - Visualisation des données")
+        st.subheader(self.streamlit_widgets_config['subheader_titles'][selected_dataset])
 
         # Gérer l'état du bouton pour ne pas réinitialiser à chaque interaction (ça faisait un bug dans le filtrage streamlit quittait)
         if 'go_clicked' not in st.session_state:
             st.session_state.go_clicked = False
 
-        if st.button("Afficher"):
+        if st.button(self.streamlit_widgets_config['start_button']['label']): #Afficher ne fait rien
             st.session_state.go_clicked = True
 
-            # if selected_dataset == 'merged_table':
-            #     df_plot = self.model.get_inflation_vs_interest()
-            #     self.view.plotly_inflation_vs_interest(df_plot)
-            #
-            # exp_df = st.expander(
-            #     self.streamlit_widgets_config["expander_data"]["label"]
-            # )
-            # with st.expander('je commence a fatiguer la'): ##
-            #     st.dataframe(df_merged)
-
-            if selected_dataset == 'Financial Summary Table':
-                df = self.model.get_country_financial_summary()
-                with st.expander('new test'):
         if st.session_state.go_clicked:
-            if selected_dataset == "get_new_table":
-                df = self.model.get_new_table()
-                with st.expander("Tableau - Données par pays"):
+            if selected_dataset == "Financial Summary Table": #voir comment on peut enelver le nom explivite
+                df = self.model.get_country_financial_summary()
+                with st.expander(self.streamlit_widgets_config["expander_data"][selected_dataset]["label"]):
                     st.dataframe(df)
 
-            elif selected_dataset == 'Firms Summary Table':
-                df= self.model.get_firms_financial_summary()
-
-            # exp_df = st.expander(
-            #     self.streamlit_widgets_config["expander_data"]["label"]
-            # )
-                with st.expander('new test'):
-            elif selected_dataset == "get_another_new_table":
-                df = self.model.get_another_new_table()
-                with st.expander("Tableau - Données par entreprise"):
+            elif selected_dataset == "Firms Summary Table": #ici aussi
+                df = self.model.get_firms_financial_summary()
+                with st.expander(self.streamlit_widgets_config["expander_data"][selected_dataset]["label"]):
                     st.dataframe(df)
 
+                #dans view
                 if chart_type == "ROA vs Efficiency":
                     seuil_roa = st.slider("Filtrer ROA max", 0, 6000, 1000)
                     seuil_eff = st.slider("Filtrer efficacité max", 0, 6000, 1000)

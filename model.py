@@ -15,6 +15,7 @@ class Model:
         self.mean = None
 
         self.load_columns()
+        self.load_new_columns()
 
     def load_columns(self):
 
@@ -37,6 +38,19 @@ class Model:
         self.col_total_asset = self.col['Total Assest in (USD Millions)']
         self.col_company = self.col['Company']
         self.col_country = self.col['Headquarters']
+
+    def load_new_columns(self):
+        self.countries_financial_summary_table = self.config['countries_financial_summary_table']
+
+        self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
+        self.real_interest_rate = self.countries_financial_summary_table['real_interest_rate']
+        self.average_contrib_to_pub_fin = self.countries_financial_summary_table['average_contrib_to_pub_fin']
+        self.average_roa = self.countries_financial_summary_table['average_roa']
+
+        self.firms_financial_summary_table = self.config['firms_financial_summary_table']
+
+        self.asset_efficiency = self.firms_financial_summary_table['asset_efficiency']
+        self.return_on_assets = self.firms_financial_summary_table['return_on_assets']
 
     def compute(self):
         df = self.repo.merged_data.copy()
