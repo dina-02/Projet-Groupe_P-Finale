@@ -50,6 +50,11 @@ class Main:
                     df_plot = self.model.get_contribution_vs_roa()
                     self.view.plot_contribution_vs_roa(df_plot)
 
+                elif chart_type == "Matrice de corrélation macro":
+                    df_corr = self.model.get_country_financial_summary()
+                    corr_matrix = df_corr.drop(columns=[self.model.col_country_merged]).corr()
+                    self.view.plot_macro_correlation_heatmap(corr_matrix)
+
                 #Faudra faire l'ajout des graphs avec données par pays ici
 
             elif selected_dataset == "Firms Summary Table":

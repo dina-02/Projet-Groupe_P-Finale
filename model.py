@@ -162,6 +162,11 @@ class Model:
 
         return df
 
+    def get_macro_correlation_matrix(self):
+        df = self.get_country_financial_summary()
+        df = df.set_index(self.col_country_merged)
+        return df.corr()
+
 
 if __name__ == '__main__':
     from constants import config_file

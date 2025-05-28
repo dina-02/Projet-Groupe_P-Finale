@@ -95,6 +95,34 @@ class View:
 
         st.markdown("Ce graphique permet de visualiser les différences de modèles économiques entre pays. On observe que certains pays comme la Chine ou les États-Unis bénéficient de champions nationaux très rentables mais peu taxés, tandis que la France semble illustrer un modèle économique redistributif dans lequel des entreprises peu rentables soutiennent malgré tout significativement les recettes publiques. Cela met en évidence des arbitrages entre efficacité économique et politique fiscale.")
 
+    def plot_macro_correlation_heatmap(self, corr_df):
+        fig = px.imshow(
+            corr_df,
+            text_auto=".2f",
+            color_continuous_scale="RdBu_r",
+            zmin=-1,
+            zmax=1,
+            labels=dict(color="Corrélation"),
+            aspect="auto"
+        )
+        fig.update_layout(
+            title="Matrice de corrélation entre indicateurs macroéconomiques",
+            xaxis_title="",
+            yaxis_title="",
+            width=700,
+            height=600
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        st.markdown("""
+        **Interprétation des coefficients :**  
+        - **Revenue to GDP (%) vs Contribution Publique (% PIB) : +0.90** ➤ Des entreprises plus présentes dans l’économie génèrent logiquement plus de recettes fiscales pour l’État.  
+
+        - **Taux d’intérêt réel vs ROA moyen : -0.44** ➤ Lorsque les taux d’intérêt réels sont élevés, les entreprises ont tendance à être moins rentables : taux réel élevé plus lourd ➤ coût du crédit plus lourd ➤ moins d'investissement et de croissance ➤ ROA plus faible.  
+
+        - **Real Interest Rate (%) vs Revenue to GDP (%) ou Contribution Publique : corrélations proches de 0** ➤ Il n’y a pas de lien direct entre les taux d’intérêt réels et la taille des entreprises dans l’économie (ou leur contribution fiscale).
+        """)
+
 
 
 
