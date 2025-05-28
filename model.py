@@ -6,6 +6,26 @@ class Model:
     def __init__(self, config, repo):
         self.config = config
         self.repo = repo
+        self.min = None
+        self.max = None
+        self.median = None
+        self.average = None
+        self.std = None
+        self.quantile = None
+        self.mean = None
+
+    def compute(self):
+        df = self.repo.df_merged.copy()
+
+        col_gdp_name = self.config['rename_merged_table']['GDP (USD Trillions)']
+        col_gdp = df[col_gdp_name]
+
+        self.mean = col_gdp.mean()
+        self.median = col_gdp.median()
+        self.min = col_gdp.min()
+        self.max = col_gdp.max()
+        self.std = col_gdp.std()
+        self.quantile = col_gdp.quantile([0.25, 0.5, 0.75])
 
     def get_biggest_sector(self):
         df = self.repo.largest_companies.copy()
@@ -19,6 +39,12 @@ class Model:
 
         print(biggest_sector.head())
         return biggest_sector
+
+
+
+
+
+
 
 if __name__ == '__main__':
     from constants import config_file
