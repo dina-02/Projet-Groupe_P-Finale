@@ -66,8 +66,6 @@ firms_financial_summary_table:
   asset_efficiency: Asset Efficiency
   return_on_assets: Return on Assets
 
-
-
 data:
   Financial Summary Table: Financial Summary Table
   Firms Summary Table:  Firms Summary Table
@@ -81,7 +79,7 @@ streamlit:
     start_button:
       label: 'inaf'
     ticker_radio:
-      label: Get data
+      label: Ticker
       items: ['a voir', 'a voir2', 'a voir3', 'a voir4']
     start_label:
       label: Vas-y
@@ -90,4 +88,7 @@ streamlit:
     widgets:
     title:
       label: OUF
+
+
+
 

@@ -18,8 +18,8 @@ class Main:
 
     def run(self):
         self.repo.get_data()
-        df_get_country_financial_summary = self.model.get_country_financial_summary()
-        df_get_firms_financial_summary = self.model.get_firms_financial_summary()
+        df_get_new_table = self.model.get_country_financial_summary()
+        df_get_another_new_table = self.model.get_firms_financial_summary()
 
         data = self.config['data']
 
@@ -31,18 +31,22 @@ class Main:
 
         chart_type = st.sidebar.radio(
             self.streamlit_widgets_config['ticker_radio']['label'],
+            list(data.keys())
+        )
+
+        chart_type = st.sidebar.radio(
+            "Choix du graphique",
             self.streamlit_widgets_config['ticker_radio']['items']
         )
 
-        st.subheader(
-            self.streamlit_widgets_config["title"]["label"].format(
-                selected_dataset, dataset_info
-            )
-        )
+        st.subheader(f"{selected_dataset} - Visualisation des données")
 
-        go = st.button(self.streamlit_widgets_config["start_button"]["label"])
+        # Gérer l'état du bouton pour ne pas réinitialiser à chaque interaction (ça faisait un bug dans le filtrage streamlit quittait)
+        if 'go_clicked' not in st.session_state:
+            st.session_state.go_clicked = False
 
-        if go:
+        if st.button("Afficher"):
+            st.session_state.go_clicked = True
 
             # if selected_dataset == 'merged_table':
             #     df_plot = self.model.get_inflation_vs_interest()
@@ -57,6 +61,10 @@ class Main:
             if selected_dataset == 'Financial Summary Table':
                 df = self.model.get_country_financial_summary()
                 with st.expander('new test'):
+        if st.session_state.go_clicked:
+            if selected_dataset == "get_new_table":
+                df = self.model.get_new_table()
+                with st.expander("Tableau - Données par pays"):
                     st.dataframe(df)
 
             elif selected_dataset == 'Firms Summary Table':
@@ -66,8 +74,22 @@ class Main:
             #     self.streamlit_widgets_config["expander_data"]["label"]
             # )
                 with st.expander('new test'):
+            elif selected_dataset == "get_another_new_table":
+                df = self.model.get_another_new_table()
+                with st.expander("Tableau - Données par entreprise"):
                     st.dataframe(df)
 
+                if chart_type == "ROA vs Efficiency":
+                    seuil_roa = st.slider("Filtrer ROA max", 0, 6000, 1000)
+                    seuil_eff = st.slider("Filtrer efficacité max", 0, 6000, 1000)
+
+                    df_plot = self.model.get_roa_vs_efficiency()
+                    df_plot = df_plot[
+                        (df_plot['Return on Assets'] <= seuil_roa) &
+                        (df_plot['Asset Efficiency'] <= seuil_eff)
+                    ]
+
+                    self.view.plot_roa_vs_efficiency(df_plot)
 
 if __name__ == "__main__":
     app = Main()

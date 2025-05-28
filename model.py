@@ -15,7 +15,6 @@ class Model:
         self.mean = None
 
         self.load_columns()
-        self.load_new_columns()
 
     def load_columns(self):
 
@@ -38,21 +37,6 @@ class Model:
         self.col_total_asset = self.col['Total Assest in (USD Millions)']
         self.col_company = self.col['Company']
         self.col_country = self.col['Headquarters']
-
-    def load_new_columns(self):
-
-        self.countries_financial_summary_table=self.config['countries_financial_summary_table']
-
-        self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
-        self.real_interest_rate=self.countries_financial_summary_table['real_interest_rate']
-        self.average_contrib_to_pub_fin=self.countries_financial_summary_table['average_contrib_to_pub_fin']
-        self.average_roa = self.countries_financial_summary_table['average_roa']
-
-        self.firms_financial_summary_table=self.config['firms_financial_summary_table']
-
-        self.asset_efficiency=self.firms_financial_summary_table['asset_efficiency']
-        self.return_on_assets=self.firms_financial_summary_table['return_on_assets']
-
 
     def compute(self):
         df = self.repo.merged_data.copy()
@@ -121,6 +105,12 @@ class Model:
     def get_inflation_vs_interest(self):
         df = self.repo.merged_data.copy()
         return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
+
+    def get_roa_vs_efficiency(self):
+        df = self.repo.largest_companies.copy()
+        df['Return on Assets'] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
+        df['Asset Efficiency'] = df[self.col_revenue] / df[self.col_total_asset]
+        return df[[self.col_company, 'Return on Assets', 'Asset Efficiency']]
 
     def get_country_financial_summary(self):
 
