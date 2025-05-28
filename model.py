@@ -114,14 +114,9 @@ class Model:
     def get_average_ROA_per_country(self):
         df = self.repo.merged_data.copy()
 
-        q1 = df[self.return_on_assets].quantile(0.05)
-        q2 = df[self.return_on_assets].quantile(0.95)
+        df[self.average_roa] = (df[self.col_net_income_merged] / df[self.col_total_asset_merged]) * 100
 
-        df = df[(df[self.return_on_assets] >= q1) & (df[self.return_on_assets] <= q2)]
-
-        df['weighted_roa'] = df[self.return_on_assets] * df[self.col_total_asset]
-
-        grouped = df.groupby(self.col_country, as_index=False).agg({weight})
+        return df[[self.col_country_merged, self.average_roa]]
 
     def get_inflation_vs_interest(self):
         df = self.repo.merged_data.copy()
