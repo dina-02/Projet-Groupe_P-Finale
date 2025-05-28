@@ -5,6 +5,7 @@ from constants import config_file
 from repository import get_config, Repository
 from view import View
 
+
 class Main:
     def __init__(self):
         self.config = get_config()
@@ -12,42 +13,44 @@ class Main:
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
         self.view = View(self.config)
-        self.repo = Repository(self.config, None, 'output') #changer
-        self.repo.get_data()
+        self.repo = Repository(self.config, None, 'output')
         self.model = Model(self.config, self.repo)
         self.view.set_repository(self.repo)
 
     def run(self):
+        self.repo.get_data()
 
         data = self.config['data']
 
         selected_dataset = st.sidebar.radio(
-            self.streamlit_widgets_config['selected_dataset']['label'], data.keys()
+            self.streamlit_widgets_config['ticker_radio']['label'],
+            list(data.keys())
         )
 
         chart_type = st.sidebar.radio(
-            self.streamlit_widgets_config['ticker_radio']['label'],
+            "Choix du graphique",
             self.streamlit_widgets_config['ticker_radio']['items']
         )
 
-        st.subheader(self.streamlit_widgets_config['subheader_titles'][selected_dataset])
+        st.subheader(f"{selected_dataset} - Visualisation des données")
 
-        # Gérer l'état du bouton pour ne pas réinitialiser à chaque interaction (ça faisait un bug dans le filtrage streamlit quittait)
         if 'go_clicked' not in st.session_state:
             st.session_state.go_clicked = False
 
-        if st.button(self.streamlit_widgets_config['start_button']['label']): #Afficher ne fait rien
+        if st.button("Afficher"):
             st.session_state.go_clicked = True
 
         if st.session_state.go_clicked:
-            if selected_dataset == "Financial Summary Table": #voir comment on peut enelver le nom explivite
+            if selected_dataset == "Financial Summary Table":
                 df = self.model.get_country_financial_summary()
-                with st.expander(self.streamlit_widgets_config["expander_data"][selected_dataset]["label"]):
+                with st.expander("Tableau - Données par pays"):
                     st.dataframe(df)
 
-            elif selected_dataset == "Firms Summary Table": #ici aussi
+                #Faudra faire l'ajout des graphs avec données par pays ici
+
+            elif selected_dataset == "Firms Summary Table":
                 df = self.model.get_firms_financial_summary()
-                with st.expander(self.streamlit_widgets_config["expander_data"][selected_dataset]["label"]):
+                with st.expander("Tableau - Données par entreprise"):
                     st.dataframe(df)
 
                 if chart_type == "ROA vs Efficiency":
@@ -59,8 +62,12 @@ class Main:
                         (df_plot['Return on Assets'] <= seuil_roa) &
                         (df_plot['Asset Efficiency'] <= seuil_eff)
                     ]
-
                     self.view.plot_roa_vs_efficiency(df_plot)
+
+                elif chart_type == "Top 10 ROA":
+                    df_plot = self.model.get_top10_roa()
+                    self.view.plot_top10_roa(df_plot)
+
 
 if __name__ == "__main__":
     app = Main()

@@ -62,3 +62,20 @@ class View:
         fig.update_layout(width=900, height=600, title_font_size=18)
         st.plotly_chart(fig)
 
+    def plot_top10_roa(self, df):
+        df["ROA arrondi"] = df["Return on Assets"].round(0)  #Arrondi car illisible sur streamlit sinon (trop de chiffres après la virgule)
+
+        fig = px.bar(
+            df,
+            x=self.config['columns']['largest_companies']['Company'],
+            y="ROA arrondi",
+            title='Top 10 entreprises par ROA',
+            labels={"ROA arrondi": "ROA (%)"},
+            text="ROA arrondi"
+        )
+        fig.update_traces(marker_color='indigo', textposition='outside')
+        fig.update_layout(width=800, height=500)
+        st.plotly_chart(fig)
+
+
+

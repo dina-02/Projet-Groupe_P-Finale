@@ -126,6 +126,11 @@ class Model:
         df['Asset Efficiency'] = df[self.col_revenue] / df[self.col_total_asset]
         return df[[self.col_company, 'Return on Assets', 'Asset Efficiency']]
 
+    def get_top10_roa(self):
+        df = self.get_return_on_assets()
+        df = df.sort_values(by=self.return_on_assets, ascending=False).head(10)
+        return df
+
     def get_country_financial_summary(self):
 
         df2 = self.get_revenue_to_gdp()
