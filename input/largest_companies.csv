@@ -1,51 +1,51 @@
 Rank,Company,Industry,Revenue in (USD Million),Total Assest in (USD Millions),Net Income in (USD Millions),Headquarters
-1,Transamerica Corporation,Conglomerate,227381,85000,4250,United States
-2,Ping An Insurance Group,Insurance,77930,310000,9300,China
-3,ICBC,Banking,109772,500000,22500,China
-4,China Construction Bank,Banking,82361,460000,21000,China
-5,Agricultural Bank of China,Banking,82961,420000,18000,China
-6,China Life Insurance,Insurance,97184,65000,3250,China
-7,Allianz,Insurance,114996,75000,4125,Germany
-8,Bank of China,Banking,121748,400000,19000,China
-9,JP Morgan Chase,Banking,97967,580000,29000,United States
-10,AXA,Insurance,76256,60000,3600,France
-11,Fannie Mae,Investment Services,77588,320000,8000,United States
-12,Life Insurance Corporation of India,Insurance,101213,68000,3400,India
-13,Generali Group,Insurance,53520,50000,1500,Italy
-14,Bank of America,Banking,108030,400000,19500,United States
-15,Citigroup,Banking,91430,340000,16000,United States
-16,People's Insurance Company,Insurance,74067,48000,2400,China
-17,Credit Agricole,Banking,85928,57000,2850,France
-18,BNP Paribas,Banking,67297,65000,3900,France
-19,HSBC,Banking,106802,72000,4300,United Kingdom
-20,Wells Fargo,Banking,104763,60000,3600,United States
-21,State Farm,Insurance,98568,42000,2100,United States
-22,Nippon Life,Insurance,63728,39000,2730,Japan
-23,Munich Re,Insurance,50238,33000,1155,Germany
-24,Dai-ichi Life,Insurance,107180,36000,1800,Japan
-25,Banco Santander,Banking,102887,86000,4300,Spain
-26,MetLife,Insurance,68341,48000,2880,United States
-27,Bank of Communications,Banking,111823,120000,7200,China
-28,Freddie Mac,Investment Services,27474,98000,4900,United States
-29,Legal and General Group,Insurance,61092,32000,1280,United Kingdom
-30,Brookfield Asset Management,Investment Services,63569,18000,900,Canada
-31,Aviva,Insurance,65039,30000,1650,United Kingdom
-32,China Pacific Insurance,Insurance,45288,27000,1100,China
-33,China Merchants Bank,Banking,120169,100000,6700,China
-34,Zurich Insurance Group,Insurance,71598,34000,1700,Switzerland
-35,Manulife Financial,Insurance,111001,36000,1800,Canada
-36,Prudential Financial,Insurance,49321,32000,1500,United States
-37,Mitsubishi UFJ Financial Group,Banking,94323,110000,7500,Japan
-38,Prudential,Insurance,41778,28000,1400,United Kingdom
-39,StoneX Group Inc,Investment Services,69867,1500,75,United States
-40,Goldman Sachs,Investment Services,43827,90000,5400,United States
-41,Industrial Bank,Banking,70763,87000,5200,China
-42,Shanghai Pudong Development,Banking,124067,88000,6200,China
-43,Morgan Stanley,Investment Services,34753,80000,6400,United States
-44,State Bank of India,Banking,89969,66000,3200,India
-45,Tokio Marine Holdings,Insurance,86084,25000,1250,Japan
-46,AIA Group,Insurance,72756,30000,1800,China
-47,China Mensheng Banking,Banking,113286,65000,3300,China
-48,Power Corporation of Canada,Insurance,84812,24000,1200,Canada
-49,Talanx,Insurance,118087,19000,800,Germany
-50,Lloyds Banking Group,Banking,89245,25000,1500,United Kingdom
+1,Transamerica Corporation,Conglomerate,275788.0,106540.0,1891.48,United States
+2,Ping An Insurance Group,Insurance,62809.0,32744.0,206.84,China
+3,ICBC,Banking,72467.0,265952.0,2130.88,China
+4,China Construction Bank,Banking,131455.0,214784.0,1779.29,China
+5,Agricultural Bank of China,Banking,63167.0,142224.0,2231.89,China
+6,China Life Insurance,Insurance,107595.0,52580.0,543.19,China
+7,Allianz,Insurance,130840.0,83122.0,976.61,Germany
+8,Bank of China,Banking,90110.0,245221.0,2924.29,China
+9,JP Morgan Chase,Banking,144992.0,268453.0,3032.5,United States
+10,AXA,Insurance,116528.0,46590.0,450.73,France
+11,Fannie Mae,Investment Services,94241.0,139094.0,6230.88,United States
+12,Life Insurance Corporation of India,Insurance,106172.0,42220.0,403.09,India
+13,Generali Group,Insurance,122024.0,48733.0,526.6,Italy
+14,Bank of America,Banking,108907.0,316663.0,4706.95,United States
+15,Citigroup,Banking,115623.0,211947.0,4066.99,United States
+16,People's Insurance Company,Insurance,81465.0,41628.0,307.32,China
+17,Credit Agricole,Banking,83191.0,189460.0,2034.16,France
+18,BNP Paribas,Banking,125110.0,163205.0,2994.38,France
+19,HSBC,Banking,96057.0,138742.0,2393.37,United Kingdom
+20,Wells Fargo,Banking,117204.0,190205.0,2889.3,United States
+21,State Farm,Insurance,66243.0,30056.0,248.96,United States
+22,Nippon Life,Insurance,98624.0,35860.0,322.74,Japan
+23,Munich Re,Insurance,110145.0,33889.0,310.47,Germany
+24,Dai-ichi Life,Insurance,93824.0,35122.0,318.55,Japan
+25,Banco Santander,Banking,112532.0,164400.0,2966.39,Spain
+26,MetLife,Insurance,88242.0,36471.0,420.47,United States
+27,Bank of Communications,Banking,87411.0,219304.0,3965.47,China
+28,Freddie Mac,Investment Services,91654.0,151223.0,6795.93,United States
+29,Legal and General Group,Insurance,73912.0,26104.0,285.31,United Kingdom
+30,Brookfield Asset Management,Investment Services,80713.0,22122.0,1161.36,Canada
+31,Aviva,Insurance,74291.0,22933.0,251.34,United Kingdom
+32,China Pacific Insurance,Insurance,77534.0,21783.0,198.15,China
+33,China Merchants Bank,Banking,83526.0,150762.0,1809.14,China
+34,Zurich Insurance Group,Insurance,90125.0,28945.0,301.38,Switzerland
+35,Manulife Financial,Insurance,82446.0,31226.0,290.71,Canada
+36,Prudential Financial,Insurance,84934.0,26939.0,323.27,United States
+37,Mitsubishi UFJ Financial Group,Banking,95512.0,227338.0,2981.39,Japan
+38,Prudential,Insurance,70239.0,23102.0,253.32,United Kingdom
+39,StoneX Group Inc,Investment Services,61104.0,1123.0,44.63,United States
+40,Goldman Sachs,Investment Services,84496.0,102783.0,4238.07,United States
+41,Industrial Bank,Banking,79572.0,178221.0,2628.58,China
+42,Shanghai Pudong Development,Banking,75821.0,154333.0,2221.06,China
+43,Morgan Stanley,Investment Services,88213.0,93532.0,4377.13,United States
+44,State Bank of India,Banking,77024.0,124512.0,1886.18,India
+45,Tokio Marine Holdings,Insurance,68916.0,21095.0,240.25,Japan
+46,AIA Group,Insurance,71602.0,24312.0,291.74,China
+47,China Mensheng Banking,Banking,73411.0,146223.0,2001.61,China
+48,Power Corporation of Canada,Insurance,69284.0,18793.0,225.52,Canada
+49,Talanx,Insurance,61285.0,14214.0,185.32,Germany
+50,Lloyds Banking Group,Banking,56638.0,124893.0,2113.18,United Kingdom

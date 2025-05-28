@@ -63,7 +63,7 @@ class View:
         st.plotly_chart(fig)
 
     def plot_top10_roa(self, df):
-        df["ROA arrondi"] = df["Return on Assets"].round(0)  #Arrondi car illisible sur streamlit sinon (trop de chiffres après la virgule)
+        df["ROA arrondi"] = df["Return on Assets"].round(2)  #Arrondi car illisible sur streamlit sinon (trop de chiffres après la virgule)
 
         fig = px.bar(
             df,
