@@ -7,7 +7,18 @@ from view import View
 
 
 class Main:
+    """
+    Main entry point of the Streamlit application.
+
+    Handles configuration loading, initializes the model, repository, and view,
+    and controls user interactions and visualizations based on selected options.
+    """
+
     def __init__(self):
+        """
+        Initialize configuration, repository, model, and view for the application.
+        """
+
         self.config = get_config()
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
@@ -18,6 +29,13 @@ class Main:
         self.view.set_repository(self.repo)
 
     def run(self):
+        """
+        Runs the Streamlit app interface.
+
+        Displays a sidebar to choose between datasets and chart types.
+        Loads and displays the appropriate table and chart based on user input.
+        :return: none
+        """
         self.repo.get_data()
 
         data = self.config['data']
