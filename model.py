@@ -1,10 +1,7 @@
 import pandas as pd
 
-
 from helpers import compute_ratio
-
 from sqlalchemy import create_engine
-
 
 class Model:
     """

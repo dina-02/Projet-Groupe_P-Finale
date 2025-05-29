@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 import logging
 
@@ -6,13 +5,10 @@ from logger import Logger
 from etl import ETL
 from model import Model
 from view import View
-from constants import config_file,output_path, database_path, input_dir
+from constants import config_file, output_path, database_path, input_dir
 from repository import get_config, Repository
-from helpers import get_serialized_data
 
 config = get_config()
-
-
 
 
 class Main:
