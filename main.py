@@ -5,7 +5,18 @@ from view import View
 
 
 class Main:
+    """
+    Main entry point of the Streamlit application.
+
+    Handles configuration loading, initializes the model, repository, and view,
+    and controls user interactions and visualizations based on selected options.
+    """
+
     def __init__(self):
+        """
+        Initialize configuration, repository, model, and view for the application.
+        """
+
         self.config = get_config()
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
@@ -16,6 +27,13 @@ class Main:
         self.view.set_repository(self.repo)
 
     def run(self):
+        """
+        Runs the Streamlit app interface.
+
+        Displays a sidebar to choose between datasets and chart types.
+        Loads and displays the appropriate table and chart based on user input.
+        :return: none
+        """
         self.repo.get_data()
 
         data = self.config['data']
@@ -47,6 +65,11 @@ class Main:
                 if chart_type == "Contribution vs ROA":
                     df_plot = self.model.get_contribution_vs_roa()
                     self.view.plot_contribution_vs_roa(df_plot)
+
+                elif chart_type == "Matrice de corrélation macro":
+                    df_corr = self.model.get_country_financial_summary()
+                    corr_matrix = df_corr.drop(columns=[self.model.col_country_merged]).corr()
+                    self.view.plot_macro_correlation_heatmap(corr_matrix)
 
                 #Faudra faire l'ajout des graphs avec données par pays ici
 
