@@ -2,8 +2,7 @@ import pandas as pd
 
 
 from helpers import compute_ratio
-from constants import output_path
-from repository import Repository, get_config
+
 from sqlalchemy import create_engine
 
 

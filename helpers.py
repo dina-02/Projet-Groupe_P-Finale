@@ -39,7 +39,7 @@ def get_serialized_data(path: str) -> Dict:
 
 
 def compute_ratio(df:pd.DataFrame, num: str, denom: str, result: float, x=1) -> pd.DataFrame:
-    '''
+    """
     Compute the ratio between two columns.
     :param df: dataframe containig the data.
     :param num: the column used as numeroator.
@@ -47,7 +47,7 @@ def compute_ratio(df:pd.DataFrame, num: str, denom: str, result: float, x=1) -> 
     :param result: the new column containing the result of the ratio.
     :param x: the scaling factor.
     :return: The dataframe with the computed ratio.
-    '''
+    """
     df[result] = (df[num]/df[denom] * x)
     return df
 

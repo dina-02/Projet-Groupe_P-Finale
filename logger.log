@@ -1,0 +1,268 @@
+2025-05-29 23:16:15,795 - INFO - root - initializing
+2025-05-29 23:16:15,795 - INFO - root - initializing
+2025-05-29 23:16:16,072 - INFO - root - ETL completed
+2025-05-29 23:16:16,073 - INFO - root - ETL completed
+2025-05-29 23:16:16,087 - INFO - root - Data loaded
+2025-05-29 23:16:16,098 - INFO - root - Data loaded
+2025-05-29 23:16:16,230 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:16,230 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:16,233 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:16,236 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:16,236 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:16,236 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:16,246 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.table_info("country_financial_summary")
+2025-05-29 23:16:16,247 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.table_info("country_financial_summary")
+2025-05-29 23:16:16,247 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:16,247 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:16,249 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE country_financial_summary (
+	"Country" TEXT, 
+	"Revenue to GDP (%)" FLOAT, 
+	"Real Interest Rate (%)" FLOAT, 
+	"Average Contribution to Public Finances (% of GDP)" FLOAT, 
+	"Average ROA" FLOAT
+)
+
+
+2025-05-29 23:16:16,249 - INFO - sqlalchemy.engine.Engine - [no key 0.00027s] ()
+2025-05-29 23:16:16,251 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE country_financial_summary (
+	"Country" TEXT, 
+	"Revenue to GDP (%)" FLOAT, 
+	"Real Interest Rate (%)" FLOAT, 
+	"Average Contribution to Public Finances (% of GDP)" FLOAT, 
+	"Average ROA" FLOAT
+)
+
+
+2025-05-29 23:16:16,251 - INFO - sqlalchemy.engine.Engine - [no key 0.00083s] ()
+2025-05-29 23:16:16,256 - INFO - sqlalchemy.engine.Engine - INSERT INTO country_financial_summary ("Country", "Revenue to GDP (%)", "Real Interest Rate (%)", "Average Contribution to Public Finances (% of GDP)", "Average ROA") VALUES (?, ?, ?, ?, ?)
+2025-05-29 23:16:16,257 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:16,257 - INFO - sqlalchemy.engine.Engine - [generated in 0.00053s] [('Spain', 7.033250000000001, -1.5, 1.7583125000000002, 1.8043734793187347), ('China', 0.4672901533494754, -0.7, 0.11682253833736884, 1.2295543394930668), ('France', 3.6092111111111103, -1.2000000000000002, 0.9311764666666664, 1.3723735457289201), ('India', 2.4756216216216216, -0.5999999999999996, 0.7426864864864865, 1.3730237746803253), ('Japan', 1.8207959183673468, 0.7999999999999999, 0.42242465306122445, 1.2093765164441244), ('United Kingdom', 2.394432258064516, -1.9, 0.454942129032258, 1.5774062315724269), ('Italy', 5.810666666666667, -1.85, 1.6153653333333338, 1.080581946524942), ('Germany', 2.3431782945736437, -1.85, 0.7006103100775195, 1.1220422937702421), ('Canada', 3.8740499999999995, -1.7999999999999998, 1.02662325, 2.325432139837263)]
+2025-05-29 23:16:16,257 - INFO - root - Data exported to SQLite
+2025-05-29 23:16:16,261 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:16,273 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:16,274 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:16,275 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:16,275 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.table_info("firms_financial_stat")
+2025-05-29 23:16:16,275 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:16,277 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE firms_financial_stat (
+	"Company" TEXT, 
+	"Return on Assets" FLOAT, 
+	"Asset Efficiency" FLOAT
+)
+
+
+2025-05-29 23:16:16,278 - INFO - sqlalchemy.engine.Engine - [no key 0.00056s] ()
+2025-05-29 23:16:16,281 - INFO - sqlalchemy.engine.Engine - INSERT INTO firms_financial_stat ("Company", "Return on Assets", "Asset Efficiency") VALUES (?, ?, ?)
+2025-05-29 23:16:16,281 - INFO - sqlalchemy.engine.Engine - [generated in 0.00039s] [('Transamerica Corporation', 1.7753707527689133, 2.588586446405106), ('Ping An Insurance Group', 0.6316882482286832, 1.9181834839970682), ('ICBC', 0.8012272891348815, 0.2724815004211286), ('China Construction Bank', 0.8284090062574493, 0.6120334848033373), ('Agricultural Bank of China', 1.5692780402744966, 0.4441374170322871), ('China Life Insurance', 1.033073411943705, 2.046310384176493), ('Allianz', 1.1749115757561175, 1.5740718462019683), ('Bank of China', 1.1925120605494635, 0.36746445043450604)  ... displaying 10 of 50 total bound parameter sets ...  ('Talanx', 1.3037850007035316, 4.311594202898551), ('Lloyds Banking Group', 1.6919923454477033, 0.45349218931405283)]
+2025-05-29 23:16:16,282 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:16,284 - INFO - root - Data exported to SQLite
+2025-05-29 23:16:25,055 - INFO - root - initializing
+2025-05-29 23:16:25,081 - INFO - root - ETL completed
+2025-05-29 23:16:25,087 - INFO - root - Data loaded
+2025-05-29 23:16:25,107 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:25,108 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:25,108 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,109 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:25,109 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,109 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:25,109 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,110 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='view' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:25,110 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,111 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_xinfo("country_financial_summary")
+2025-05-29 23:16:25,111 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,112 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:25,112 - INFO - sqlalchemy.engine.Engine - [raw sql] ('country_financial_summary',)
+2025-05-29 23:16:25,113 - INFO - sqlalchemy.engine.Engine - PRAGMA main.foreign_key_list("country_financial_summary")
+2025-05-29 23:16:25,113 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,113 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.foreign_key_list("country_financial_summary")
+2025-05-29 23:16:25,113 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,113 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:25,113 - INFO - sqlalchemy.engine.Engine - [raw sql] ('country_financial_summary',)
+2025-05-29 23:16:25,115 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("country_financial_summary")
+2025-05-29 23:16:25,115 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,115 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("country_financial_summary")
+2025-05-29 23:16:25,116 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,116 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:25,116 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,116 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("country_financial_summary")
+2025-05-29 23:16:25,116 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,117 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("country_financial_summary")
+2025-05-29 23:16:25,117 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,117 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:25,117 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,117 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:25,118 - INFO - sqlalchemy.engine.Engine - [raw sql] ('country_financial_summary',)
+2025-05-29 23:16:25,121 - INFO - sqlalchemy.engine.Engine - 
+DROP TABLE country_financial_summary
+2025-05-29 23:16:25,121 - INFO - sqlalchemy.engine.Engine - [no key 0.00020s] ()
+2025-05-29 23:16:25,125 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE country_financial_summary (
+	"Country" TEXT, 
+	"Revenue to GDP (%)" FLOAT, 
+	"Real Interest Rate (%)" FLOAT, 
+	"Average Contribution to Public Finances (% of GDP)" FLOAT, 
+	"Average ROA" FLOAT
+)
+
+
+2025-05-29 23:16:25,125 - INFO - sqlalchemy.engine.Engine - [no key 0.00021s] ()
+2025-05-29 23:16:25,128 - INFO - sqlalchemy.engine.Engine - INSERT INTO country_financial_summary ("Country", "Revenue to GDP (%)", "Real Interest Rate (%)", "Average Contribution to Public Finances (% of GDP)", "Average ROA") VALUES (?, ?, ?, ?, ?)
+2025-05-29 23:16:25,128 - INFO - sqlalchemy.engine.Engine - [generated in 0.00034s] [('Spain', 7.033250000000001, -1.5, 1.7583125000000002, 1.8043734793187347), ('China', 0.4672901533494754, -0.7, 0.11682253833736884, 1.2295543394930668), ('France', 3.6092111111111103, -1.2000000000000002, 0.9311764666666664, 1.3723735457289201), ('India', 2.4756216216216216, -0.5999999999999996, 0.7426864864864865, 1.3730237746803253), ('Japan', 1.8207959183673468, 0.7999999999999999, 0.42242465306122445, 1.2093765164441244), ('United Kingdom', 2.394432258064516, -1.9, 0.454942129032258, 1.5774062315724269), ('Italy', 5.810666666666667, -1.85, 1.6153653333333338, 1.080581946524942), ('Germany', 2.3431782945736437, -1.85, 0.7006103100775195, 1.1220422937702421), ('Canada', 3.8740499999999995, -1.7999999999999998, 1.02662325, 2.325432139837263)]
+2025-05-29 23:16:25,129 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:25,130 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:25,131 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:25,132 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,132 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:25,132 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,132 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:25,132 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,133 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='view' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:25,133 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,134 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_xinfo("firms_financial_stat")
+2025-05-29 23:16:25,134 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,135 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:25,135 - INFO - sqlalchemy.engine.Engine - [raw sql] ('firms_financial_stat',)
+2025-05-29 23:16:25,135 - INFO - sqlalchemy.engine.Engine - PRAGMA main.foreign_key_list("firms_financial_stat")
+2025-05-29 23:16:25,136 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,136 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.foreign_key_list("firms_financial_stat")
+2025-05-29 23:16:25,136 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,137 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:25,137 - INFO - sqlalchemy.engine.Engine - [raw sql] ('firms_financial_stat',)
+2025-05-29 23:16:25,138 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("firms_financial_stat")
+2025-05-29 23:16:25,138 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,138 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("firms_financial_stat")
+2025-05-29 23:16:25,138 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,138 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:25,139 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,139 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("firms_financial_stat")
+2025-05-29 23:16:25,139 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,139 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("firms_financial_stat")
+2025-05-29 23:16:25,139 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,139 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:25,140 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:25,140 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:25,140 - INFO - sqlalchemy.engine.Engine - [raw sql] ('firms_financial_stat',)
+2025-05-29 23:16:25,141 - INFO - sqlalchemy.engine.Engine - 
+DROP TABLE firms_financial_stat
+2025-05-29 23:16:25,141 - INFO - sqlalchemy.engine.Engine - [no key 0.00014s] ()
+2025-05-29 23:16:25,144 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE firms_financial_stat (
+	"Company" TEXT, 
+	"Return on Assets" FLOAT, 
+	"Asset Efficiency" FLOAT
+)
+
+
+2025-05-29 23:16:25,144 - INFO - sqlalchemy.engine.Engine - [no key 0.00020s] ()
+2025-05-29 23:16:25,147 - INFO - sqlalchemy.engine.Engine - INSERT INTO firms_financial_stat ("Company", "Return on Assets", "Asset Efficiency") VALUES (?, ?, ?)
+2025-05-29 23:16:25,147 - INFO - sqlalchemy.engine.Engine - [generated in 0.00041s] [('Transamerica Corporation', 1.7753707527689133, 2.588586446405106), ('Ping An Insurance Group', 0.6316882482286832, 1.9181834839970682), ('ICBC', 0.8012272891348815, 0.2724815004211286), ('China Construction Bank', 0.8284090062574493, 0.6120334848033373), ('Agricultural Bank of China', 1.5692780402744966, 0.4441374170322871), ('China Life Insurance', 1.033073411943705, 2.046310384176493), ('Allianz', 1.1749115757561175, 1.5740718462019683), ('Bank of China', 1.1925120605494635, 0.36746445043450604)  ... displaying 10 of 50 total bound parameter sets ...  ('Talanx', 1.3037850007035316, 4.311594202898551), ('Lloyds Banking Group', 1.6919923454477033, 0.45349218931405283)]
+2025-05-29 23:16:25,148 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:25,149 - INFO - root - Data exported to SQLite
+2025-05-29 23:16:26,740 - INFO - root - initializing
+2025-05-29 23:16:26,859 - INFO - root - ETL completed
+2025-05-29 23:16:26,870 - INFO - root - Data loaded
+2025-05-29 23:16:26,898 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:26,899 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:26,900 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,900 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:26,900 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,901 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:26,901 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,901 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='view' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:26,901 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,902 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_xinfo("country_financial_summary")
+2025-05-29 23:16:26,902 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,903 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:26,903 - INFO - sqlalchemy.engine.Engine - [raw sql] ('country_financial_summary',)
+2025-05-29 23:16:26,904 - INFO - sqlalchemy.engine.Engine - PRAGMA main.foreign_key_list("country_financial_summary")
+2025-05-29 23:16:26,904 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,905 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.foreign_key_list("country_financial_summary")
+2025-05-29 23:16:26,905 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,905 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:26,905 - INFO - sqlalchemy.engine.Engine - [raw sql] ('country_financial_summary',)
+2025-05-29 23:16:26,905 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("country_financial_summary")
+2025-05-29 23:16:26,905 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,906 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("country_financial_summary")
+2025-05-29 23:16:26,906 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,906 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:26,906 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,906 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("country_financial_summary")
+2025-05-29 23:16:26,906 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,907 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("country_financial_summary")
+2025-05-29 23:16:26,907 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,907 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("country_financial_summary")
+2025-05-29 23:16:26,907 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,907 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:26,907 - INFO - sqlalchemy.engine.Engine - [raw sql] ('country_financial_summary',)
+2025-05-29 23:16:26,909 - INFO - sqlalchemy.engine.Engine - 
+DROP TABLE country_financial_summary
+2025-05-29 23:16:26,909 - INFO - sqlalchemy.engine.Engine - [no key 0.00017s] ()
+2025-05-29 23:16:26,913 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE country_financial_summary (
+	"Country" TEXT, 
+	"Revenue to GDP (%)" FLOAT, 
+	"Real Interest Rate (%)" FLOAT, 
+	"Average Contribution to Public Finances (% of GDP)" FLOAT, 
+	"Average ROA" FLOAT
+)
+
+
+2025-05-29 23:16:26,913 - INFO - sqlalchemy.engine.Engine - [no key 0.00020s] ()
+2025-05-29 23:16:26,917 - INFO - sqlalchemy.engine.Engine - INSERT INTO country_financial_summary ("Country", "Revenue to GDP (%)", "Real Interest Rate (%)", "Average Contribution to Public Finances (% of GDP)", "Average ROA") VALUES (?, ?, ?, ?, ?)
+2025-05-29 23:16:26,917 - INFO - sqlalchemy.engine.Engine - [generated in 0.00033s] [('Spain', 7.033250000000001, -1.5, 1.7583125000000002, 1.8043734793187347), ('China', 0.4672901533494754, -0.7, 0.11682253833736884, 1.2295543394930668), ('France', 3.6092111111111103, -1.2000000000000002, 0.9311764666666664, 1.3723735457289201), ('India', 2.4756216216216216, -0.5999999999999996, 0.7426864864864865, 1.3730237746803253), ('Japan', 1.8207959183673468, 0.7999999999999999, 0.42242465306122445, 1.2093765164441244), ('United Kingdom', 2.394432258064516, -1.9, 0.454942129032258, 1.5774062315724269), ('Italy', 5.810666666666667, -1.85, 1.6153653333333338, 1.080581946524942), ('Germany', 2.3431782945736437, -1.85, 0.7006103100775195, 1.1220422937702421), ('Canada', 3.8740499999999995, -1.7999999999999998, 1.02662325, 2.325432139837263)]
+2025-05-29 23:16:26,918 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:26,921 - INFO - sqlalchemy.engine.Engine - BEGIN (implicit)
+2025-05-29 23:16:26,922 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:26,922 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,923 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:26,923 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,923 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:26,923 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,924 - INFO - sqlalchemy.engine.Engine - SELECT name FROM sqlite_master WHERE type='view' AND name NOT LIKE 'sqlite~_%' ESCAPE '~' ORDER BY name
+2025-05-29 23:16:26,924 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,925 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_xinfo("firms_financial_stat")
+2025-05-29 23:16:26,925 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,926 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:26,926 - INFO - sqlalchemy.engine.Engine - [raw sql] ('firms_financial_stat',)
+2025-05-29 23:16:26,927 - INFO - sqlalchemy.engine.Engine - PRAGMA main.foreign_key_list("firms_financial_stat")
+2025-05-29 23:16:26,927 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,928 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.foreign_key_list("firms_financial_stat")
+2025-05-29 23:16:26,928 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,929 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:26,929 - INFO - sqlalchemy.engine.Engine - [raw sql] ('firms_financial_stat',)
+2025-05-29 23:16:26,929 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("firms_financial_stat")
+2025-05-29 23:16:26,929 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,929 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("firms_financial_stat")
+2025-05-29 23:16:26,929 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,930 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:26,930 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,930 - INFO - sqlalchemy.engine.Engine - PRAGMA main.index_list("firms_financial_stat")
+2025-05-29 23:16:26,930 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,930 - INFO - sqlalchemy.engine.Engine - PRAGMA temp.index_list("firms_financial_stat")
+2025-05-29 23:16:26,930 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,931 - INFO - sqlalchemy.engine.Engine - PRAGMA main.table_info("firms_financial_stat")
+2025-05-29 23:16:26,931 - INFO - sqlalchemy.engine.Engine - [raw sql] ()
+2025-05-29 23:16:26,931 - INFO - sqlalchemy.engine.Engine - SELECT sql FROM  (SELECT * FROM sqlite_master UNION ALL   SELECT * FROM sqlite_temp_master) WHERE name = ? AND type in ('table', 'view')
+2025-05-29 23:16:26,931 - INFO - sqlalchemy.engine.Engine - [raw sql] ('firms_financial_stat',)
+2025-05-29 23:16:26,932 - INFO - sqlalchemy.engine.Engine - 
+DROP TABLE firms_financial_stat
+2025-05-29 23:16:26,932 - INFO - sqlalchemy.engine.Engine - [no key 0.00040s] ()
+2025-05-29 23:16:26,936 - INFO - sqlalchemy.engine.Engine - 
+CREATE TABLE firms_financial_stat (
+	"Company" TEXT, 
+	"Return on Assets" FLOAT, 
+	"Asset Efficiency" FLOAT
+)
+
+
+2025-05-29 23:16:26,936 - INFO - sqlalchemy.engine.Engine - [no key 0.00020s] ()
+2025-05-29 23:16:26,940 - INFO - sqlalchemy.engine.Engine - INSERT INTO firms_financial_stat ("Company", "Return on Assets", "Asset Efficiency") VALUES (?, ?, ?)
+2025-05-29 23:16:26,940 - INFO - sqlalchemy.engine.Engine - [generated in 0.00041s] [('Transamerica Corporation', 1.7753707527689133, 2.588586446405106), ('Ping An Insurance Group', 0.6316882482286832, 1.9181834839970682), ('ICBC', 0.8012272891348815, 0.2724815004211286), ('China Construction Bank', 0.8284090062574493, 0.6120334848033373), ('Agricultural Bank of China', 1.5692780402744966, 0.4441374170322871), ('China Life Insurance', 1.033073411943705, 2.046310384176493), ('Allianz', 1.1749115757561175, 1.5740718462019683), ('Bank of China', 1.1925120605494635, 0.36746445043450604)  ... displaying 10 of 50 total bound parameter sets ...  ('Talanx', 1.3037850007035316, 4.311594202898551), ('Lloyds Banking Group', 1.6919923454477033, 0.45349218931405283)]
+2025-05-29 23:16:26,941 - INFO - sqlalchemy.engine.Engine - COMMIT
+2025-05-29 23:16:26,943 - INFO - root - Data exported to SQLite
+2025-05-29 23:16:26,963 - INFO - root - button clicked: Données par entreprise and ROA vs Efficiency
+2025-05-29 23:16:27,064 - INFO - root - filtering firms with ROA <= 1.5 and Efficiency <= 3.0
+2025-05-29 23:16:27,588 - INFO - root - displayed chart: Plot vs ROA efficiency
