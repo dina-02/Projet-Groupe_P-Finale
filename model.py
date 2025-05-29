@@ -1,8 +1,9 @@
 import os
+import pandas as pd
 
 from helpers import compute_ratio
 from constants import config_file, output_path, database_path
-from repository import Repository
+from repository import Repository, get_config
 from sqlalchemy import create_engine
 from helpers import get_serialized_data
 
@@ -26,7 +27,7 @@ class Model:
         self.load_columns()
         self.load_new_columns()
 
-    def load_columns(self): #voir comment raccourcir
+    def load_columns(self) -> None: #voir comment raccourcir
         """
          Loads column names for the merged and company datasets from the configuration.
 
@@ -54,7 +55,7 @@ class Model:
         self.col_company = self.col['Company']
         self.col_country = self.col['Headquarters']
 
-    def load_new_columns(self): #voir comment raccourcir
+    def load_new_columns(self) -> None: #voir comment raccourcir
         """
         Loads names of newly computed financial indicators from the configuration.
 
@@ -75,7 +76,7 @@ class Model:
         self.return_on_assets = self.firms_financial_summary_table['return_on_assets']
 
 
-    def get_revenue_to_gdp(self):
+    def get_revenue_to_gdp(self) -> pd.DataFrame:
         """
         Calculates the mean revenue as a percentage of GDP for each country.
         :return: DataFrame with country names and their revenue-to-GDP ratio.
@@ -87,7 +88,7 @@ class Model:
 
         return df[[self.col_country_merged, self.revenue_to_gdp]]
 
-    def get_real_interest_rate(self):
+    def get_real_interest_rate(self) -> pd.DataFrame:
         """
         Computes the real interest rate by subtracting inflation from the nominal interest rate.
         :return: DataFrame with country names and their real interest rates.
@@ -99,7 +100,7 @@ class Model:
 
         return df[[self.col_country_merged, self.real_interest_rate]]
 
-    def get_average_contribution_to_public_finances(self):
+    def get_average_contribution_to_public_finances(self) -> pd.DataFrame:
         """
         Estimates each country's average contribution to public finances based on revenue and tax rate.
         :return: DataFrame with countries and their estimated fiscal contribution percentages.
@@ -115,7 +116,7 @@ class Model:
         return df[[self.col_country_merged,self.average_contrib_to_pub_fin]]
 
 
-    def get_average_ROA_per_country(self):
+    def get_average_ROA_per_country(self) -> pd.DataFrame:
         """
         Computes the average Return on Assets (ROA) per country.
 
@@ -134,7 +135,7 @@ class Model:
 
         return df[[self.col_country_merged, self.average_roa]]
 
-    def get_firms_financial_summary(self):
+    def get_firms_financial_summary(self) -> pd.DataFrame:
         """
         Computes financial efficiency metrics for individual companies.
 
@@ -152,7 +153,7 @@ class Model:
 
         return  df[[self.col_company, self.return_on_assets, self.asset_efficiency]]
 
-    def get_country_financial_summary(self):
+    def get_country_financial_summary(self) -> pd.DataFrame:
         """
         Aggregates all country-level metrics into a single DataFrame.
 
@@ -173,13 +174,11 @@ class Model:
 
         return df
 
-    #appel
-    def export_datasets(self):
+    def export_datasets_toSQLite(self, database_path: str) -> None:
         """
         Exports the summarized country and firm financial datasets to a SQLite database.
 
         The data is saved under table names specified in the configuration file.
-        :return: none
         """
 
         country_financial_summary=self.get_country_financial_summary()
@@ -192,11 +191,13 @@ class Model:
         firms_financial_summary.to_sql(self.config['export_final_results']['firms_summary_stat'],
                   con=engine, if_exists='replace', index=False)
 
-
-if __name__ == '__main__':
-    config = get_serialized_data(os.path.join(os.getcwd(), config_file))
-    repo = Repository(config=config, output_path=output_path)
+if __name__ =='__main__':
+    config = get_config()
+    repo = Repository(config, output_path)
     repo.get_data()
+    model = Model(config, repo)
 
-    model = Model(config=config, repo=repo)
-    model.export_datasets()
+    print(model.get_firms_financial_summary().head())
+    print(model.get_firms_financial_summary().shape)
+    print(model.get_country_financial_summary().head())
+    print(model.get_country_financial_summary().shape)

@@ -21,8 +21,8 @@ export_final_results:
 largest_company_dataset:
   Rank: Rank
 
-etl_main_parameters: ###a simplifier
-  to_csv: true
+#etl_main_parameters: ###a simplifier
+#  to_csv: true
 
 columns:
   largest_companies:

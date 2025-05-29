@@ -1,10 +1,12 @@
+import os
 import streamlit as st
 
 from etl import ETL
 from model import Model
-from constants import output_path
-from repository import get_config, Repository
 from view import View
+from constants import config_file,output_path, database_path, input_dir
+from repository import get_config, Repository
+from helpers import get_serialized_data
 
 
 class Main:
@@ -22,14 +24,16 @@ class Main:
 
         self.config = get_config()
         self.repo = Repository(self.config, output_path)
+        self.repo.get_data()
         self.model = Model(self.config, self.repo)
+        self.model.export_datasets_toSQLite(database_path)
         self.view = View(self.config)
         self.view.set_model(self.model)
 
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
-    def run(self):
+    def run(self) -> None:
         """
         Run the Streamlit application.
 
@@ -108,7 +112,14 @@ class Main:
                 elif chart_type == "Top 10 ROA":
                     self.view.plot_top10_roa()
 
-
+#Scrip entry point
 if __name__ == "__main__":
+    config = get_serialized_data(os.path.join(os.getcwd(), config_file))
+    etl = ETL(config=config, input_dir=input_dir)
+    etl.run()
+    repo = Repository(config, output_path)
+    repo.get_data()
+    model = Model(config, repo)
+    model.export_datasets_toSQLite(database_path)
     app = Main()
     app.run()

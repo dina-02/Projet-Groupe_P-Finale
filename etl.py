@@ -1,12 +1,11 @@
 import os
 import pandas as pd
 
-from constants import config_file
+from constants import config_file, input_dir
 from helpers import get_serialized_data
 from constants import financial_indicators_path, largest_companies_path
-from helpers import dataframes_to_db
 
-def get_config():
+def get_config() -> dict:
     """
     Load and return the project configuration dictionary from the serialized config file path.
    :return: the serialized data
@@ -22,7 +21,7 @@ class ETL:
     and company data into a merged, clean and analyzable format.
     """
 
-    def __init__(self, config: dict, input_dir):
+    def __init__(self, config: dict, input_dir: str) -> None:
         """
         Initialize the ETL process with configuration, input folder.
 
@@ -41,7 +40,7 @@ class ETL:
         self.df_largest_companies = pd.DataFrame()
         self.df_merged = pd.DataFrame()
 
-    def extract(self):
+    def extract(self) -> None:
         """
         Extract raw data from CSV sources intro pandas DataFrames.
         :return: none
@@ -51,7 +50,7 @@ class ETL:
         self.df_financial_indicators_raw = pd.read_csv(financial_indicators_path, sep=',')
         self.df_largest_companies_raw = pd.read_csv(largest_companies_path, sep=',')
 
-    def transform(self):
+    def transform(self) -> None:
         """
         Apply a series of transformation steps: cleaning, aggregation, merging,
         and sorting the dataset by total assets.
@@ -63,7 +62,7 @@ class ETL:
         self.merge_data()
         self.sort_countries_by_total_assets()
 
-    def clean_data(self):
+    def clean_data(self) -> None:
         """
         Clean the raw datasets by replacing 0s with NaN, dropping empty and duplicate rows,
         and renaming columns based on configuration mappings.
@@ -84,7 +83,7 @@ class ETL:
         self.df_largest_companies.rename(columns=self.config['columns']['largest_companies'],
                                          inplace=True)
 
-    def aggregate_data(self):
+    def aggregate_data(self) -> None:
         """
         Group the company data by country, compute the mean of numeric values,
         and rename the columns for aggregated output.
@@ -108,7 +107,7 @@ class ETL:
 
         self.df_largest_companies_aggregated = df_mean
 
-    def merge_data(self):
+    def merge_data(self) -> None:
         """
         Merge aggregated company data with financial indicators on the 'Country' column.
         Column names are renamed according to config after merging.
@@ -125,7 +124,7 @@ class ETL:
         self.df_merged.rename(columns=self.config['rename_merged_table'],
                               inplace=True)
 
-    def sort_countries_by_total_assets(self):
+    def sort_countries_by_total_assets(self) -> pd.DataFrame:
         """
         Sort the merged dataset in descending order based on mean total assets.
         :return: the sorted dataframe by mean total assets
@@ -144,7 +143,7 @@ class ETL:
         :return: none
         """
 
-        export_csv = {
+        export = {
             self.config['files_csv']['merged_table']: self.df_merged,
             self.config['files_csv']['source_largest_companies']: self.df_largest_companies
         }
@@ -153,14 +152,23 @@ class ETL:
         os.makedirs(output_folder, exist_ok = True)
 
         # Save each DataFrame to CSV in the output directory
-        for name, df in export_csv.items():
+        for name, df in export.items():
             csv_path = os.path.join(output_folder, f'{name}')
             df.to_csv(csv_path, index = False)
 
+    def run(self) -> None:
+        self.extract()
+        self.transform()
+        self.load()
+
 # Script entry point
 if __name__ == '__main__':
+    '''
+    Executes the entire ETL: extract, transform, load.
+    The data will be extracted, cleaned and exported to CSV.
+    '''
     config = get_config()
-    etl = ETL(config=config, input_dir='input')
+    etl = ETL(config=config, input_dir=input_dir)
     etl.extract()
     etl.transform()
     etl.load()

@@ -68,7 +68,7 @@ class View:
             title=self.config['plot_roa_vs_efficiency']['title'],
             labels=self.config['plot_roa_vs_efficiency']['labels']
         )
-        #voir si j'ai la patience
+
         fig.update_traces(marker=dict(size=10, color='green', opacity=0.7), textposition='top right')
         fig.update_layout(width=900, height=600, title_font_size=18)
         st.plotly_chart(fig)
