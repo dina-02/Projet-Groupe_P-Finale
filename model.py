@@ -23,6 +23,7 @@ class Model:
         self.config = config
         self.repo = repo
 
+        # Load column mappings from config
         self.load_columns()
         self.load_new_columns()
 
@@ -36,6 +37,7 @@ class Model:
 
         self.col_merged = self.config['rename_merged_table']
 
+        # Columns related to macroeconomic indicators
         self.col_gdp_merged = self.col_merged['GDP (USD Trillions)']
         self.col_tax_rate_merged = self.col_merged['Corporate Tax Rate (%)']
         self.col_country_merged = self.col_merged['Headquarters']
@@ -45,6 +47,7 @@ class Model:
         self.col_net_income_merged = self.col_merged['Mean Net Income in (USD Millions)']
         self.col_total_asset_merged = self.col_merged['Mean Total Asset in (USD Millions)']
 
+        # Columns related to individual companies
         self.col = self.config['columns']['largest_companies']
 
         self.col_revenue = self.col['Revenue in (USD Million)']
@@ -83,6 +86,7 @@ class Model:
 
         df = self.repo.merged_data.copy()
 
+        # GDP is in trillions -> convert to millions before dividing
         df[self.revenue_to_gdp] = df[self.col_mean_revenue_merged] / (df[self.col_gdp_merged] * 1000000) * 100
 
         return df[[self.col_country_merged, self.revenue_to_gdp]]
@@ -107,6 +111,7 @@ class Model:
 
         df = self.repo.merged_data.copy()
 
+        # Estimate public contribution: (tax rate * revenue) / GDP
         df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] / 100) * df[
                                                   self.col_mean_revenue_merged]
                                                       / (df[self.col_gdp_merged] * 1000000)
@@ -125,9 +130,11 @@ class Model:
 
         df = self.repo.merged_data.copy()
 
+        # ROA = Net Income / Total Assets
         df=compute_ratio(df=df, num=self.col_net_income_merged, denom=self.col_total_asset_merged,
                          result=self.average_roa, x=100)
 
+        # Filter extreme outliers using 5th and 95th percentiles
         q1 = df[self.average_roa].quantile(0.05)
         q2 = df[self.average_roa].quantile(0.95)
         df = df[(df[self.average_roa] >= q1) & (df[self.average_roa] <= q2)]
@@ -144,9 +151,11 @@ class Model:
 
         df=self.repo.largest_companies.copy()
 
+        # Efficiency = Revenue / Assets
         df=compute_ratio(df=df, num=self.col_revenue, denom=self.col_total_asset,
                                        result=self.asset_efficiency)
 
+        # ROA = Net Income / Assets
         df=compute_ratio(df=df, num=self.col_net_income, denom=self.col_total_asset,
                           result=self.return_on_assets, x=100)
 
@@ -165,15 +174,14 @@ class Model:
         df4 = self.get_average_contribution_to_public_finances()
         df5 = self.get_average_ROA_per_country()
 
+        # Merge datasets step-by-step on the country column
         df = df2.merge(df3, on=self.col_country_merged)
         df = df.merge(df4, on=self.col_country_merged)
         df = df.merge(df5, on=self.col_country_merged)
 
         print(df.head())
-
         return df
 
-    #appel
     def export_datasets(self):
         """
         Exports the summarized country and firm financial datasets to a SQLite database.
@@ -187,6 +195,7 @@ class Model:
 
         engine = create_engine(f'sqlite:///{database_path}', echo=True)
 
+        # Save both summaries to named tables defined in the config
         country_financial_summary.to_sql(self.config['export_final_results']['financial_summary_stat'],
                   con=engine, if_exists='replace', index=False)
         firms_financial_summary.to_sql(self.config['export_final_results']['firms_summary_stat'],

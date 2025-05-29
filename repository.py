@@ -12,6 +12,7 @@ def get_config():
     :return: Dictionary with configuration data.
     """
 
+    # Create the absolute path to the config file
     config_full_path = os.path.join(os.getcwd(), config_file)
     return get_serialized_data(config_full_path)
 
@@ -32,6 +33,8 @@ class Repository:
 
         self.config = config
         self.output_path = output_path
+
+        # These attributes will hold the loaded datasets
         self.merged_data = None
         self.largest_companies = None
 
@@ -44,20 +47,22 @@ class Repository:
         :return: none
         """
 
+        # Construct full paths to the CSV files
         merged_file = os.path.join(self.output_path, self.config['files_csv']['merged_table'])
         largest_file = os.path.join(self.output_path, self.config['files_csv']['source_largest_companies'])
 
+        # Read the CSV files into pandas DataFrames
         self.merged_data = pd.read_csv(merged_file, sep=',')
         self.largest_companies = pd.read_csv(largest_file,sep =',')
 
 if __name__ == '__main__':
+    # Load the configuration and initialize the repository
     config_path = os.path.join(os.getcwd(), config_file)
     config = get_serialized_data(config_path)
 
     repo = Repository(config=config, output_path='output')
-
     repo.get_data()
 
+    # Print the first few rows of each dataset to verify loading
     print(repo.merged_data.head())
-
     print(repo.largest_companies.head())
