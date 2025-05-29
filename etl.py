@@ -11,7 +11,8 @@ def get_config():
     Load and return the project configuration dictionary from the serialized config file path.
    :return: the serialized data
    """
-   
+
+    # Build the full path to the config file and load the data
     config_full_path = os.path.join(os.getcwd(), config_file)
     return get_serialized_data(config_full_path)
 
@@ -32,6 +33,7 @@ class ETL:
         self.config = config
         self.input_dir = input_dir
 
+        # Initialize dataframes for each ETL stage
         self.df_financial_indicators_raw = pd.DataFrame()
         self.df_financial_indicators = pd.DataFrame()
         self.df_largest_companies_aggregated = pd.DataFrame()
@@ -45,6 +47,7 @@ class ETL:
         :return: none
         """
 
+        # Load the raw CSV files for financial indicators and company data
         self.df_financial_indicators_raw = pd.read_csv(financial_indicators_path, sep=',')
         self.df_largest_companies_raw = pd.read_csv(largest_companies_path, sep=',')
 
@@ -67,14 +70,17 @@ class ETL:
         :return: none
         """
 
+        # Make copies of the original raw data
         self.df_financial_indicators = self.df_financial_indicators_raw.copy()
         self.df_largest_companies = self.df_largest_companies_raw.copy()
 
+        # Apply cleaning to both datasets
         for df in [self.df_financial_indicators, self.df_largest_companies]:
             df.replace(0, pd.NA, inplace=True)
             df.dropna(how='all', inplace=True)
             df.drop_duplicates(inplace=True)
 
+        # Rename columns in the company data using config mappings
         self.df_largest_companies.rename(columns=self.config['columns']['largest_companies'],
                                          inplace=True)
 
@@ -90,12 +96,13 @@ class ETL:
 
         df=self.df_largest_companies.copy()
 
+        # Drop the columns not needed for aggregation
         df.drop(self.config['drop_columns_largest_companies'], axis=1, inplace=True)
 
-
+        # Group by country and compute the mean for numeric columns
         df_mean=(df.groupby('Country', as_index=False)
                                             .mean(numeric_only=True))
-
+        # Rename the resulting aggregated columns
         df_mean.rename(columns=self.config['columns']['largest_companies_aggregated'],
                        inplace=True)
 
@@ -114,6 +121,7 @@ class ETL:
             how='left',
             on='Country')
 
+        # Rename merged columns based on config
         self.df_merged.rename(columns=self.config['rename_merged_table'],
                               inplace=True)
 
@@ -144,10 +152,12 @@ class ETL:
         output_folder = self.config['folders']['output_folder']
         os.makedirs(output_folder, exist_ok = True)
 
+        # Save each DataFrame to CSV in the output directory
         for name, df in export_csv.items():
             csv_path = os.path.join(output_folder, f'{name}')
             df.to_csv(csv_path, index = False)
 
+# Script entry point
 if __name__ == '__main__':
     config = get_config()
     etl = ETL(config=config, input_dir='input')
