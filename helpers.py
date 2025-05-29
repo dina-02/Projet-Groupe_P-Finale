@@ -1,79 +1,10 @@
 import os
 import yaml
-import numpy as np
 import pandas as pd
 
 from typing import Dict, Literal
-from sqlalchemy import create_engine, MetaData
 
 IfExists = Literal["fail", "replace", "append"]
-
-def dataframes_to_excel(
-        dataframes: Dict[str, pd.DataFrame], excel_full_path: str
-) -> None:
-    """
-    Export DataFrames to an Excel file from a dict like keys=sheet names and values=DataFrame
-    :param dataframes: DataFrames as Dict[sheet_name, data]
-    :param excel_full_path: full path of the Excel File
-    :return: None
-    """
-    os.makedirs(os.path.dirname(excel_full_path), exist_ok=True)
-
-    with pd.ExcelWriter(excel_full_path) as writer:
-        for sheet, df in dataframes.items():
-            if isinstance(df, pd.Series):
-                df.to_frame().to_excel(writer, sheet_name=sheet, merge_cells=False, index=True)
-            elif isinstance(df.columns, pd.MultiIndex):
-                df.to_excel(writer, sheet_name=sheet, merge_cells=False)
-            elif df.index.dtype == np.int64 and df.index.nlevels == 1:
-                df.to_excel(writer, sheet_name=sheet, merge_cells=False, index=False)
-            else:
-                df.to_excel(writer, sheet_name=sheet, merge_cells=False, index=True)
-
-
-def dataframes_to_db(
-        dataframes: Dict[str, pd.DataFrame],
-        db_path: str,
-        drop_all_tables: bool = False,
-        append_data: bool = False,
-):
-    """
-    Create a SQLite database from a dict like keys=sheet names and values=DataFrame
-    If the SQLite database already exists, current data (before this new insertion) could be kept or erased with the
-    drop_all_tables parameter
-    :param dataframes: DataFrames as Dict(sheet_name, Data)
-    :param db_path: full database path
-    :param drop_all_tables: if true, all tables will be deleted
-    :param append_data: if True, data will be added to the current table. If False, current data will be erased before
-    the insertion
-    :return: None
-    """
-    path, _ = os.path.split(db_path)
-    os.makedirs(path, exist_ok=True)
-
-    engine = create_engine(f"sqlite:///{db_path}", echo=True)
-    con = engine.connect()
-    meta = MetaData()
-
-    if drop_all_tables:
-        meta.drop_all(con)
-
-    if append_data:
-        if_exists: IfExists = "append"
-    else:
-        if_exists: IfExists = "replace"
-
-    for sh, df in dataframes.items():
-        df.to_sql(name=sh, con=con, if_exists=if_exists, index=False)
-
-
-def to_db_format(name: str) -> str:
-    """
-    Format a column name to a database column name - no space and lower case
-    :param name:
-    :return:
-    """
-    return name.strip().lower().replace(" ", "_")
 
 def get_serialized_data(path: str) -> Dict:
     """
@@ -106,8 +37,17 @@ def get_serialized_data(path: str) -> Dict:
         raise ValueError(f"Unsupported file extension {extension} | file={path}")
 
 
-##docstring + tester eventuellement ?
-def compute_ratio(df, num, denom, result, x=1): #optional
+
+def compute_ratio(df:pd.DataFrame, num: str, denom: str, result: float, x=1) -> pd.DataFrame:
+    '''
+    Compute the ratio between two columns.
+    :param df: dataframe containig the data.
+    :param num: the column used as numeroator.
+    :param denom: the column used a denominator.
+    :param result: the new column containing the result of the ratio.
+    :param x: the scaling factor.
+    :return: The dataframe with the computed ratio.
+    '''
     df[result] = (df[num]/df[denom] * x)
     return df
 

@@ -13,17 +13,20 @@ Constants:
 """
 
 # Path to the YAML configuration file for the ETL and visualization settings
-config_file = (r'input/config.yaml')
+config_file = r'input/config.yaml'
+
+#Path to the input files
+input_dir = r'input'
 
 # Directory where output CSVs and files will be stored
-output_path = (r'output')
+output_path = r'output'
 
 # SQLite database file path to store structured datasets
-database_path = (r'output/output.sqlite')
+database_path = r'output/output.sqlite'
 
 # Input CSV file containing country-level financial indicators (e.g., GDP, inflation)
-financial_indicators_path = (r'input/financial_indicators.csv')
+financial_indicators_path = r'input/financial_indicators.csv'
 
 # Input CSV file containing firm-level data for the largest global companies
-largest_companies_path = (r'input/largest_companies.csv')
+largest_companies_path = r'input/largest_companies.csv'
 

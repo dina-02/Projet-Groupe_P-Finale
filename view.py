@@ -1,5 +1,6 @@
 import streamlit as st
 import plotly.express as px
+import pandas as pd
 
 
 class View:
@@ -22,7 +23,6 @@ class View:
         # Set the global page configuration using Streamlit
         st.set_page_config(
             page_title=self.streamlit_settings['page_title'],
-            #page_icon=self.streamlit_settings['page_icon'],
             layout=self.streamlit_settings['layout'],
             initial_sidebar_state=self.streamlit_settings['initial_sidebar_state'],
             menu_items=self.streamlit_settings['menu_items']
@@ -34,7 +34,7 @@ class View:
         self.fig = None
         self.ax = None
 
-    def set_repository(self, repo):
+    def set_repository(self, repo) -> None:
         """
         Links the repository instance to the view.
 
@@ -44,7 +44,7 @@ class View:
 
         self.repo = repo
 
-    def set_model(self, model):
+    def set_model(self, model) -> None:
         """
         Links the model instance to the view.
 
@@ -54,7 +54,7 @@ class View:
 
         self.model = model
 
-    def plot_roa_vs_efficiency(self, df):
+    def plot_roa_vs_efficiency(self, df: pd.DataFrame) -> None:
         """
          Displays a scatter plot of Return on Assets vs. Asset Efficiency for firms.
 
@@ -81,7 +81,7 @@ class View:
         # Add custom explanatory markdown below the chart
         st.markdown(self.config['plot_roa_vs_efficiency']['markdown'])
 
-    def plot_top10_roa(self):
+    def plot_top10_roa(self) -> None:
         """
         Displays a bar chart of the top 10 companies ranked by Return on Assets.
         :return: none
@@ -111,7 +111,7 @@ class View:
         # Add markdown explanation if available
         st.markdown(self.config['plot_top10_roa']['markdown'])
 
-    def plot_contribution_vs_roa(self):
+    def plot_contribution_vs_roa(self) -> None:
         """
         Displays a scatter plot comparing average contribution to public finances vs. average ROA per country.
         :return: none
@@ -140,7 +140,7 @@ class View:
         # Add markdown description
         st.markdown(self.config['plot_contribution_vs_roa']['markdown'])
 
-    def plot_macro_correlation_heatmap(self):
+    def plot_macro_correlation_heatmap(self) -> None:
         """
         Displays a heatmap of correlations between macroeconomic indicators for countries.
         :return: none

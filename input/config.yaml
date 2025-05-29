@@ -9,20 +9,9 @@ files_csv:
   source_largest_companies: largest_companies.csv
   merged_table: merged_table.csv
 
-files_sql:
-  source_financial_indicators: financial_indicators
-  source_largest_companies: largest_companies
-  merged_table: merged_table
-
 export_final_results:
   financial_summary_stat: country_financial_summary
   firms_summary_stat: firms_financial_stat
-
-largest_company_dataset:
-  Rank: Rank
-
-etl_main_parameters: ###a simplifier
-  to_csv: true
 
 columns:
   largest_companies:
@@ -77,11 +66,11 @@ streamlit:
   settings:
     page_title: Groupe_P
     layout: 'wide'
-    initial_sidebar_state: auto #changer
+    initial_sidebar_state: auto
     menu_items:
       Get Help: null
       Report a bug: null
-      About: juste pour voir ce que ca fait
+      About: Groupe_P
 
   widgets:
     selected_dataset:

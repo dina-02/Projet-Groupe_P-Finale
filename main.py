@@ -1,10 +1,12 @@
+import os
 import streamlit as st
 
 from etl import ETL
 from model import Model
-from constants import output_path
-from repository import get_config, Repository
 from view import View
+from constants import config_file,output_path, database_path, input_dir
+from repository import get_config, Repository
+from helpers import get_serialized_data
 
 
 class Main:
@@ -20,17 +22,19 @@ class Main:
         Initialize the application components: configuration, repository, model, and view.
         """
 
-        self.config = get_config()   # Load configuration from YAML
-        self.repo = Repository(self.config, output_path)   # Set up data access
-        self.model = Model(self.config, self.repo)   # Prepare computation engine
-        self.view = View(self.config)   # Prepare charting and UI renderer
-        self.view.set_model(self.model)   # Link the model to the view
+        self.config = get_config()
+        self.repo = Repository(self.config, output_path)
+        self.repo.get_data()
+        self.model = Model(self.config, self.repo)
+        self.model.export_datasets_toSQLite(database_path)
+        self.view = View(self.config)
+        self.view.set_model(self.model)
 
         # Store specific config sections for UI elements
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
-    def run(self):
+    def run(self) -> None:
         """
         Run the Streamlit application.
 
@@ -123,5 +127,12 @@ class Main:
 
 # Application execution entry point
 if __name__ == "__main__":
+    config = get_serialized_data(os.path.join(os.getcwd(), config_file))
+    etl = ETL(config=config, input_dir=input_dir)
+    etl.run()
+    repo = Repository(config, output_path)
+    repo.get_data()
+    model = Model(config, repo)
+    model.export_datasets_toSQLite(database_path)
     app = Main()
     app.run()
