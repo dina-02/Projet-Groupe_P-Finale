@@ -1,12 +1,18 @@
 import os
 import streamlit as st
+import logging
 
+from logger import Logger
 from etl import ETL
 from model import Model
 from view import View
 from constants import config_file,output_path, database_path, input_dir
 from repository import get_config, Repository
 from helpers import get_serialized_data
+
+config = get_config()
+
+
 
 
 class Main:
@@ -23,10 +29,21 @@ class Main:
         """
 
         self.config = get_config()
+        Logger(self.config).set_log()
+        logging.info('initializing')
+
+        etl = ETL(config=config, input_dir=input_dir)
+        etl.run()
+        logging.info('ETL completed')
+
         self.repo = Repository(self.config, output_path)
         self.repo.get_data()
+        logging.info('Data loaded')
+
         self.model = Model(self.config, self.repo)
         self.model.export_datasets_toSQLite(database_path)
+        logging.info('Data exported to SQLite')
+
         self.view = View(self.config)
         self.view.set_model(self.model)
 
@@ -80,6 +97,7 @@ class Main:
         if st.session_state.go_clicked:
 
             # If dataset is country-level
+            logging.info(f'button clicked: {selected_dataset} and {chart_type}')
             if selected_dataset == "Données par pays":
                 df = self.model.get_country_financial_summary()
 
@@ -91,9 +109,10 @@ class Main:
                 # Country-level visualizations
                 if chart_type == "Contribution vs ROA":
                     self.view.plot_contribution_vs_roa()
-
+                    logging.info('displayed chart: Contribution vs ROA')
                 elif chart_type == "Matrice de corrélation macro":
                     self.view.plot_macro_correlation_heatmap()
+                    logging.info('displayed chart: Matrice de corrélation macro')
 
             # If dataset is firm-level
             elif selected_dataset == "Données par entreprise":
@@ -114,6 +133,8 @@ class Main:
                     threshold_eff = st.slider(self.streamlit_widgets_config['slider']['efficiency'],
                                               min_value=0.5, max_value=5.1, value=3.0, step=1.0)
 
+                    logging.info(f'filtering firms with ROA <= {threshold_roa} and Efficiency <= {threshold_eff}')
+
                     df_plot = self.model.get_firms_financial_summary()
                     df_plot = df_plot[
                         (df_plot[self.model.return_on_assets] <= threshold_roa) &
@@ -121,18 +142,13 @@ class Main:
                     ]
 
                     self.view.plot_roa_vs_efficiency(df_plot)
+                    logging.info('displayed chart: Plot vs ROA efficiency')
+
 
                 elif chart_type == "Top 10 ROA":
-                    self.view.plot_top10_roa()   # Display bar chart of top 10 companies by ROA
-
+                    self.view.plot_top10_roa()
+                    logging.info('displayed chart: Plot Top10 ROA')
 # Application execution entry point
-if __name__ == "__main__":
-    config = get_serialized_data(os.path.join(os.getcwd(), config_file))
-    etl = ETL(config=config, input_dir=input_dir)
-    etl.run()
-    repo = Repository(config, output_path)
-    repo.get_data()
-    model = Model(config, repo)
-    model.export_datasets_toSQLite(database_path)
+if __name__ == '__main__':
     app = Main()
     app.run()

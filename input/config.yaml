@@ -13,6 +13,9 @@ export_final_results:
   financial_summary_stat: country_financial_summary
   firms_summary_stat: firms_financial_stat
 
+logger:
+  format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
 columns:
   largest_companies:
     Rank : Rank
