@@ -11,7 +11,7 @@ class Main:
     """
     Main entry point of the Streamlit application.
 
-   This class is responsible for loading configuration, initializing the Repository, Model, and View,
+    This class is responsible for loading configuration, initializing the Repository, Model, and View,
     and managing user interaction through the Streamlit UI to display financial summaries and visualizations.
     """
 
@@ -29,7 +29,6 @@ class Main:
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
-
     def run(self):
         """
         Run the Streamlit application.
@@ -41,7 +40,7 @@ class Main:
 
         self.repo.get_data()
 
-        data=self.streamlit_widgets_config['options']
+        data = self.streamlit_widgets_config['options']
 
         selected_dataset = st.sidebar.radio(
             self.streamlit_widgets_config['selected_dataset']['label'],
@@ -49,9 +48,9 @@ class Main:
         )
 
         st.subheader(f"{selected_dataset} - {self.streamlit_widgets_config['header']['label']}",
-                  divider=self.streamlit_widgets_config['header']['divider'])
+                     divider=self.streamlit_widgets_config['header']['divider'])
 
-        col1, col2=st.columns(2, vertical_alignment=self.streamlit_widgets_config['column']['vertical_alignment'])
+        col1, col2 = st.columns(2, vertical_alignment=self.streamlit_widgets_config['column']['vertical_alignment'])
 
         with col1:
             chart_type = st.selectbox(
@@ -72,31 +71,26 @@ class Main:
 
             if selected_dataset == "Données par pays":
                 df = self.model.get_country_financial_summary()
-                with st.container():
-                    st.subheader(self.streamlit_widgets_config['expander']['donnees_par_pays'])
+
+                with st.expander(self.streamlit_widgets_config['expander']['donnees_par_pays'], expanded=False):
                     st.dataframe(df)
 
-                    st.divider()
+                st.divider()
 
                 if chart_type == "Contribution vs ROA":
                     self.view.plot_contribution_vs_roa()
-##enelever les accents
                 elif chart_type == "Matrice de corrélation macro":
                     self.view.plot_macro_correlation_heatmap()
 
-                #Faudra faire l'ajout des graphs avec données par pays ici
-
             elif selected_dataset == "Données par entreprise":
                 df = self.model.get_firms_financial_summary()
-                with st.container():
-                    st.subheader(self.streamlit_widgets_config['expander']['donnees_par_entreprise'])
+
+                with st.expander(self.streamlit_widgets_config['expander']['donnees_par_entreprise'], expanded=False):
                     st.dataframe(df)
 
                 st.divider()
 
                 if chart_type == "ROA vs Efficiency":
-
-
                     threshold_roa = st.slider(self.streamlit_widgets_config['slider']['roa'],
                                               min_value=0.5, max_value=3.1, value=1.0, step=0.1)
 
