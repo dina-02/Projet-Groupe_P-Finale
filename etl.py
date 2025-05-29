@@ -44,6 +44,7 @@ class ETL:
         Extract raw data from CSV sources intro pandas DataFrames.
         :return: none
         """
+
         self.df_financial_indicators_raw = pd.read_csv(financial_indicators_path, sep=',')
         self.df_largest_companies_raw = pd.read_csv(largest_companies_path, sep=',')
 
