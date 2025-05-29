@@ -92,10 +92,10 @@ class Main:
 
                 if chart_type == "ROA vs Efficiency":
                     threshold_roa = st.slider(self.streamlit_widgets_config['slider']['roa'],
-                                              min_value=0.5, max_value=3.1, value=1.0, step=0.1)
+                                              min_value=0.5, max_value=3.1, value=1.5, step=0.1)
 
                     threshold_eff = st.slider(self.streamlit_widgets_config['slider']['efficiency'],
-                                              min_value=0.5, max_value=5.1, value=1.5, step=1.0)
+                                              min_value=0.5, max_value=5.1, value=3.0, step=1.0)
 
                     df_plot = self.model.get_firms_financial_summary()
                     df_plot = df_plot[
