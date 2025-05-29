@@ -6,7 +6,6 @@ from constants import output_path
 from repository import get_config, Repository
 from view import View
 
-#ajouter l'appel
 
 class Main:
     """
@@ -22,74 +21,87 @@ class Main:
         """
 
         self.config = get_config()
+        self.repo = Repository(self.config, output_path)
+        self.model = Model(self.config, self.repo)
+        self.view = View(self.config)
+        self.view.set_model(self.model)
 
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
-        self.view = View(self.config)
-        self.repo = Repository(self.config, output_path)
-        self.model = Model(self.config, self.repo)
-        self.view.set_repository(self.repo)
-        self.view.set_model(self.model)
 
     def run(self):
-        """
-        Runs the Streamlit app interface.
 
-        Displays a sidebar to choose between datasets and chart types.
-        Loads and displays the appropriate table and chart based on user input.
-        :return: none
-        """
         self.repo.get_data()
 
-        data = self.config['data']
+        data=self.streamlit_widgets_config['options']
 
         selected_dataset = st.sidebar.radio(
-            self.streamlit_widgets_config['ticker_radio']['label'],
+            self.streamlit_widgets_config['selected_dataset']['label'],
             list(data.keys())
         )
 
-        chart_type = st.sidebar.radio(
-            "Choix du graphique",
-            self.streamlit_widgets_config['ticker_radio']['items']
-        )
+        st.subheader(f"{selected_dataset} - {self.streamlit_widgets_config['header']['label']}",
+                  divider=self.streamlit_widgets_config['header']['divider'])
 
-        st.subheader(f"{selected_dataset} - Visualisation des données")
+        col1, col2=st.columns(2, vertical_alignment=self.streamlit_widgets_config['column']['vertical_alignment'])
 
-        if 'go_clicked' not in st.session_state:
-            st.session_state.go_clicked = False
+        with col1:
+            chart_type = st.selectbox(
+                self.streamlit_widgets_config['select_box']['label'],
+                self.streamlit_widgets_config['options'][selected_dataset]
+            )
 
-        if st.button("Afficher"):
-            st.session_state.go_clicked = True
+        with col2:
+            if 'go_clicked' not in st.session_state:
+                st.session_state.go_clicked = False
+
+            if st.button(self.streamlit_widgets_config['start_button']['label']):
+                st.session_state.go_clicked = True
+
+        st.divider()
 
         if st.session_state.go_clicked:
-            if selected_dataset == "Financial Summary Table":
+
+            if selected_dataset == "Données par pays":
                 df = self.model.get_country_financial_summary()
-                with st.expander("Tableau - Données par pays"):
+                with st.container():
+                    st.subheader(self.streamlit_widgets_config['expander']['donnees_par_pays'])
                     st.dataframe(df)
+
+                    st.divider()
 
                 if chart_type == "Contribution vs ROA":
                     self.view.plot_contribution_vs_roa()
-
+##enelever les accents
                 elif chart_type == "Matrice de corrélation macro":
                     self.view.plot_macro_correlation_heatmap()
 
                 #Faudra faire l'ajout des graphs avec données par pays ici
 
-            elif selected_dataset == "Firms Summary Table":
+            elif selected_dataset == "Données par entreprise":
                 df = self.model.get_firms_financial_summary()
-                with st.expander("Tableau - Données par entreprise"):
+                with st.container():
+                    st.subheader(self.streamlit_widgets_config['expander']['donnees_par_entreprise'])
                     st.dataframe(df)
 
+                st.divider()
+
                 if chart_type == "ROA vs Efficiency":
-                    seuil_roa = st.slider("Filtrer ROA max", 0, 100, 10)
-                    seuil_eff = st.slider("Filtrer efficacité max", 0, 100, 10)
+
+
+                    threshold_roa = st.slider(self.streamlit_widgets_config['slider']['roa'],
+                                              min_value=0.5, max_value=3.1, value=1.0, step=0.1)
+
+                    threshold_eff = st.slider(self.streamlit_widgets_config['slider']['efficiency'],
+                                              min_value=0.5, max_value=5.1, value=1.5, step=1.0)
 
                     df_plot = self.model.get_firms_financial_summary()
                     df_plot = df_plot[
-                        (df_plot['Return on Assets'] <= seuil_roa) &
-                        (df_plot['Asset Efficiency'] <= seuil_eff)
+                        (df_plot[self.model.return_on_assets] <= threshold_roa) &
+                        (df_plot[self.model.asset_efficiency] <= threshold_eff)
                     ]
+
                     self.view.plot_roa_vs_efficiency(df_plot)
 
                 elif chart_type == "Top 10 ROA":

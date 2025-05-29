@@ -75,27 +75,40 @@ data:
 
 streamlit:
   settings:
-    page_title: "Groupe_P"
-    initial_sidebar_state: collapsed
+    page_title: Groupe_P
+    layout: 'wide'
+    initial_sidebar_state: auto #changer
+    menu_items:
+      Get Help: null
+      Report a bug: null
+      About: juste pour voir ce que ca fait
 
   widgets:
-    start_button:
-      label: 'Afficher'
     selected_dataset:
       label: Choix des données
-    subheader_titles:
-      Financial Summary Table: 'Tableau pays - Visualisation des données'
-      Firms Summary Table: 'Tabeau des entreprises - Visualisation des données'
-    ticker_radio:
+    options:
+      Données par entreprise:
+       - Top 10 ROA
+       - ROA vs Efficiency
+      Données par pays:
+       - Contribution vs ROA
+       - Matrice de corrélation macro
+    select_box:
       label: Choix du graphique
-      items: ['Top 10 ROA', 'ROA vs Efficiency', 'Contribution vs ROA', 'Matrice de corrélation macro']
-    expander_data:
-      Financial Summary Table:
-        label: 'Tableau - Donées par pays'
-      Firms Summary Table:
-        label: 'Tableau - Données par entreprise'
-    title:
-      label: OUF
+    header:
+      label: Visualisation de données
+      divider: blue
+    start_button:
+      label: Afficher
+    column:
+      vertical_alignment: bottom
+    expander:
+      donnees_par_entreprise: Tableau - Données par entreprise #enlever les accents
+      donnees_par_pays: Tableau - Données par pays
+    slider:
+      roa: Filtrage par ROA (%)
+      efficiency: Filtrage par efficacité des actifs (%)
+
 
 plot_roa_vs_efficiency:
   title: Rentabilité vs Efficacité des actifs (entreprises)

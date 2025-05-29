@@ -9,9 +9,10 @@ class View:
 
         st.set_page_config(
             page_title=self.streamlit_settings['page_title'],
-            # page_icon=self.streamlit_settings['page_icon']
+            #page_icon=self.streamlit_settings['page_icon'],
+            layout=self.streamlit_settings['layout'],
             initial_sidebar_state=self.streamlit_settings['initial_sidebar_state'],
-            # menu_items=self.streamlit_settings['menu_items']
+            menu_items=self.streamlit_settings['menu_items']
         )
 
         self.repo = None
