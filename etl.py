@@ -47,8 +47,12 @@ class ETL:
         """
 
         # Load the raw CSV files for financial indicators and company data
-        self.df_financial_indicators_raw = pd.read_csv(financial_indicators_path, sep=',')
-        self.df_largest_companies_raw = pd.read_csv(largest_companies_path, sep=',')
+        try:
+            self.df_financial_indicators_raw = pd.read_csv(financial_indicators_path, sep=',')
+            self.df_largest_companies_raw = pd.read_csv(largest_companies_path, sep=',')
+        except FileNotFoundError as e:
+            print(f'[Error] File not found : {e}')
+
 
     def transform(self) -> None:
         """
@@ -148,13 +152,16 @@ class ETL:
             self.config['files_csv']['source_largest_companies']: self.df_largest_companies
         }
 
-        output_folder = self.config['folders']['output_folder']
-        os.makedirs(output_folder, exist_ok = True)
+        try:
+            output_folder = self.config['folders']['output_folder']
+            os.makedirs(output_folder, exist_ok = True)
 
-        # Save each DataFrame to CSV in the output directory
-        for name, df in export.items():
-            csv_path = os.path.join(output_folder, f'{name}')
-            df.to_csv(csv_path, index = False)
+            # Save each DataFrame to CSV in the output directory
+            for name, df in export.items():
+                csv_path = os.path.join(output_folder, f'{name}')
+                df.to_csv(csv_path, index = False)
+        except PermissionError as e:
+            print(f'[Error] Datasets not exported: {e}')
 
     def run(self) -> None:
         self.extract()

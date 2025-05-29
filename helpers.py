@@ -3,7 +3,6 @@ import yaml
 import pandas as pd
 
 from typing import Dict, Literal
-from sqlalchemy import create_engine, MetaData
 
 IfExists = Literal["fail", "replace", "append"]
 

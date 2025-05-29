@@ -1,11 +1,11 @@
-import os
 import pandas as pd
 
+
 from helpers import compute_ratio
-from constants import config_file, output_path, database_path
+from constants import output_path
 from repository import Repository, get_config
 from sqlalchemy import create_engine
-from helpers import get_serialized_data
+
 
 class Model:
     """
@@ -27,7 +27,7 @@ class Model:
         self.load_columns()
         self.load_new_columns()
 
-    def load_columns(self) -> None: #voir comment raccourcir
+    def load_columns(self) -> None: #a vomir
         """
          Loads column names for the merged and company datasets from the configuration.
 
@@ -55,7 +55,7 @@ class Model:
         self.col_company = self.col['Company']
         self.col_country = self.col['Headquarters']
 
-    def load_new_columns(self) -> None: #voir comment raccourcir
+    def load_new_columns(self) -> None:
         """
         Loads names of newly computed financial indicators from the configuration.
 
@@ -143,7 +143,7 @@ class Model:
         :return: DataFrame with companies, ROA, and asset efficiency.
         """
 
-        df=self.repo.largest_companies.copy()
+        df = self.repo.largest_companies.copy()
 
         df=compute_ratio(df=df, num=self.col_revenue, denom=self.col_total_asset,
                                        result=self.asset_efficiency)
@@ -170,8 +170,6 @@ class Model:
         df = df.merge(df4, on=self.col_country_merged)
         df = df.merge(df5, on=self.col_country_merged)
 
-        print(df.head())
-
         return df
 
     def export_datasets_toSQLite(self, database_path: str) -> None:
@@ -181,23 +179,18 @@ class Model:
         The data is saved under table names specified in the configuration file.
         """
 
-        country_financial_summary=self.get_country_financial_summary()
-        firms_financial_summary=self.get_firms_financial_summary()
+        try:
+            country_financial_summary = self.get_country_financial_summary()
+            firms_financial_summary = self.get_firms_financial_summary()
 
-        engine = create_engine(f'sqlite:///{database_path}', echo=True)
+            engine = create_engine(f'sqlite:///{database_path}', echo=True)
 
-        country_financial_summary.to_sql(self.config['export_final_results']['financial_summary_stat'],
-                  con=engine, if_exists='replace', index=False)
-        firms_financial_summary.to_sql(self.config['export_final_results']['firms_summary_stat'],
-                  con=engine, if_exists='replace', index=False)
+            country_financial_summary.to_sql(self.config['export_final_results']['financial_summary_stat'],
+                      con=engine, if_exists='replace', index=False)
+            firms_financial_summary.to_sql(self.config['export_final_results']['firms_summary_stat'],
+                      con=engine, if_exists='replace', index=False)
+        except Exception as e:
+            print(f'Error during the export, {e}')
 
-if __name__ =='__main__':
-    config = get_config()
-    repo = Repository(config, output_path)
-    repo.get_data()
-    model = Model(config, repo)
 
-    print(model.get_firms_financial_summary().head())
-    print(model.get_firms_financial_summary().shape)
-    print(model.get_country_financial_summary().head())
-    print(model.get_country_financial_summary().shape)
+

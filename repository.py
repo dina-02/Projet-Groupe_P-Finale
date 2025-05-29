@@ -1,8 +1,7 @@
 import os.path
 import pandas as pd
 
-
-from constants import config_file
+from constants import config_file, output_path
 from helpers import get_serialized_data
 
 
@@ -53,11 +52,8 @@ class Repository:
 if __name__ == '__main__':
     config_path = os.path.join(os.getcwd(), config_file)
     config = get_serialized_data(config_path)
-
-    repo = Repository(config=config, output_path='output')
-
+    repo = Repository(config, output_path)
     repo.get_data()
 
     print(repo.merged_data.head())
-
     print(repo.largest_companies.head())
