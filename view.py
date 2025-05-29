@@ -3,7 +3,19 @@ import plotly.express as px
 
 
 class View:
+    """
+    Handles all visualizations for the Streamlit app, using Plotly charts.
+
+    This class manages setting up the Streamlit page configuration and provides
+    methods to display various financial charts based on country and firm data.
+    """
+
     def __init__(self, config: dict):
+        """
+         Initializes the View with the given configuration and sets Streamlit page settings.
+        :param config: A dictionary containing the application's configuration settings.
+        """
+
         self.config = config
         self.streamlit_settings = self.config['streamlit']['settings']
 
@@ -21,12 +33,32 @@ class View:
         self.ax = None
 
     def set_repository(self, repo):
+        """
+        Links the repository instance to the view.
+
+        :param repo: Repository object providing access to data.
+        :return: none
+        """
+
         self.repo = repo
 
     def set_model(self, model):
+        """
+        Links the model instance to the view.
+
+        :param model: Model object providing processed financial data.
+        :return: none
+        """
+
         self.model = model
 
     def plot_roa_vs_efficiency(self, df):
+        """
+         Displays a scatter plot of Return on Assets vs. Asset Efficiency for firms.
+
+        :param df: DataFrame containing company data with ROA and efficiency metrics.
+        :return: none
+        """
 
         fig = px.scatter(
             df,
@@ -42,6 +74,10 @@ class View:
         st.plotly_chart(fig)
 
     def plot_top10_roa(self):
+        """
+        Displays a bar chart of the top 10 companies ranked by Return on Assets.
+        :return: none
+        """
         df=self.model.get_firms_financial_summary()
         df=df.sort_values(by=self.model.return_on_assets, ascending=False).head(10).round(2)  #arrorndi car illisible
 
@@ -59,6 +95,10 @@ class View:
         st.plotly_chart(fig)
 
     def plot_contribution_vs_roa(self):
+        """
+        Displays a scatter plot comparing average contribution to public finances vs. average ROA per country.
+        :return: none
+        """
 
         df=self.model.get_country_financial_summary()
 
@@ -77,6 +117,10 @@ class View:
         st.markdown(self.config['plot_contribution_vs_roa']['markdown'])
 
     def plot_macro_correlation_heatmap(self):
+        """
+        Displays a heatmap of correlations between macroeconomic indicators for countries.
+        :return: none
+        """
 
         df = self.model.get_country_financial_summary()
         df = df.set_index(self.model.col_country_merged)
