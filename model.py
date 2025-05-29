@@ -3,7 +3,18 @@ from constants import config_file, output_path, database_path
 from repository import Repository
 
 class Model:
+    """
+    The Model class handles financial calculations and metrics for both countries and firms,
+    using data loaded from the Repository.
+    """
+
     def __init__(self, config, repo):
+        """
+        Initializes the Model with configuration and data repository.
+
+        :param config: Configuration dictionary.
+        :param repo: Repository object containing loaded data.
+        """
         self.config = config
         self.repo = repo
         self.min = None
@@ -18,6 +29,10 @@ class Model:
         self.load_new_columns()
 
     def load_columns(self): #voir comment raccourcir
+        """
+        Loads and stores column names for merged and raw datasets from the configuration.
+        :return: none
+        """
 
         self.col_merged = self.config['rename_merged_table']
 
@@ -40,6 +55,11 @@ class Model:
         self.col_country = self.col['Headquarters']
 
     def load_new_columns(self): #voir comment raccourcir
+        """
+        Loads new calculated metric column names from the configuration.
+        :return: none
+        """
+
         self.countries_financial_summary_table = self.config['countries_financial_summary_table']
 
         self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
@@ -53,6 +73,12 @@ class Model:
         self.return_on_assets = self.firms_financial_summary_table['return_on_assets']
 
     def compute(self): #a voir
+        """
+        Computes basic statistics (mean, median, min, max, std, quantiles)
+        for the GDP column in the merged dataset.
+        :return: none
+        """
+
         df = self.repo.merged_data.copy()
 
         col_gdp = df[self.col_gdp_merged]
@@ -74,6 +100,11 @@ class Model:
     #     return biggest_sector
 
     def get_revenue_to_gdp(self):
+        """
+        Calculates revenue as a percentage of GDP per country.
+        :return: DataFrame with countries and their revenue-to-GDP ratios.
+        """
+
         df = self.repo.merged_data.copy()
 
         df[self.revenue_to_gdp] = df[self.col_mean_revenue_merged]/(df[self.col_gdp_merged] * 1000000) * 100
@@ -81,6 +112,11 @@ class Model:
         return df[[self.col_country_merged, self.revenue_to_gdp]]
 
     def get_real_interest_rate(self):
+        """
+        Computes the real interest rate (interest rate - inflation rate) per country.
+        :return: DataFrame with countries and their real interest rates.
+        """
+
         df = self.repo.merged_data.copy()
 
         df[self.real_interest_rate] = df[self.col_inflation] - df[self.col_interest]
@@ -88,6 +124,11 @@ class Model:
         return df[[self.col_country_merged, self.real_interest_rate]]
 
     def get_asset_efficiency(self):
+        """
+        Calculates asset efficiency as revenue divided by total assets per firm.
+        :return: DataFrame with companies and their asset efficiency.
+        """
+
         df = self.repo.largest_companies.copy()
 
         df[self.asset_efficiency] = df[self.col_revenue] / df[self.col_total_asset]
@@ -95,6 +136,11 @@ class Model:
         return df[[self.col_company, self.asset_efficiency]]
 
     def get_average_contribution_to_public_finances(self):
+        """
+        Estimates each country's average contribution to public finances based on tax rate and revenue.
+        :return: DataFrame with countries and estimated contribution values.
+        """
+
         df = self.repo.merged_data.copy()
 
         df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] / 100) * df[
@@ -105,6 +151,11 @@ class Model:
         return df[[self.col_country_merged,self.average_contrib_to_pub_fin]]
 
     def get_return_on_assets(self):
+        """
+        Calculates Return on Assets (ROA) for each firm.
+        :return: DataFrame with companies and their ROA.
+        """
+
         df = self.repo.largest_companies.copy()
 
         df[self.return_on_assets] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
@@ -112,6 +163,11 @@ class Model:
         return df[[self.col_company, self.return_on_assets]]
 
     def get_average_ROA_per_country(self):
+        """
+        Calculates average ROA per country based on aggregated company data.
+        :return: DataFrame with countries and their average ROA.
+        """
+
         df = self.repo.merged_data.copy()
 
         df[self.average_roa] = (df[self.col_net_income_merged] / df[self.col_total_asset_merged]) * 100
