@@ -1,6 +1,4 @@
 import streamlit as st
-import mplfinance as mpf
-import matplotlib.pyplot as plt
 import plotly.express as px
 
 

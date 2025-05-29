@@ -94,15 +94,6 @@ class Model:
         self.std = col_gdp.std()
         self.quantile = col_gdp.quantile([0.25, 0.5, 0.75])
 
-    # def get_biggest_sector(self):
-    #     df = self.repo.largest_companies.copy()
-    #
-    #     df[self.revenue_to_gdp] = df[self.col_net_income] / df[self.col_revenue] * 100
-    #     biggest_sector = df.groupby(self.col_industry, as_index=False)[self.revenue_to_gdp].mean().sort_values(by = 'Profit Margin (%)', ascending = False)
-    #
-    #     print(biggest_sector.head())
-    #     return biggest_sector
-
     def get_revenue_to_gdp(self):
         """
         Calculates revenue as a percentage of GDP per country.
@@ -182,9 +173,6 @@ class Model:
 
         return df[[self.col_country_merged, self.average_roa]]
 
-    def get_inflation_vs_interest(self):
-        df = self.repo.merged_data.copy()
-        return df[[self.col_inflation, self.col_interest, self.col_country_merged]]
 
     def get_roa_vs_efficiency(self):
         df = self.repo.largest_companies.copy()
@@ -230,6 +218,7 @@ class Model:
 
         return df
 
+    #NO USAGE
     def get_macro_correlation_matrix(self):
         df = self.get_country_financial_summary()
         df = df.set_index(self.col_country_merged)
@@ -248,8 +237,6 @@ class Model:
 
 
 if __name__ == '__main__':
-
-
     config = get_serialized_data(os.path.join(os.getcwd(), config_file))
     repo = Repository(config=config, output_path=output_path)
     repo.get_data()

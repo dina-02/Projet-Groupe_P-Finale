@@ -22,7 +22,7 @@ class Main:
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
         self.view = View(self.config)
-        self.repo = Repository(self.config, None, 'output')
+        self.repo = Repository(self.config, 'output') #changer avec le fichier de config
         self.model = Model(self.config, self.repo)
         self.view.set_repository(self.repo)
 

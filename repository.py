@@ -27,7 +27,6 @@ class Repository:
         Initialize the Repository with config and data source paths.
 
         :param config: dictionary with settings and file names
-        :param database_path: path to the SQLite database
         :param output_path: path to the CSV files folder
         """
 
