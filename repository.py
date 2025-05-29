@@ -9,7 +9,7 @@ from helpers import get_serialized_data
 def get_config():
     """
     Load and return the project configuration from the config file.
-    :return: the serialized data
+    :return: Dictionary with configuration data.
     """
 
     config_full_path = os.path.join(os.getcwd(), config_file)
@@ -17,16 +17,17 @@ def get_config():
 
 class Repository:
     """
-    A class used to load data either from a SQLite database or CSV files,
-    depending on the project settings.
+    Handles loading data either from CSV files or (optionally) a database.
+
+    This class centralizes the logic to retrieve the project's data.
     """
 
     def __init__(self, config: dict, output_path: str = None) -> None:
         """
-        Initialize the Repository with config and data source paths.
+        Initialize the Repository with the configuration and data source paths.
 
-        :param config: dictionary with settings and file names
-        :param output_path: path to the CSV files folder
+        :param config: Configuration dictionary.
+        :param output_path: Path to the folder where CSV files are stored.
         """
 
         self.config = config
@@ -36,8 +37,10 @@ class Repository:
 
     def get_data(self) -> None:
         """
-        Load data from the source defined in the configuration.
-        Reads a CSV file.
+        Load datasets from CSV files defined in the configuration.
+
+        This method fills `self.merged_data` and `self.largest_companies`
+        with DataFrames read from the specified CSV files.
         :return: none
         """
 
