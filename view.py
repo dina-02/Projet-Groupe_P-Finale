@@ -73,6 +73,8 @@ class View:
         fig.update_layout(width=900, height=600, title_font_size=18)
         st.plotly_chart(fig)
 
+        st.markdown(self.config['plot_roa_vs_efficiency']['markdown'])
+
     def plot_top10_roa(self):
         """
         Displays a bar chart of the top 10 companies ranked by Return on Assets.
@@ -93,6 +95,8 @@ class View:
         fig.update_traces(marker_color='indigo', textposition='outside')
         fig.update_layout(width=800, height=500)
         st.plotly_chart(fig)
+
+        st.markdown(self.config['plot_top10_roa']['markdown'])
 
     def plot_contribution_vs_roa(self):
         """
