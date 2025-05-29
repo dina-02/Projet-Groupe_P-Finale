@@ -11,13 +11,13 @@ class Main:
     """
     Main entry point of the Streamlit application.
 
-    Handles configuration loading, initializes the model, repository, and view,
-    and controls user interactions and visualizations based on selected options.
+   This class is responsible for loading configuration, initializing the Repository, Model, and View,
+    and managing user interaction through the Streamlit UI to display financial summaries and visualizations.
     """
 
     def __init__(self):
         """
-        Initialize configuration, repository, model, and view for the application.
+        Initialize the application components: configuration, repository, model, and view.
         """
 
         self.config = get_config()
@@ -31,6 +31,13 @@ class Main:
 
 
     def run(self):
+        """
+        Run the Streamlit application.
+
+        Handles user input via sidebar and UI widgets, loads data using the repository,
+        and renders appropriate charts and tables based on the selected options.
+        :return: none
+        """
 
         self.repo.get_data()
 
