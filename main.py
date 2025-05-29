@@ -20,12 +20,13 @@ class Main:
         Initialize the application components: configuration, repository, model, and view.
         """
 
-        self.config = get_config()
-        self.repo = Repository(self.config, output_path)
-        self.model = Model(self.config, self.repo)
-        self.view = View(self.config)
-        self.view.set_model(self.model)
+        self.config = get_config()   # Load configuration from YAML
+        self.repo = Repository(self.config, output_path)   # Set up data access
+        self.model = Model(self.config, self.repo)   # Prepare computation engine
+        self.view = View(self.config)   # Prepare charting and UI renderer
+        self.view.set_model(self.model)   # Link the model to the view
 
+        # Store specific config sections for UI elements
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
@@ -38,59 +39,71 @@ class Main:
         :return: none
         """
 
-        self.repo.get_data()
+        self.repo.get_data()   # Load data into memory
 
-        data = self.streamlit_widgets_config['options']
+        data = self.streamlit_widgets_config['options']   # Available datasets for selection
 
+        # Sidebar radio button for dataset choice
         selected_dataset = st.sidebar.radio(
             self.streamlit_widgets_config['selected_dataset']['label'],
             list(data.keys())
         )
 
+        # Display the header with selected dataset
         st.subheader(f"{selected_dataset} - {self.streamlit_widgets_config['header']['label']}",
                      divider=self.streamlit_widgets_config['header']['divider'])
 
+        # Create two columns for chart selection and execution
         col1, col2 = st.columns(2, vertical_alignment=self.streamlit_widgets_config['column']['vertical_alignment'])
 
+        # First column: chart type selection
         with col1:
             chart_type = st.selectbox(
                 self.streamlit_widgets_config['select_box']['label'],
                 self.streamlit_widgets_config['options'][selected_dataset]
             )
 
+        # Second column: display trigger
         with col2:
             if 'go_clicked' not in st.session_state:
-                st.session_state.go_clicked = False
+                st.session_state.go_clicked = False   # Initialize session flag
 
             if st.button(self.streamlit_widgets_config['start_button']['label']):
-                st.session_state.go_clicked = True
+                st.session_state.go_clicked = True   # Trigger display
 
-        st.divider()
+        st.divider()   # Visual separation
 
         if st.session_state.go_clicked:
 
+            # If dataset is country-level
             if selected_dataset == "Données par pays":
                 df = self.model.get_country_financial_summary()
 
                 with st.expander(self.streamlit_widgets_config['expander']['donnees_par_pays'], expanded=False):
-                    st.dataframe(df)
+                    st.dataframe(df)   # Show data table
 
                 st.divider()
 
+                # Country-level visualizations
                 if chart_type == "Contribution vs ROA":
                     self.view.plot_contribution_vs_roa()
+
                 elif chart_type == "Matrice de corrélation macro":
                     self.view.plot_macro_correlation_heatmap()
 
+            # If dataset is firm-level
             elif selected_dataset == "Données par entreprise":
                 df = self.model.get_firms_financial_summary()
 
                 with st.expander(self.streamlit_widgets_config['expander']['donnees_par_entreprise'], expanded=False):
-                    st.dataframe(df)
+                    st.dataframe(df)   # Show data table
 
                 st.divider()
 
+                # Company-level visualizations
                 if chart_type == "ROA vs Efficiency":
+
+                    # Sliders to filter the scatter plot
                     threshold_roa = st.slider(self.streamlit_widgets_config['slider']['roa'],
                                               min_value=0.5, max_value=3.1, value=1.5, step=0.1)
 
@@ -106,9 +119,9 @@ class Main:
                     self.view.plot_roa_vs_efficiency(df_plot)
 
                 elif chart_type == "Top 10 ROA":
-                    self.view.plot_top10_roa()
+                    self.view.plot_top10_roa()   # Display bar chart of top 10 companies by ROA
 
-
+# Application execution entry point
 if __name__ == "__main__":
     app = Main()
     app.run()
