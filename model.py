@@ -7,8 +7,8 @@ from sqlalchemy import create_engine
 from helpers import get_serialized_data
 
 class Model:
-    """ #ajouter export
-    The Model class handles financial calculations and metrics for both countries and firms,
+    """
+    The Model class handles financial calculations and metrics generation for both countries and firms,
     using data loaded from the Repository.
     """
 
@@ -16,9 +16,10 @@ class Model:
         """
         Initializes the Model with configuration and data repository.
 
-        :param config: Configuration dictionary.
-        :param repo: Repository object containing loaded data.
+        :param config: Configuration dictionary with column mappings and settings.
+        :param repo: Repository object that provides access to cleaned and loaded data.
         """
+
         self.config = config
         self.repo = repo
 
@@ -27,7 +28,9 @@ class Model:
 
     def load_columns(self): #voir comment raccourcir
         """
-        Loads and stores column names for merged and raw datasets from the configuration.
+         Loads column names for the merged and company datasets from the configuration.
+
+        These names are used throughout the class for referencing specific financial metrics.
         :return: none
         """
 
@@ -53,7 +56,9 @@ class Model:
 
     def load_new_columns(self): #voir comment raccourcir
         """
-        Loads new calculated metric column names from the configuration.
+        Loads names of newly computed financial indicators from the configuration.
+
+        These include metrics such as real interest rate, ROA, and contribution to public finances.
         :return: none
         """
 
@@ -72,8 +77,8 @@ class Model:
 
     def get_revenue_to_gdp(self):
         """
-        Calculates revenue as a percentage of GDP per country.
-        :return: DataFrame with countries and their revenue-to-GDP ratios.
+        Calculates the mean revenue as a percentage of GDP for each country.
+        :return: DataFrame with country names and their revenue-to-GDP ratio.
         """
 
         df = self.repo.merged_data.copy()
@@ -84,8 +89,8 @@ class Model:
 
     def get_real_interest_rate(self):
         """
-        Computes the real interest rate (interest rate - inflation rate) per country.
-        :return: DataFrame with countries and their real interest rates.
+        Computes the real interest rate by subtracting inflation from the nominal interest rate.
+        :return: DataFrame with country names and their real interest rates.
         """
 
         df = self.repo.merged_data.copy()
@@ -96,8 +101,8 @@ class Model:
 
     def get_average_contribution_to_public_finances(self):
         """
-        Estimates each country's average contribution to public finances based on tax rate and revenue.
-        :return: DataFrame with countries and estimated contribution values.
+        Estimates each country's average contribution to public finances based on revenue and tax rate.
+        :return: DataFrame with countries and their estimated fiscal contribution percentages.
         """
 
         df = self.repo.merged_data.copy()
@@ -112,8 +117,10 @@ class Model:
 
     def get_average_ROA_per_country(self):
         """
-        Calculates average ROA per country based on aggregated company data.
-        :return: DataFrame with countries and their average ROA.
+        Computes the average Return on Assets (ROA) per country.
+
+        This function filters out extreme values (5th and 95th percentiles) for better reliability.
+        :return: DataFrame with country names and their average ROA values.
         """
 
         df = self.repo.merged_data.copy()
@@ -128,6 +135,12 @@ class Model:
         return df[[self.col_country_merged, self.average_roa]]
 
     def get_firms_financial_summary(self):
+        """
+        Computes financial efficiency metrics for individual companies.
+
+        Includes Return on Assets and Revenue-to-Asset ratios.
+        :return: DataFrame with companies, ROA, and asset efficiency.
+        """
 
         df=self.repo.largest_companies.copy()
 
@@ -140,6 +153,12 @@ class Model:
         return  df[[self.col_company, self.return_on_assets, self.asset_efficiency]]
 
     def get_country_financial_summary(self):
+        """
+        Aggregates all country-level metrics into a single DataFrame.
+
+        Merges revenue-to-GDP, real interest rate, public finance contribution, and ROA.
+        :return: Final country-level DataFrame containing financial summaries.
+        """
 
         df2 = self.get_revenue_to_gdp()
         df3 = self.get_real_interest_rate()
@@ -156,6 +175,13 @@ class Model:
 
     #appel
     def export_datasets(self):
+        """
+        Exports the summarized country and firm financial datasets to a SQLite database.
+
+        The data is saved under table names specified in the configuration file.
+        :return: none
+        """
+
         country_financial_summary=self.get_country_financial_summary()
         firms_financial_summary=self.get_firms_financial_summary()
 
