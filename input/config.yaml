@@ -65,6 +65,7 @@ countries_financial_summary_table:
   average_roa: Average ROA
 
 firms_financial_summary_table:
+  company: Company
   asset_efficiency: Asset Efficiency
   return_on_assets: Return on Assets
 
@@ -96,6 +97,42 @@ streamlit:
     title:
       label: OUF
 
+plot_roa_vs_efficiency:
+  title: Rentabilité vs Efficacité des actifs (entreprises)
+  labels:
+    Asset Efficiency: Efficacité des Actifs
+    Return on Assets: ROA (%)
 
+plot_top10_roa:
+  title: Top 10 entreprises par ROA
+  col_y: Return on Assets
+  labels:
+    ROA arrondi: ROA (%)
+
+plot_contribution_vs_roa:
+  text: Country
+  title: ROA moyen vs Contribution publique par pays
+  labels:
+    Average Contribution to Public Finances (% of GDP): Contribution publique (% PIB)
+    Average ROA: ROA moyen (%)
+  markdown: | 
+    Ce graphique permet de visualiser les différences de modèles économiques entre pays. 
+    On observe que certains pays comme la Chine ou les États-Unis bénéficient de champions nationaux très rentables mais peu taxés, 
+    tandis que la France semble illustrer un modèle économique redistributif dans lequel des entreprises peu rentables soutiennent malgré tout significativement les recettes publiques. 
+    Cela met en évidence des arbitrages entre efficacité économique et politique fiscale.
+
+plot_macro_correlation_heatmap:
+  title: Matrice de corrélation entre indicateurs macroéconomiques
+  markdown: |
+   **Interprétation des coefficients :**  
+   - **Revenue to GDP (%) vs Contribution Publique (% PIB) : +0.90**  
+   ➤ Des entreprises plus présentes dans l’économie génèrent logiquement plus de recettes fiscales pour l’État.  
+
+   - **Taux d’intérêt réel vs ROA moyen : -0.44**  
+   ➤  les taux d’intérêt réels sont élevés, les entreprises ont tendance à être moins rentables : taux réel élevé plus lourd ➤ coût du crédit plus lourd ➤ moins d'investissement et de croissance ➤ ROA plus faible.  
+
+   - **Real Interest Rate (%) vs Revenue to GDP (%) ou Contribution Publique : corrélations proches de 0** 
+   ➤ Il n’y a pas de lien direct entre les taux d’intérêt réels et la taille des entreprises dans l’économie (ou leur contribution fiscale).
+ 
 
 

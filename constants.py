@@ -8,4 +8,3 @@ financial_indicators_path = (r'input/financial_indicators.csv')
 
 largest_companies_path = (r'input/largest_companies.csv')
 
-merged_data = (r'input/output.csv')

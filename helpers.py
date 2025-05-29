@@ -1,13 +1,12 @@
 import os
 import yaml
-from typing import Dict, Literal
-
 import numpy as np
 import pandas as pd
+
+from typing import Dict, Literal
 from sqlalchemy import create_engine, MetaData
 
 IfExists = Literal["fail", "replace", "append"]
-
 
 def dataframes_to_excel(
         dataframes: Dict[str, pd.DataFrame], excel_full_path: str
@@ -105,4 +104,11 @@ def get_serialized_data(path: str) -> Dict:
             return toml.load(file)
 
         raise ValueError(f"Unsupported file extension {extension} | file={path}")
+
+
+##docstring + tester eventuellement ?
+def compute_ratio(df, num, denom, result, x=1): #optional
+    df[result] = (df[num]/df[denom] * x)
+    return df
+
 

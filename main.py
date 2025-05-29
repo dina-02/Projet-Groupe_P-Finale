@@ -1,8 +1,12 @@
 import streamlit as st
+
+from etl import ETL
 from model import Model
+from constants import output_path
 from repository import get_config, Repository
 from view import View
 
+#ajouter l'appel
 
 class Main:
     """
@@ -18,13 +22,15 @@ class Main:
         """
 
         self.config = get_config()
+
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
         self.view = View(self.config)
-        self.repo = Repository(self.config, 'output') #changer avec le fichier de config
+        self.repo = Repository(self.config, output_path)
         self.model = Model(self.config, self.repo)
         self.view.set_repository(self.repo)
+        self.view.set_model(self.model)
 
     def run(self):
         """
@@ -63,13 +69,10 @@ class Main:
                     st.dataframe(df)
 
                 if chart_type == "Contribution vs ROA":
-                    df_plot = self.model.get_contribution_vs_roa()
-                    self.view.plot_contribution_vs_roa(df_plot)
+                    self.view.plot_contribution_vs_roa()
 
                 elif chart_type == "Matrice de corrélation macro":
-                    df_corr = self.model.get_country_financial_summary()
-                    corr_matrix = df_corr.drop(columns=[self.model.col_country_merged]).corr()
-                    self.view.plot_macro_correlation_heatmap(corr_matrix)
+                    self.view.plot_macro_correlation_heatmap()
 
                 #Faudra faire l'ajout des graphs avec données par pays ici
 
@@ -82,7 +85,7 @@ class Main:
                     seuil_roa = st.slider("Filtrer ROA max", 0, 100, 10)
                     seuil_eff = st.slider("Filtrer efficacité max", 0, 100, 10)
 
-                    df_plot = self.model.get_roa_vs_efficiency()
+                    df_plot = self.model.get_firms_financial_summary()
                     df_plot = df_plot[
                         (df_plot['Return on Assets'] <= seuil_roa) &
                         (df_plot['Asset Efficiency'] <= seuil_eff)
@@ -90,8 +93,7 @@ class Main:
                     self.view.plot_roa_vs_efficiency(df_plot)
 
                 elif chart_type == "Top 10 ROA":
-                    df_plot = self.model.get_top10_roa()
-                    self.view.plot_top10_roa(df_plot)
+                    self.view.plot_top10_roa()
 
 
 if __name__ == "__main__":

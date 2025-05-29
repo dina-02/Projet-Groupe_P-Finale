@@ -1,11 +1,10 @@
 import os.path
 import pandas as pd
 
+
 from constants import config_file
-from sqlalchemy import create_engine
 from helpers import get_serialized_data
 
-##marche
 
 def get_config():
     """

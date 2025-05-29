@@ -21,18 +21,16 @@ class ETL:
     and company data into a merged, clean and analyzable format.
     """
 
-    def __init__(self, config: dict, input_dir, sqlite_path):
+    def __init__(self, config: dict, input_dir):
         """
-        Initialize the ETL process with configuration, input folder, and SQLite path.
+        Initialize the ETL process with configuration, input folder.
 
         :param config: dict containing config parameters
         :param input_dir: folder path to input data
-        :param sqlite_path: path where SQLite database will be written
         """
 
         self.config = config
         self.input_dir = input_dir
-        self.sqlite_path = sqlite_path
 
         self.df_financial_indicators_raw = pd.DataFrame()
         self.df_financial_indicators = pd.DataFrame()
@@ -151,7 +149,7 @@ class ETL:
 
 if __name__ == '__main__':
     config = get_config()
-    etl = ETL(config=config, input_dir='input', sqlite_path='output/output.sqlite')
+    etl = ETL(config=config, input_dir='input')
     etl.extract()
     etl.transform()
     etl.load()

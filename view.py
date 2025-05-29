@@ -22,78 +22,65 @@ class View:
     def set_repository(self, repo):
         self.repo = repo
 
-    def compute_chart(self, chart_type: str):
-        st.bar_chart(self.repo.merged_data.set_index('Country'))
-
-    ## à continuer pour l'export
-
-    def plotly_inflation_vs_interest(self, df):
-        fig = px.scatter(
-            df,
-            x=df.columns[0],  # Inflation
-            y=df.columns[1],  # Interest
-            text=df.columns[2],  # Country
-            title="Relation entre inflation et taux d’intérêt",
-            labels={
-                df.columns[0]: "Inflation Rate (%)",
-                df.columns[1]: "Interest Rate (%)"
-            }
-        )
-        fig.update_traces(marker=dict(size=12, color='blue'), textposition='top center')
-        fig.update_layout(width=700, height=500)
-
-        st.plotly_chart(fig)
+    def set_model(self, model):
+        self.model = model
 
     def plot_roa_vs_efficiency(self, df):
+
         fig = px.scatter(
             df,
-            x='Asset Efficiency',
-            y='Return on Assets',
+            x=self.config['firms_financial_summary_table']['asset_efficiency'],
+            y=self.config['firms_financial_summary_table']['return_on_assets'],
             text=self.config['columns']['largest_companies']['Company'],
-            title='Rentabilité vs Efficacité des actifs (entreprises)',
-            labels={
-                'Asset Efficiency': 'Efficacité des Actifs',
-                'Return on Assets': 'ROA (%)'
-            }
+            title=self.config['plot_roa_vs_efficiency']['title'],
+            labels=self.config['plot_roa_vs_efficiency']['labels']
         )
+        #voir si j'ai la patience
         fig.update_traces(marker=dict(size=10, color='green', opacity=0.7), textposition='top right')
         fig.update_layout(width=900, height=600, title_font_size=18)
         st.plotly_chart(fig)
 
-    def plot_top10_roa(self, df):
-        df["ROA arrondi"] = df["Return on Assets"].round(2)  #Arrondi car illisible sur streamlit sinon (trop de chiffres après la virgule)
+    def plot_top10_roa(self):
+        df=self.model.get_firms_financial_summary()
+        df=df.sort_values(by=self.model.return_on_assets, ascending=False).head(10).round(2)  #arrorndi car illisible
 
         fig = px.bar(
             df,
-            x=self.config['columns']['largest_companies']['Company'],
-            y="ROA arrondi",
-            title='Top 10 entreprises par ROA',
-            labels={"ROA arrondi": "ROA (%)"},
-            text="ROA arrondi"
+            x=self.config['firms_financial_summary_table']['company'],
+            y=self.config['firms_financial_summary_table']['return_on_assets'],
+            title=self.config['plot_top10_roa']['title'],
+            labels=self.config['plot_top10_roa']['labels'],
+            text=self.config['plot_top10_roa']['col_y']
         )
+
         fig.update_traces(marker_color='indigo', textposition='outside')
         fig.update_layout(width=800, height=500)
         st.plotly_chart(fig)
 
-    def plot_contribution_vs_roa(self, df):
+    def plot_contribution_vs_roa(self):
+
+        df=self.model.get_country_financial_summary()
+
         fig = px.scatter(
             df,
-            x="Average Contribution to Public Finances (% of GDP)",
-            y="Average ROA",
-            text="Country",
-            title="ROA moyen vs Contribution publique par pays",
-            labels={
-                "Average Contribution to Public Finances (% of GDP)": "Contribution publique (% PIB)",
-                "Average ROA": "ROA moyen (%)"
-            }
+            x=self.config['countries_financial_summary_table']['average_contrib_to_pub_fin'],
+            y=self.config['countries_financial_summary_table']['average_roa'],
+            text=self.config['plot_contribution_vs_roa']['text'],
+            title=self.config['plot_contribution_vs_roa']['title'],
+            labels=self.config['plot_contribution_vs_roa']['labels']
         )
         fig.update_traces(marker=dict(size=12, color='darkred'), textposition='top center')
         fig.update_layout(width=800, height=600)
         st.plotly_chart(fig)
 
-        st.markdown("Ce graphique permet de visualiser les différences de modèles économiques entre pays. On observe que certains pays comme la Chine ou les États-Unis bénéficient de champions nationaux très rentables mais peu taxés, tandis que la France semble illustrer un modèle économique redistributif dans lequel des entreprises peu rentables soutiennent malgré tout significativement les recettes publiques. Cela met en évidence des arbitrages entre efficacité économique et politique fiscale.")
+        st.markdown(self.config['plot_contribution_vs_roa']['markdown'])
 
-    def plot_macro_correlation_heatmap(self, corr_df):
+    def plot_macro_correlation_heatmap(self):
+
+        df = self.model.get_country_financial_summary()
+        df = df.set_index(self.model.col_country_merged)
+        corr_df= df.corr()
+
         fig = px.imshow(
             corr_df,
             text_auto=".2f",
@@ -104,25 +91,11 @@ class View:
             aspect="auto"
         )
         fig.update_layout(
-            title="Matrice de corrélation entre indicateurs macroéconomiques",
-            xaxis_title="",
-            yaxis_title="",
+            title=self.config['plot_macro_correlation_heatmap']['title'],
             width=700,
             height=600
         )
         st.plotly_chart(fig, use_container_width=True)
 
-        st.markdown("""
-        **Interprétation des coefficients :**  
-        - **Revenue to GDP (%) vs Contribution Publique (% PIB) : +0.90** ➤ Des entreprises plus présentes dans l’économie génèrent logiquement plus de recettes fiscales pour l’État.  
-
-        - **Taux d’intérêt réel vs ROA moyen : -0.44** ➤ Lorsque les taux d’intérêt réels sont élevés, les entreprises ont tendance à être moins rentables : taux réel élevé plus lourd ➤ coût du crédit plus lourd ➤ moins d'investissement et de croissance ➤ ROA plus faible.  
-
-        - **Real Interest Rate (%) vs Revenue to GDP (%) ou Contribution Publique : corrélations proches de 0** ➤ Il n’y a pas de lien direct entre les taux d’intérêt réels et la taille des entreprises dans l’économie (ou leur contribution fiscale).
-        """)
-
-
-
-
-
+        st.markdown(self.config['plot_macro_correlation_heatmap']['markdown'])
 
