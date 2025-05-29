@@ -24,7 +24,7 @@ class Model:
         self.load_columns()
         self.load_new_columns()
 
-    def load_columns(self) -> None: #a vomir
+    def load_columns(self) -> None:
         """
          Loads column names for the merged and company datasets from the configuration.
 
@@ -149,14 +149,16 @@ class Model:
         df = self.repo.largest_companies.copy()
 
         # Efficiency = Revenue / Assets
-        df=compute_ratio(df=df, num=self.col_revenue, denom=self.col_total_asset,
+        df = compute_ratio(df=df, num=self.col_revenue, denom=self.col_total_asset,
                                        result=self.asset_efficiency)
 
         # ROA = Net Income / Assets
-        df=compute_ratio(df=df, num=self.col_net_income, denom=self.col_total_asset,
+        df = compute_ratio(df=df, num=self.col_net_income, denom=self.col_total_asset,
                           result=self.return_on_assets, x=100)
 
-        return  df[[self.col_company, self.return_on_assets, self.asset_efficiency]]
+        df = df[[self.col_company, self.return_on_assets, self.asset_efficiency]].round(3)
+
+        return  df
 
     def get_country_financial_summary(self) -> pd.DataFrame:
         """
@@ -175,6 +177,8 @@ class Model:
         df = df2.merge(df3, on=self.col_country_merged)
         df = df.merge(df4, on=self.col_country_merged)
         df = df.merge(df5, on=self.col_country_merged)
+
+        df = df.round(3)
 
         return df
 

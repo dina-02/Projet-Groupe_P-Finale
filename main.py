@@ -144,6 +144,7 @@ class Main:
                 elif chart_type == "Top 10 ROA":
                     self.view.plot_top10_roa()
                     logging.info('displayed chart: Plot Top10 ROA')
+
 # Application execution entry point
 if __name__ == '__main__':
     app = Main()

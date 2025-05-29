@@ -1,8 +1,7 @@
 folders:
   input_folder: input
   output_folder: output
-  database_path: output.sqlite
-  sqlite_table: financial_data
+  database_path: final_output.sqlite
 
 files_csv:
   source_financial_indicators: financial_indicators.csv
@@ -67,13 +66,13 @@ data:
 
 streamlit:
   settings:
-    page_title: Groupe_P
+    page_title: Groupe P
     layout: 'wide'
     initial_sidebar_state: auto
     menu_items:
       Get Help: null
       Report a bug: null
-      About: Groupe_P
+      About: Groupe P
 
   widgets:
     selected_dataset:
@@ -95,7 +94,7 @@ streamlit:
     column:
       vertical_alignment: bottom
     expander:
-      donnees_par_entreprise: Tableau - Données par entreprise #enlever les accents
+      donnees_par_entreprise: Tableau - Données par entreprise
       donnees_par_pays: Tableau - Données par pays
     slider:
       roa: Filtrage par ROA (%)

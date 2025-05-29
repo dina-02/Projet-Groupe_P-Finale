@@ -103,7 +103,7 @@ class ETL:
         df.drop(self.config['drop_columns_largest_companies'], axis=1, inplace=True)
 
         # Group by country and compute the mean for numeric columns
-        df_mean=(df.groupby('Country', as_index=False)
+        df_mean=(df.groupby(self.config['columns']['largest_companies']['Headquarters'], as_index=False)
                                             .mean(numeric_only=True))
         # Rename the resulting aggregated columns
         df_mean.rename(columns=self.config['columns']['largest_companies_aggregated'],
@@ -118,15 +118,19 @@ class ETL:
         :return: none
         """
 
+        merge_col = self.config['columns']['largest_companies']['Headquarters']
+
         self.df_merged = pd.merge(
             self.df_largest_companies_aggregated,
             self.df_financial_indicators,
             how='left',
-            on='Country')
+            on=merge_col)
 
         # Rename merged columns based on config
         self.df_merged.rename(columns=self.config['rename_merged_table'],
                               inplace=True)
+
+        self.df_merged = self.df_merged.round(3)
 
     def sort_countries_by_total_assets(self) -> pd.DataFrame:
         """
@@ -134,10 +138,14 @@ class ETL:
         :return: the sorted dataframe by mean total assets
         """
 
+        mean_total_asset = self.config['rename_merged_table']['Mean Total Asset in (USD Millions)']
+
         self.df_merged.sort_values(
-            by='Mean_Total_Asset',
+            by=mean_total_asset,
             ascending=False,
             inplace=True)
+
+        self.df_merged[mean_total_asset] = self.df_merged[mean_total_asset].round(2)
 
         return self.df_merged
 
@@ -176,6 +184,4 @@ if __name__ == '__main__':
     '''
     config = get_config()
     etl = ETL(config=config, input_dir=input_dir)
-    etl.extract()
-    etl.transform()
-    etl.load()
+    etl.run()

@@ -51,7 +51,7 @@ class Repository:
         largest_file = os.path.join(self.output_path, self.config['files_csv']['source_largest_companies'])
 
         # Read the CSV files into pandas DataFrames
-        self.merged_data = pd.read_csv(merged_file, sep=',')
+        self.merged_data = pd.read_csv(merged_file, sep=',') #separated by columns
         self.largest_companies = pd.read_csv(largest_file,sep =',')
 
 if __name__ == '__main__':
