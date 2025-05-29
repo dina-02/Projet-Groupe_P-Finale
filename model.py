@@ -1,6 +1,9 @@
 import pandas as pd
+import os
 from constants import config_file, output_path, database_path
 from repository import Repository
+from sqlalchemy import create_engine
+from helpers import get_serialized_data
 
 class Model:
     def __init__(self, config, repo):
@@ -40,6 +43,7 @@ class Model:
         self.col_country = self.col['Headquarters']
 
     def load_new_columns(self): #voir comment raccourcir
+
         self.countries_financial_summary_table = self.config['countries_financial_summary_table']
 
         self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
@@ -51,27 +55,6 @@ class Model:
 
         self.asset_efficiency = self.firms_financial_summary_table['asset_efficiency']
         self.return_on_assets = self.firms_financial_summary_table['return_on_assets']
-
-    def compute(self): #a voir
-        df = self.repo.merged_data.copy()
-
-        col_gdp = df[self.col_gdp_merged]
-
-        self.mean = col_gdp.mean()
-        self.median = col_gdp.median()
-        self.min = col_gdp.min()
-        self.max = col_gdp.max()
-        self.std = col_gdp.std()
-        self.quantile = col_gdp.quantile([0.25, 0.5, 0.75])
-
-    # def get_biggest_sector(self):
-    #     df = self.repo.largest_companies.copy()
-    #
-    #     df[self.revenue_to_gdp] = df[self.col_net_income] / df[self.col_revenue] * 100
-    #     biggest_sector = df.groupby(self.col_industry, as_index=False)[self.revenue_to_gdp].mean().sort_values(by = 'Profit Margin (%)', ascending = False)
-    #
-    #     print(biggest_sector.head())
-    #     return biggest_sector
 
     def get_revenue_to_gdp(self):
         df = self.repo.merged_data.copy()
@@ -107,14 +90,18 @@ class Model:
     def get_return_on_assets(self):
         df = self.repo.largest_companies.copy()
 
-        df[self.return_on_assets] = (df[self.col_net_income] / df[self.col_total_asset]) * 100
+        df[self.return_on_assets]=(df[self.col_net_income] / df[self.col_total_asset]) * 100
 
         return df[[self.col_company, self.return_on_assets]]
 
     def get_average_ROA_per_country(self):
         df = self.repo.merged_data.copy()
 
-        df[self.average_roa] = (df[self.col_net_income_merged] / df[self.col_total_asset_merged]) * 100
+        df[self.average_roa]=(df[self.col_net_income_merged] / df[self.col_total_asset_merged]) * 100
+
+        q1 = df[self.average_roa].quantile(0.05)
+        q2 = df[self.average_roa].quantile(0.95)
+        df = df[(df[self.average_roa] >= q1) & (df[self.average_roa] <= q2)]
 
         return df[[self.col_country_merged, self.average_roa]]
 
@@ -147,9 +134,11 @@ class Model:
         df4 = self.get_average_contribution_to_public_finances()
         df5 = self.get_average_ROA_per_country()
 
-        df = df2.merge(df3, on = self.col_country_merged)
-        df = df.merge(df4, on = self.col_country_merged)
-        df = df.merge(df5, on = self.col_country_merged)
+        df = df2.merge(df3, on=self.col_country_merged)
+        df = df.merge(df4, on=self.col_country_merged)
+        df = df.merge(df5, on=self.col_country_merged)
+
+        print(df.head())
 
         return df
 
@@ -160,20 +149,31 @@ class Model:
 
         df = df2.merge(df, on=self.col_company)
 
+        print(df.head())
+
         return df
+
+    def export_datasets(self):
+        country_financial_summary=self.get_country_financial_summary()
+        firms_financial_summary=self.get_firms_financial_summary()
+
+        engine = create_engine(f'sqlite:///{database_path}', echo=True)
+
+        country_financial_summary.to_sql(self.config['export_final_results']['financial_summary_stat'],
+                  con=engine, if_exists='replace', index=False)
+        firms_financial_summary.to_sql(self.config['export_final_results']['firms_summary_stat'],
+                  con=engine, if_exists='replace', index=False)
 
 
 if __name__ == '__main__':
-    from constants import config_file
-    from helpers import get_serialized_data
-    import os
+
 
     config = get_serialized_data(os.path.join(os.getcwd(), config_file))
-    repo = Repository(config=config, output_path = output_path, database_path=database_path)
+    repo = Repository(config=config, output_path=output_path)
     repo.get_data()
 
-    model = Model(config = config, repo = repo)
-    #model.get_biggest_sector()
+    model = Model(config=config, repo=repo)
+    model.export_datasets()
 
 
 

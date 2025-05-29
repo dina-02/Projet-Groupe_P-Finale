@@ -1,7 +1,7 @@
 folders:
   input_folder: input
   output_folder: output
-  sqlite_db: output.sqlite
+  database_path: output.sqlite
   sqlite_table: financial_data
 
 files_csv:
@@ -14,12 +14,14 @@ files_sql:
   source_largest_companies: largest_companies
   merged_table: merged_table
 
+export_final_results:
+  financial_summary_stat: country_financial_summary
+  firms_summary_stat: firms_financial_stat
+
 largest_company_dataset:
   Rank: Rank
 
-etl_main_parameters:
-  to_sqlite: false ##voir pourquoi c'est faux
-  drop_all_tables: true
+etl_main_parameters: ###a simplifier
   to_csv: true
 
 columns:

@@ -1,7 +1,5 @@
 import streamlit as st
-import os
 from model import Model
-from constants import config_file
 from repository import get_config, Repository
 from view import View
 

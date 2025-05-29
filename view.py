@@ -95,8 +95,3 @@ class View:
 
         st.markdown("Ce graphique permet de visualiser les différences de modèles économiques entre pays. On observe que certains pays comme la Chine ou les États-Unis bénéficient de champions nationaux très rentables mais peu taxés, tandis que la France semble illustrer un modèle économique redistributif dans lequel des entreprises peu rentables soutiennent malgré tout significativement les recettes publiques. Cela met en évidence des arbitrages entre efficacité économique et politique fiscale.")
 
-
-
-
-
-
