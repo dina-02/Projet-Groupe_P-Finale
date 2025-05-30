@@ -208,5 +208,3 @@ class Model:
         except Exception as e:
             print(f'Error during the export, {e}')
 
-
-
