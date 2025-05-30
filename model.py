@@ -88,6 +88,7 @@ class Model:
 
         return df[[self.col_country_merged, self.revenue_to_gdp]]
 
+
     def get_real_interest_rate(self) -> pd.DataFrame:
         """
         Computes the real interest rate by subtracting inflation from the nominal interest rate.
@@ -96,9 +97,10 @@ class Model:
 
         df = self.repo.merged_data.copy()
 
-        df[self.real_interest_rate] = df[self.col_inflation] - df[self.col_interest]
+        df[self.real_interest_rate] = df[self.col_interest] - df[self.col_inflation]
 
         return df[[self.col_country_merged, self.real_interest_rate]]
+
 
     def get_average_contribution_to_public_finances(self) -> pd.DataFrame:
         """
@@ -138,6 +140,7 @@ class Model:
 
         return df[[self.col_country_merged, self.average_roa]]
 
+
     def get_firms_financial_summary(self) -> pd.DataFrame:
         """
         Computes financial efficiency metrics for individual companies.
@@ -160,6 +163,7 @@ class Model:
 
         return  df
 
+
     def get_country_financial_summary(self) -> pd.DataFrame:
         """
         Aggregates all country-level metrics into a single DataFrame.
@@ -181,6 +185,7 @@ class Model:
         df = df.round(3)
 
         return df
+
 
     def export_datasets_toSQLite(self, database_path: str) -> None:
         """

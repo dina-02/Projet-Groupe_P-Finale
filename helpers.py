@@ -2,9 +2,8 @@ import os
 import yaml
 import pandas as pd
 
-from typing import Dict, Literal
+from typing import Dict
 
-IfExists = Literal["fail", "replace", "append"]
 
 def get_serialized_data(path: str) -> Dict:
     """
@@ -35,7 +34,6 @@ def get_serialized_data(path: str) -> Dict:
             return toml.load(file)
 
         raise ValueError(f"Unsupported file extension {extension} | file={path}")
-
 
 
 def compute_ratio(df:pd.DataFrame, num: str, denom: str, result: float, x=1) -> pd.DataFrame:

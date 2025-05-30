@@ -17,43 +17,53 @@ logger:
 
 columns:
   largest_companies:
-    Rank : Rank
-    Company : Company
-    Industry : Industry
-    Revenue in (USD Million) : Revenue
-    Net Income in (USD Millions) : Net_Income
-    Total Assest in (USD Millions) : Total_Asset
-    Headquarters: Country
+    Rank : rank
+    Company : company
+    Industry : industry
+    Revenue in (USD Million) : revenue_usd_millions
+    Net Income in (USD Millions) : net_income_millions
+    Total Assest in (USD Millions) : total_asset_millions
+    Headquarters: country
 
   largest_companies_aggregated:
-    Headquarters: Country
-    Revenue: Mean_Revenue
-    Net_Income: Mean_Income
-    Total_Asset: Mean_Total_Asset
+    country: country
+    revenue_usd_millions: mean_revenue
+    net_income_millions: mean_income
+    total_asset_millions: mean_total_asset
+
+financial_indicators:
+  Country: country
+  Interest Rate (%): interest_rate_pct
+  Inflation Rate (%): inflation_rate_pct
+  Banking Sector Assets (% of GDP): banking_sector_assets_pct
+  Stock Market Capitalization (% of GDP): stock_market_cap_pct
+  Corporate Tax Rate (%): corporate_tax_rate
+  GDP (USD Trillions): gdp_usd_trillion
 
 rename_merged_table:
-  Headquarters: Country
-  Mean Revenue in (USD Million): Mean_Revenue
-  Mean Net Income in (USD Millions): Mean_Income
-  Mean Total Asset in (USD Millions): Mean_Total_Asset
-  Interest Rate (%): Interest_Rate_Pct
-  Inflation Rate (%): Inflation_Rate_Pct
-  Stock Market Capitalization (% of GDP): Stock_market_Capitalization
-  Banking Sector Assets (% of GDP): Banking_Sector_Asset
-  Corporate Tax Rate (%): Corporate_Tax_Rate
-  GDP (USD Trillions): GDP_USD_Trillion
+  Headquarters: country
+  Mean Revenue in (USD Million): mean_revenue
+  Mean Net Income in (USD Millions): mean_income
+  Mean Total Asset in (USD Millions): mean_total_asset
+  Interest Rate (%): interest_rate_pct
+  Inflation Rate (%): inflation_rate_pct
+  Stock Market Capitalization (% of GDP): stock_market_capitalization
+  Banking Sector Assets (% of GDP): banking_sector_asset
+  Corporate Tax Rate (%): corporate_tax_rate
+  GDP (USD Trillions): gdp_usd_trillion
 
 drop_columns_largest_companies:
-  - Rank
+  - rank
 
 drop_columns_merged_table:
-  - Country
+  - country
 
 countries_financial_summary_table:
   revenue_to_gdp: Revenue to GDP (%)
   real_interest_rate: Real Interest Rate (%)
   average_contrib_to_pub_fin: Average Contribution to Public Finances (% of GDP)
   average_roa: Average ROA
+
 
 firms_financial_summary_table:
   company: Company
@@ -80,7 +90,7 @@ streamlit:
     options:
       Données par entreprise:
        - Top 10 ROA
-       - ROA vs Efficiency
+       - ROA vs Efficacité des actifs
       Données par pays:
        - Contribution vs ROA
        - Matrice de corrélation macro
@@ -113,6 +123,8 @@ plot_roa_vs_efficiency:
     Cela suggère que **le modèle économique joue un rôle structurant** : on ne peut pas comparer tous les secteurs sur ces deux axes sans contexte.
 
 plot_top10_roa:
+  x_axis: company
+  y_axis: Return on Assets
   title: Top 10 entreprises par ROA
   col_y: Return on Assets
   labels:
@@ -122,7 +134,7 @@ plot_top10_roa:
     On voit que des sociétés d’investissement comme Brookfield, Freddie Mac ou Morgan Stanley dominent.
 
 plot_contribution_vs_roa:
-  text: Country
+  text: country
   title: ROA moyen vs Contribution publique par pays
   labels:
     Average Contribution to Public Finances (% of GDP): Contribution publique (% PIB)
@@ -140,9 +152,10 @@ plot_macro_correlation_heatmap:
    - **Revenue to GDP (%) vs Contribution Publique (% PIB) : +0.99**  
    ➤ Forte corrélation positive : Naturellement, plus les entreprises génèrent des revenus, plus elles paient d'impôts.
 
-   - **Taux d’intérêt réel vs ROA moyen/ : -0.32**  
-   ➤ Corrélation négative : elle démontre une tendance des entreprises à être moins rentables lorsque les taux d’intérêt réels sont plus élevés (coût du capital, frein à l’investissement).
+   - **Taux d’intérêt réel vs ROA moyen : +0.32**  
+   ➤ Corrélation positive : elle démontre une tendance des entreprises à être moins rentables lorsque les taux d’intérêt réels sont plus élevés.
 
-    - **Taux d'intérêt réel vs Revenue to GDP (%) ou Contribution Publique : -0,46**  
-   ➤ Corrélation négative : une hausse des taux d'intérêts réels engendre une baisse de profit des entreprises, baissant ainsi leur contribution au PIB (et donc mécaniquement leur contribution publique).
+    - **Taux d'intérêt réel vs Revenue to GDP (%) ou Contribution Publique : +0,46**  
+   ➤ Corrélation positive : une hausse des taux d'intérêts réels est associée à une hausse de la contribution des entreprises
+     au PIB.
 

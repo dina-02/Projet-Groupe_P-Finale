@@ -1,19 +1,20 @@
 import os
 import pandas as pd
 
-from constants import config_file, input_dir
+from constants import config_file, input_dir, financial_indicators_path, largest_companies_path
 from helpers import get_serialized_data
-from constants import financial_indicators_path, largest_companies_path
+
 
 def get_config() -> dict:
     """
     Load and return the project configuration dictionary from the serialized config file path.
-   :return: the serialized data
-   """
+    :return: the serialized data
+    """
 
     # Build the full path to the config file and load the data
     config_full_path = os.path.join(os.getcwd(), config_file)
     return get_serialized_data(config_full_path)
+
 
 class ETL:
     """
@@ -87,15 +88,15 @@ class ETL:
         self.df_largest_companies.rename(columns=self.config['columns']['largest_companies'],
                                          inplace=True)
 
+        self.df_financial_indicators.rename(columns=self.config['financial_indicators'], inplace=True)
+
+
     def aggregate_data(self) -> None:
         """
         Group the company data by country, compute the mean of numeric values,
         and rename the columns for aggregated output.
         :return: none
         """
-
-        self.df_largest_companies.rename(self.config['columns']['largest_companies'],
-                                         inplace=True)
 
         df=self.df_largest_companies.copy()
 
@@ -109,7 +110,11 @@ class ETL:
         df_mean.rename(columns=self.config['columns']['largest_companies_aggregated'],
                        inplace=True)
 
+        print(f"[DEBUG] df_largest_companies_aggregated type: {type(self.df_largest_companies_aggregated)}")
+        print(f"[DEBUG] df_financial_indicators type: {type(self.df_financial_indicators)}")
+
         self.df_largest_companies_aggregated = df_mean
+
 
     def merge_data(self) -> None:
         """
@@ -118,19 +123,22 @@ class ETL:
         :return: none
         """
 
-        merge_col = self.config['columns']['largest_companies']['Headquarters']
+        merge_col_left = self.config['columns']['largest_companies']['Headquarters']
+        merge_col_right = self.config['financial_indicators']['Country']
 
         self.df_merged = pd.merge(
             self.df_largest_companies_aggregated,
             self.df_financial_indicators,
-            how='left',
-            on=merge_col)
+            how='inner',
+            left_on=merge_col_left,
+            right_on=merge_col_right)
 
         # Rename merged columns based on config
         self.df_merged.rename(columns=self.config['rename_merged_table'],
                               inplace=True)
 
         self.df_merged = self.df_merged.round(3)
+
 
     def sort_countries_by_total_assets(self) -> pd.DataFrame:
         """
@@ -149,6 +157,7 @@ class ETL:
 
         return self.df_merged
 
+
     def load(self) -> None:
         """
         Export the transformed datasets CSV.
@@ -162,19 +171,21 @@ class ETL:
 
         try:
             output_folder = self.config['folders']['output_folder']
-            os.makedirs(output_folder, exist_ok = True)
+            os.makedirs(output_folder, exist_ok=True)
 
             # Save each DataFrame to CSV in the output directory
             for name, df in export.items():
                 csv_path = os.path.join(output_folder, f'{name}')
-                df.to_csv(csv_path, index = False)
+                df.to_csv(csv_path, index=False)
         except PermissionError as e:
             print(f'[Error] Datasets not exported: {e}')
+
 
     def run(self) -> None:
         self.extract()
         self.transform()
         self.load()
+
 
 # Script entry point
 if __name__ == '__main__':

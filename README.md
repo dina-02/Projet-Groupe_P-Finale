@@ -1,16 +1,20 @@
 ## Groupe P
 #### ALLOUT Kamila, RAMADAN Dina, TCHOUBOUKOFF Louka, GULER Serra, IBRHAHIM Loane
 
-Notre projet consiste en... 
+Ce projet propose une analyse croisée entre les performances financiéres des plus grandes entreprises mondiales et les
+indicateurs macroéconomiques des pays où elles opèrent.
 
-Nous avons donc fait un ETL sur deux fichiers CSV, un contenant les donnees des entreprises et l'autre des indicateurs
-macroéoonomiques des pays. 
+Un processus ETL a été mis en place à partir de deux fichiers CSV, l'un contenant les donnees des entreprises et l'autre 
+des indicateurs macroéoonomiques des pays.
 
-On a fait une jointure entre les deux sur la colonne des pays, et on a garde l'autre dataset afin de ne pas perdre les 
-informations relatives aux entreprises.
+Une jointure a été effectuée sur la variable pays. Le second jeu de donnée a été conservé indépendamment, adin de 
+préserver l'anlayse centrée sur les entreprises.
 
-On a retransformé ces deux tableaux dans model en calculant des ratio puis en realisant des joinutres. 
-Ces tableaux ont ete exportés dans une base SQLite.
+Les transformations de données ont été effectuées dans model. Nous avons obtenu deux nouveaux tableaux qui ont été 
+exportés dans une base SQLite.
 
-L'interface utilisateur permet de visualiser les résultats de ces transformations sous forme de tableaux interatifs 
-et de graphiques dynamiques.
+L'interface utilisateur, dévelopée avec Streamlit permet de visualiser les résultats de ces transformations sous forme d
+e tableaux interatifs et de graphiques dynamiques.
+
+#### Le projet a été divisé entre les membres du groupe, mais certains ont rencontrè des problèmes avec GitHub, ce qui a
+#### limité leur contribution directe via la plateforme. 

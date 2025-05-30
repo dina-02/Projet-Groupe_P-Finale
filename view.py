@@ -94,8 +94,8 @@ class View:
         # Create bar chart
         fig = px.bar(
             df,
-            x=self.config['firms_financial_summary_table']['company'],
-            y=self.config['firms_financial_summary_table']['return_on_assets'],
+            x=self.config['plot_top10_roa']['x_axis'],
+            y=self.config['plot_top10_roa']['y_axis'],
             title=self.config['plot_top10_roa']['title'],
             labels=self.config['plot_top10_roa']['labels'],
             text=self.config['plot_top10_roa']['col_y']

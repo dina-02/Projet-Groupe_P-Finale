@@ -5,7 +5,7 @@ from logger import Logger
 from etl import ETL
 from model import Model
 from view import View
-from constants import config_file, output_path, database_path, input_dir
+from constants import output_path, database_path, input_dir
 from repository import get_config, Repository
 
 config = get_config()
@@ -47,6 +47,7 @@ class Main:
         self.streamlit_config = self.config['streamlit']
         self.streamlit_widgets_config = self.streamlit_config["widgets"]
 
+
     def run(self) -> None:
         """
         Run the Streamlit application.
@@ -55,8 +56,6 @@ class Main:
         and renders appropriate charts and tables based on the selected options.
         :return: none
         """
-
-        self.repo.get_data()   # Load data into memory
 
         data = self.streamlit_widgets_config['options']   # Available datasets for selection
 
@@ -140,10 +139,10 @@ class Main:
                     self.view.plot_roa_vs_efficiency(df_plot)
                     logging.info('displayed chart: Plot vs ROA efficiency')
 
-
                 elif chart_type == "Top 10 ROA":
                     self.view.plot_top10_roa()
                     logging.info('displayed chart: Plot Top10 ROA')
+
 
 # Application execution entry point
 if __name__ == '__main__':
