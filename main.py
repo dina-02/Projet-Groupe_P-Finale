@@ -1,5 +1,5 @@
-import streamlit as st
 import logging
+import streamlit as st
 
 from logger import Logger
 from etl import ETL

@@ -16,6 +16,7 @@ logger:
   format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
 
 columns:
+  # raw dataset
   largest_companies:
     Rank : rank
     Company : company
@@ -26,12 +27,14 @@ columns:
     Headquarters: country
 
   largest_companies_aggregated:
+    # aggregated dataset
     country: country
     revenue_usd_millions: mean_revenue
     net_income_millions: mean_income
     total_asset_millions: mean_total_asset
 
 financial_indicators:
+  # raw dataset
   Country: country
   Interest Rate (%): interest_rate_pct
   Inflation Rate (%): inflation_rate_pct
@@ -41,6 +44,7 @@ financial_indicators:
   GDP (USD Trillions): gdp_usd_trillion
 
 rename_merged_table:
+  # merged dataset
   Headquarters: country
   Mean Revenue in (USD Million): mean_revenue
   Mean Net Income in (USD Millions): mean_income
@@ -58,22 +62,20 @@ drop_columns_largest_companies:
 drop_columns_merged_table:
   - country
 
+# final output
 countries_financial_summary_table:
   revenue_to_gdp: Revenue to GDP (%)
   real_interest_rate: Real Interest Rate (%)
   average_contrib_to_pub_fin: Average Contribution to Public Finances (% of GDP)
   average_roa: Average ROA
 
-
+# final output
 firms_financial_summary_table:
   company: Company
   asset_efficiency: Asset Efficiency
   return_on_assets: Return on Assets
 
-data:
-  Financial Summary Table: Financial Summary Table
-  Firms Summary Table:  Firms Summary Table
-
+# streamlit parameters
 streamlit:
   settings:
     page_title: Groupe P
@@ -111,6 +113,7 @@ streamlit:
       efficiency: Filtrage par efficacité des actifs (%)
 
 
+#plots
 plot_roa_vs_efficiency:
   title: Rentabilité vs Efficacité des actifs (entreprises)
   labels:
@@ -121,6 +124,7 @@ plot_roa_vs_efficiency:
     Le **ROA est assez dispersé** : certaines entreprises génèrent beaucoup de rentabilité pour chaque actif, d’autres beaucoup moins.
     En revanche, **l’efficacité des actifs est très liée au secteur** : Les **banques** se concentrent autour de 0,5 (beaucoup d’actifs, marges faibles), tandis que les **assureurs ou sociétés d’investissement** montent à 2 ou 3 (actifs plus légers, rendement plus fort).
     Cela suggère que **le modèle économique joue un rôle structurant** : on ne peut pas comparer tous les secteurs sur ces deux axes sans contexte.
+
 
 plot_top10_roa:
   x_axis: company
@@ -133,6 +137,7 @@ plot_top10_roa:
     Ce graphique montre quelles entreprises utilisent le mieux leurs actifs pour générer du profit. Il est très pertinent pour détecter les modèles de gestion les plus performants.
     On voit que des sociétés d’investissement comme Brookfield, Freddie Mac ou Morgan Stanley dominent.
 
+
 plot_contribution_vs_roa:
   text: country
   title: ROA moyen vs Contribution publique par pays
@@ -144,6 +149,7 @@ plot_contribution_vs_roa:
     On observe que certains pays comme le Canada ou l’Espagne affichent à la fois un ROA élevé et une forte contribution publique : ces pays hébergent des entreprises rentables et fiscalement contributives. 
     A l'inverse, l'Italie semble illustrer un modèle économique redistributif dans lequel des entreprises peu rentables soutiennent malgré tout significativement les recettes publiques.
     Cela met en évidence des arbitrages entre efficacité économique et politique fiscale.
+
 
 plot_macro_correlation_heatmap:
   title: Matrice de corrélation entre indicateurs macroéconomiques
