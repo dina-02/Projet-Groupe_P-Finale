@@ -16,4 +16,5 @@ exportés dans une base SQLite.
 L'interface utilisateur, développée avec Streamlit permet de visualiser les résultats de ces transformations sous forme 
 de tableaux interactifs et de graphiques dynamiques.
 
-#### Le projet a été divisé entre les membres du groupe, mais certains ont rencontré des problèmes avec GitHub, ce qui a limité leur contribution directe via la plateforme. 
+#### Le projet a été divisé entre les membres du groupe, mais certains ont rencontré des problèmes avec GitHub, ce qui
+#### a limité leur contribution directe via la plateforme. 
