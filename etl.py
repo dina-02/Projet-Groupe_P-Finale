@@ -110,9 +110,6 @@ class ETL:
         df_mean.rename(columns=self.config['columns']['largest_companies_aggregated'],
                        inplace=True)
 
-        print(f"[DEBUG] df_largest_companies_aggregated type: {type(self.df_largest_companies_aggregated)}")
-        print(f"[DEBUG] df_financial_indicators type: {type(self.df_financial_indicators)}")
-
         self.df_largest_companies_aggregated = df_mean
 
 
