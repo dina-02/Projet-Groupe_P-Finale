@@ -119,7 +119,7 @@ class Main:
                 st.divider()
 
                 # Company-level visualizations
-                if chart_type == "ROA vs Efficiency":
+                if chart_type == "ROA vs Efficacité des actifs":
 
                     # Sliders to filter the scatter plot
                     threshold_roa = st.slider(self.streamlit_widgets_config['slider']['roa'],
