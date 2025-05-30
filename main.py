@@ -2,7 +2,7 @@ import logging
 import streamlit as st
 
 from logger import Logger
-from etl import ETL
+from etl import Etl
 from model import Model
 from view import View
 from constants import output_path, database_path, input_dir
@@ -28,7 +28,7 @@ class Main:
         Logger(self.config).set_log()
         logging.info('initializing')
 
-        etl = ETL(config=config, input_dir=input_dir)
+        etl = Etl(config=config, input_dir=input_dir)
         etl.run()
         logging.info('ETL completed')
 

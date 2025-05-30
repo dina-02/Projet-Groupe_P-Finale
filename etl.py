@@ -16,7 +16,7 @@ def get_config() -> dict:
     return get_serialized_data(config_full_path)
 
 
-class ETL:
+class Etl:
     """
     A class representing the ETL pipeline for processing financial indicators
     and company data into a merged, clean and analyzable format.
@@ -178,6 +178,14 @@ class ETL:
             print(f'[Error] Datasets not exported: {e}')
 
 
+    def sanity_check(self):
+        print("**** sanity check ****")
+        print(f"df_merged={self.df_merged.shape}")
+        print(f"df_largest_companies={self.df_largest_companies.shape}")
+        print(f"df_merged={self.df_merged.describe()}")
+        print(f"df_largest_companies={self.df_largest_companies.describe()}")
+
+
     def run(self) -> None:
         self.extract()
         self.transform()
@@ -187,9 +195,10 @@ class ETL:
 # Script entry point
 if __name__ == '__main__':
     '''
-    Executes the entire ETL: extract, transform, load.
+    Executes the entire ETL and the sanity check.
     The data will be extracted, cleaned and exported to CSV.
     '''
     config = get_config()
-    etl = ETL(config=config, input_dir=input_dir)
+    etl = Etl(config=config, input_dir=input_dir)
     etl.run()
+    etl.sanity_check()

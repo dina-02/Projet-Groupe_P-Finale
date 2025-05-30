@@ -33,6 +33,11 @@ columns:
     net_income_millions: mean_income
     total_asset_millions: mean_total_asset
 
+# for the export to the SQLite database
+data:
+  country_financial_summary: Financial Summary Table
+  firms_financial_stat:  Firms Summary Table
+
 financial_indicators:
   # raw dataset
   Country: country
@@ -132,7 +137,8 @@ plot_top10_roa:
   title: Top 10 entreprises par ROA
   col_y: Return on Assets
   labels:
-    ROA arrondi: ROA (%)
+    company: Company
+    Return on Assets: ROA (%)
   markdown: |
     Ce graphique montre quelles entreprises utilisent le mieux leurs actifs pour générer du profit. Il est très pertinent pour détecter les modèles de gestion les plus performants.
     On voit que des sociétés d’investissement comme Brookfield, Freddie Mac ou Morgan Stanley dominent.
@@ -140,7 +146,7 @@ plot_top10_roa:
 
 plot_contribution_vs_roa:
   text: country
-  title: ROA moyen vs Contribution publique par pays
+  title: ROA Moyen vs Contribution Publique par Pays
   labels:
     Average Contribution to Public Finances (% of GDP): Contribution publique (% PIB)
     Average ROA: ROA moyen (%)
@@ -159,9 +165,9 @@ plot_macro_correlation_heatmap:
    ➤ Forte corrélation positive : Naturellement, plus les entreprises génèrent des revenus, plus elles paient d'impôts.
 
    - **Taux d’intérêt réel vs ROA moyen : +0.32**  
-   ➤ Corrélation positive : elle démontre une tendance des entreprises à être moins rentables lorsque les taux d’intérêt réels sont plus élevés.
+   ➤ Corrélation positive : Elle démontre une tendance des entreprises à être moins rentables lorsque les taux d’intérêt réels sont plus élevés.
 
     - **Taux d'intérêt réel vs Revenue to GDP (%) ou Contribution Publique : +0,46**  
-   ➤ Corrélation positive : une hausse des taux d'intérêts réels est associée à une hausse de la contribution des entreprises
+   ➤ Corrélation positive : Une hausse des taux d'intérêts réels est associée à une hausse de la contribution des entreprises
      au PIB.
 
