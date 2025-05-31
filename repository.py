@@ -47,8 +47,8 @@ class Repository:
         """
 
         # Construct full paths to the CSV files
-        merged_file = os.path.join(self.output_path, self.config['files_csv']['merged_table'])
-        largest_file = os.path.join(self.output_path, self.config['files_csv']['source_largest_companies'])
+        merged_file = os.path.join(self.output_path, self.config['output_files_csv']['merged_table'])
+        largest_file = os.path.join(self.output_path, self.config['output_files_csv']['largest_companies'])
 
         # Read the CSV files into pandas DataFrames
         self.merged_data = pd.read_csv(merged_file, sep=',') #separated by columns
@@ -63,5 +63,4 @@ if __name__ == '__main__':
 
     # Print the first few rows of each dataset to verify loading
     print(repo.merged_data.head())
-
     print(repo.largest_companies.head())

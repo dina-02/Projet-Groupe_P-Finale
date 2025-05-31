@@ -33,6 +33,9 @@ class Etl:
         self.config = config
         self.input_dir = input_dir
 
+        self.largest_comp_col = self.config['largest_companies']
+        self.merged_dataset = self.config['merged_dataset']['columns']
+
         # Initialize dataframes for each ETL stage
         self.df_financial_indicators_raw = pd.DataFrame()
         self.df_financial_indicators = pd.DataFrame()
@@ -78,18 +81,32 @@ class Etl:
         self.df_financial_indicators = self.df_financial_indicators_raw.copy()
         self.df_largest_companies = self.df_largest_companies_raw.copy()
 
+        self.largest_comp_col = self.config['largest_companies']
+
+        print(f'before the renaming: {self.df_largest_companies.columns}')
+        print(f'before the renaming: {self.df_financial_indicators.columns}')
+
+
         # Apply cleaning to both datasets
         for df in [self.df_financial_indicators, self.df_largest_companies]:
             df.replace(0, pd.NA, inplace=True)
             df.dropna(how='all', inplace=True)
             df.drop_duplicates(inplace=True)
+            df.columns=(df.columns
+                        .str.replace(r' \(% of GDP\)', '', regex=True)
+                        .str.replace(r' in \(USD Million\)', ' usd millions', regex=True)
+                        .str.replace(r' in \(USD Millions\)', ' usd millions', regex=True)
+                        .str.replace(r' \(%\)', ' ', regex=True)
+                        .str.replace(r' \(USD Trillions\)', ' usd trillions', regex=True)
+                        .str.strip()
+                        .str.replace(' ', '_')
+                        .str.lower())
+            df.rename(columns={'total_assest_usd_millions':'total_asset_usd_millions'}, inplace=True)  # pour que ca soit correct dans yaml
 
-        # Rename columns in the company data using config mappings
-        self.df_largest_companies.rename(columns=self.config['columns']['largest_companies'],
-                                         inplace=True)
+        self.df_largest_companies.rename(columns=self.largest_comp_col['columns'], inplace=True)
 
-        self.df_financial_indicators.rename(columns=self.config['financial_indicators'], inplace=True)
-
+        print(f'after the renaming: {self.df_largest_companies.columns}')
+        print(f'after the renaming: {self.df_financial_indicators.columns}')
 
     def aggregate_data(self) -> None:
         """
@@ -98,20 +115,28 @@ class Etl:
         :return: none
         """
 
-        df=self.df_largest_companies.copy()
+        df = self.df_largest_companies.copy()
+
+        print(f'before aggregation: {df.columns}')
 
         # Drop the columns not needed for aggregation
-        df.drop(self.config['drop_columns_largest_companies'], axis=1, inplace=True)
+        df.drop(self.largest_comp_col['drop_columns_largest_companies'], axis=1, inplace=True)
 
         # Group by country and compute the mean for numeric columns
-        df_mean=(df.groupby(self.config['columns']['largest_companies']['Headquarters'], as_index=False)
+        df_mean=(df.groupby(self.largest_comp_col['columns']['headquarters'], as_index=False)
                                             .mean(numeric_only=True))
+
+        print(f'before the renaming of df_mean: {df_mean.columns}')
+
         # Rename the resulting aggregated columns
-        df_mean.rename(columns=self.config['columns']['largest_companies_aggregated'],
+        df_mean.rename(columns=self.largest_comp_col['aggregated'],
                        inplace=True)
+
+        print(f'after the renaming of df_mean: {df_mean.columns}')
 
         self.df_largest_companies_aggregated = df_mean
 
+        print(f'after aggregation: {self.df_largest_companies_aggregated.columns}')
 
     def merge_data(self) -> None:
         """
@@ -120,18 +145,18 @@ class Etl:
         :return: none
         """
 
-        merge_col_left = self.config['columns']['largest_companies']['Headquarters']
-        merge_col_right = self.config['financial_indicators']['Country']
+        merge_col = self.config['merged_dataset']['merge_on']
 
         self.df_merged = pd.merge(
             self.df_largest_companies_aggregated,
             self.df_financial_indicators,
             how='inner',
-            left_on=merge_col_left,
-            right_on=merge_col_right)
+            on=merge_col)
+
+        print(f'new names merged table: {self.df_merged.columns}')
 
         # Rename merged columns based on config
-        self.df_merged.rename(columns=self.config['rename_merged_table'],
+        self.df_merged.rename(columns=self.config['merged_dataset']['columns'],
                               inplace=True)
 
         self.df_merged = self.df_merged.round(3)
@@ -143,7 +168,7 @@ class Etl:
         :return: the sorted dataframe by mean total assets
         """
 
-        mean_total_asset = self.config['rename_merged_table']['Mean Total Asset in (USD Millions)']
+        mean_total_asset = self.merged_dataset['mean_total_asset']
 
         self.df_merged.sort_values(
             by=mean_total_asset,
@@ -162,8 +187,8 @@ class Etl:
         """
 
         export = {
-            self.config['files_csv']['merged_table']: self.df_merged,
-            self.config['files_csv']['source_largest_companies']: self.df_largest_companies
+            self.config['output_files_csv']['merged_table']: self.df_merged,
+            self.config['output_files_csv']['largest_companies']: self.df_largest_companies
         }
 
         try:

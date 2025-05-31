@@ -3,82 +3,78 @@ folders:
   output_folder: output
   database_path: final_output.sqlite
 
-files_csv:
+logger:
+  format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+
+input_files_csv:
   source_financial_indicators: financial_indicators.csv
   source_largest_companies: largest_companies.csv
+
+output_files_csv:
   merged_table: merged_table.csv
+  largest_companies: largest_companies.csv
+
+#etl
+largest_companies:
+  columns:
+    rank: rank
+    company: company
+    industry: industry
+    revenue_usd_millions: revenue_usd_millions
+    total_asset_usd_millions: total_asset_usd_millions
+    net_income_usd_millions: net_income_usd_millions
+    headquarters: country
+
+  drop_columns_largest_companies:
+    rank
+
+  aggregated:
+    # aggregated dataset
+    country: country
+    revenue_usd_millions: mean_revenue
+    net_income_usd_millions: mean_net_income
+    total_asset_usd_millions: mean_total_asset
+
+#etl
+merged_dataset:
+  columns:
+    # merged dataset
+    country: country
+    mean_revenue: mean_revenue
+    mean_total_asset: mean_total_asset
+    mean_net_income: mean_net_income
+    interest_rate: interest_rate
+    inflation_rate: inflation_rate
+    banking_sector_assets: banking_sector_assets
+    stock_market_capitalization: stock_market_capitalization
+    corporate_tax_rate: corporate_tax_rate
+    gdp_usd_trillions: gdp_usd_trillions
+
+  merge_on: country
 
 export_final_results:
   financial_summary_stat: country_financial_summary
   firms_summary_stat: firms_financial_stat
 
-logger:
-  format: "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
-
-columns:
-  # raw dataset
-  largest_companies:
-    Rank : rank
-    Company : company
-    Industry : industry
-    Revenue in (USD Million) : revenue_usd_millions
-    Net Income in (USD Millions) : net_income_millions
-    Total Assest in (USD Millions) : total_asset_millions
-    Headquarters: country
-
-  largest_companies_aggregated:
-    # aggregated dataset
-    country: country
-    revenue_usd_millions: mean_revenue
-    net_income_millions: mean_income
-    total_asset_millions: mean_total_asset
 
 # for the export to the SQLite database
 data:
   country_financial_summary: Financial Summary Table
   firms_financial_stat:  Firms Summary Table
 
-financial_indicators:
-  # raw dataset
-  Country: country
-  Interest Rate (%): interest_rate_pct
-  Inflation Rate (%): inflation_rate_pct
-  Banking Sector Assets (% of GDP): banking_sector_assets_pct
-  Stock Market Capitalization (% of GDP): stock_market_cap_pct
-  Corporate Tax Rate (%): corporate_tax_rate
-  GDP (USD Trillions): gdp_usd_trillion
-
-rename_merged_table:
-  # merged dataset
-  Headquarters: country
-  Mean Revenue in (USD Million): mean_revenue
-  Mean Net Income in (USD Millions): mean_income
-  Mean Total Asset in (USD Millions): mean_total_asset
-  Interest Rate (%): interest_rate_pct
-  Inflation Rate (%): inflation_rate_pct
-  Stock Market Capitalization (% of GDP): stock_market_capitalization
-  Banking Sector Assets (% of GDP): banking_sector_asset
-  Corporate Tax Rate (%): corporate_tax_rate
-  GDP (USD Trillions): gdp_usd_trillion
-
-drop_columns_largest_companies:
-  - rank
-
-drop_columns_merged_table:
-  - country
-
 # final output
 countries_financial_summary_table:
-  revenue_to_gdp: Revenue to GDP (%)
-  real_interest_rate: Real Interest Rate (%)
-  average_contrib_to_pub_fin: Average Contribution to Public Finances (% of GDP)
-  average_roa: Average ROA
+  country: country
+  revenue_to_gdp: revenue_to_gdp
+  real_interest_rate: real_interest_rate
+  average_contrib_to_pub_fin: average_contrib_to_pub_fin
+  average_roa: average_roa
 
 # final output
 firms_financial_summary_table:
-  company: Company
-  asset_efficiency: Asset Efficiency
-  return_on_assets: Return on Assets
+  company: company
+  asset_efficiency: asset_efficiency
+  return_on_assets: return_on_assets
 
 # streamlit parameters
 streamlit:
@@ -89,7 +85,7 @@ streamlit:
     menu_items:
       Get Help: null
       Report a bug: null
-      About: Groupe P
+      About: too bad
 
   widgets:
     selected_dataset:
@@ -116,14 +112,21 @@ streamlit:
     slider:
       roa: Filtrage par ROA (%)
       efficiency: Filtrage par efficacité des actifs (%)
-
+    chart_types:
+      contribution_vs_roa: Contribution vs ROA
+      correlation_matrix_macro: Matrice de corrélation macro
+      roa_vs_efficiency: ROA vs Efficacité des actifs
+      top_10_roa: Top 10 ROA
+    selected_dataset_interface:
+      country: Données par pays
+      firms: Données par entreprise
 
 #plots
 plot_roa_vs_efficiency:
   title: Rentabilité vs Efficacité des actifs (entreprises)
   labels:
-    Asset Efficiency: Efficacité des Actifs
-    Return on Assets: ROA (%)
+    asset_efficiency: Efficacité des Actifs
+    return_on_assets: ROA (%)
   markdown: |
     Ici, nous explorons la relation entre la rentabilité des entreprises (ROA) et leur efficacité d’utilisation des actifs.
     Le **ROA est assez dispersé** : certaines entreprises génèrent beaucoup de rentabilité pour chaque actif, d’autres beaucoup moins.
@@ -133,12 +136,12 @@ plot_roa_vs_efficiency:
 
 plot_top10_roa:
   x_axis: company
-  y_axis: Return on Assets
+  y_axis: return_on_assets
   title: Top 10 entreprises par ROA
-  col_y: Return on Assets
+  col_y: return_on_assets
   labels:
-    company: Company
-    Return on Assets: ROA (%)
+    company: Entreprises
+    return_on_assets: ROA (%)
   markdown: |
     Ce graphique montre quelles entreprises utilisent le mieux leurs actifs pour générer du profit. Il est très pertinent pour détecter les modèles de gestion les plus performants.
     On voit que des sociétés d’investissement comme Brookfield, Freddie Mac ou Morgan Stanley dominent.
@@ -148,8 +151,8 @@ plot_contribution_vs_roa:
   text: country
   title: ROA Moyen vs Contribution Publique par Pays
   labels:
-    Average Contribution to Public Finances (% of GDP): Contribution publique (% PIB)
-    Average ROA: ROA moyen (%)
+    average_contrib_to_pub_fin: Contribution publique (% PIB)
+    average_roa : ROA moyen (%)
   markdown: | 
     Ce graphique permet de visualiser les différences de modèles économiques entre pays. 
     On observe que certains pays comme le Canada ou l’Espagne affichent à la fois un ROA élevé et une forte contribution publique : ces pays hébergent des entreprises rentables et fiscalement contributives. 
@@ -159,6 +162,11 @@ plot_contribution_vs_roa:
 
 plot_macro_correlation_heatmap:
   title: Matrice de corrélation entre indicateurs macroéconomiques
+  labels:
+    real_interest_rate: Taux d'intérêt réel
+    revenue_to_gdp: Revenus moyens rapportés au PIB
+    average_contrib_to_pub_fin: Contribution fiscale (%)
+    average_roa: ROA moyen
   markdown: |
    **Interprétation des coefficients :**  
    - **Revenue to GDP (%) vs Contribution Publique (% PIB) : +0.99**  
@@ -171,3 +179,14 @@ plot_macro_correlation_heatmap:
    ➤ Corrélation positive : Une hausse des taux d'intérêts réels est associée à une hausse de la contribution des entreprises
      au PIB.
 
+display_country_table:
+  country: Country
+  revenue_to_gdp: Revenue to GDP
+  real_interest_rate: Real Interest Rate
+  average_contrib_to_pub_fin: Average Contribution to Public Finance
+  average_roa: Average ROA
+
+display_firms_table:
+  company: Company
+  asset_efficiency: Asset Efficiency
+  return_on_assets: Return on Assets

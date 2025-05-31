@@ -37,7 +37,7 @@ class Main:
         logging.info('Data loaded')
 
         self.model = Model(self.config, self.repo)
-        self.model.export_datasets_toSQLite(database_path)
+        self.model.export_datasets_to_sqlite(database_path)
         logging.info('Data exported to SQLite')
 
         self.view = View(self.config)
@@ -93,8 +93,8 @@ class Main:
 
             # If dataset is country-level
             logging.info(f'button clicked: {selected_dataset} and {chart_type}')
-            if selected_dataset == "Données par pays":
-                df = self.model.get_country_financial_summary()
+            if selected_dataset == self.streamlit_widgets_config['selected_dataset_interface']['country'] :
+                df = self.view.display_country_table()
 
                 with st.expander(self.streamlit_widgets_config['expander']['donnees_par_pays'], expanded=False):
                     st.dataframe(df)   # Show data table
@@ -102,16 +102,17 @@ class Main:
                 st.divider()
 
                 # Country-level visualizations
-                if chart_type == "Contribution vs ROA":
+                if chart_type == self.streamlit_widgets_config['chart_types']['contribution_vs_roa']:
                     self.view.plot_contribution_vs_roa()
                     logging.info('displayed chart: Contribution vs ROA')
-                elif chart_type == "Matrice de corrélation macro":
+
+                elif chart_type == self.streamlit_widgets_config['chart_types']['correlation_matrix_macro']:
                     self.view.plot_macro_correlation_heatmap()
                     logging.info('displayed chart: Matrice de corrélation macro')
 
             # If dataset is firm-level
-            elif selected_dataset == "Données par entreprise":
-                df = self.model.get_firms_financial_summary()
+            elif selected_dataset == self.streamlit_widgets_config['selected_dataset_interface']['firms']:
+                df = self.view.display_firms_table()
 
                 with st.expander(self.streamlit_widgets_config['expander']['donnees_par_entreprise'], expanded=False):
                     st.dataframe(df)   # Show data table
@@ -119,7 +120,7 @@ class Main:
                 st.divider()
 
                 # Company-level visualizations
-                if chart_type == "ROA vs Efficacité des actifs":
+                if chart_type == self.streamlit_widgets_config['chart_types']['roa_vs_efficiency']:
 
                     # Sliders to filter the scatter plot
                     threshold_roa = st.slider(self.streamlit_widgets_config['slider']['roa'],
@@ -132,14 +133,14 @@ class Main:
 
                     df_plot = self.model.get_firms_financial_summary()
                     df_plot = df_plot[
-                        (df_plot[self.model.return_on_assets] <= threshold_roa) &
-                        (df_plot[self.model.asset_efficiency] <= threshold_eff)
+                        (df_plot[self.model.firms_financial_summary_table['asset_efficiency']] <= threshold_roa) &
+                        (df_plot[self.model.firms_financial_summary_table['return_on_assets']] <= threshold_eff)
                     ]
 
                     self.view.plot_roa_vs_efficiency(df_plot)
                     logging.info('displayed chart: Plot vs ROA efficiency')
 
-                elif chart_type == "Top 10 ROA":
+                elif chart_type == self.streamlit_widgets_config['chart_types']['top_10_roa']:
                     self.view.plot_top10_roa()
                     logging.info('displayed chart: Plot Top10 ROA')
 

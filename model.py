@@ -20,59 +20,13 @@ class Model:
         self.config = config
         self.repo = repo
 
-        # Load column mappings from config
-        self.load_columns()
-        self.load_new_columns()
+        #load old columns
+        self.col_merged = self.config['merged_dataset']['columns']
+        self.col = self.config['largest_companies']['columns']
 
-    def load_columns(self) -> None:
-        """
-         Loads column names for the merged and company datasets from the configuration.
-
-        These names are used throughout the class for referencing specific financial metrics.
-        :return: none
-        """
-
-        self.col_merged = self.config['rename_merged_table']
-
-        # Columns related to macroeconomic indicators
-        self.col_gdp_merged = self.col_merged['GDP (USD Trillions)']
-        self.col_tax_rate_merged = self.col_merged['Corporate Tax Rate (%)']
-        self.col_country_merged = self.col_merged['Headquarters']
-        self.col_inflation = self.col_merged['Inflation Rate (%)']
-        self.col_interest = self.col_merged['Interest Rate (%)']
-        self.col_mean_revenue_merged = self.col_merged['Mean Revenue in (USD Million)']
-        self.col_net_income_merged = self.col_merged['Mean Net Income in (USD Millions)']
-        self.col_total_asset_merged = self.col_merged['Mean Total Asset in (USD Millions)']
-
-        # Columns related to individual companies
-        self.col = self.config['columns']['largest_companies']
-
-        self.col_revenue = self.col['Revenue in (USD Million)']
-        self.col_net_income = self.col['Net Income in (USD Millions)']
-        self.col_industry = self.col['Industry']
-        self.col_total_asset = self.col['Total Assest in (USD Millions)']
-        self.col_company = self.col['Company']
-        self.col_country = self.col['Headquarters']
-
-    def load_new_columns(self) -> None:
-        """
-        Loads names of newly computed financial indicators from the configuration.
-
-        These include metrics such as real interest rate, ROA, and contribution to public finances.
-        :return: none
-        """
-
+        #load new columns
         self.countries_financial_summary_table = self.config['countries_financial_summary_table']
-
-        self.revenue_to_gdp = self.countries_financial_summary_table['revenue_to_gdp']
-        self.real_interest_rate = self.countries_financial_summary_table['real_interest_rate']
-        self.average_contrib_to_pub_fin = self.countries_financial_summary_table['average_contrib_to_pub_fin']
-        self.average_roa = self.countries_financial_summary_table['average_roa']
-
         self.firms_financial_summary_table = self.config['firms_financial_summary_table']
-
-        self.asset_efficiency = self.firms_financial_summary_table['asset_efficiency']
-        self.return_on_assets = self.firms_financial_summary_table['return_on_assets']
 
 
     def get_revenue_to_gdp(self) -> pd.DataFrame:
@@ -84,9 +38,11 @@ class Model:
         df = self.repo.merged_data.copy()
 
         # GDP is in trillions -> convert to millions before dividing
-        df[self.revenue_to_gdp] = df[self.col_mean_revenue_merged] / (df[self.col_gdp_merged] * 1000000) * 100
+        df[self.countries_financial_summary_table['revenue_to_gdp']] =  (df[self.col_merged['mean_revenue']]
+                                                                         / (df[self.col_merged['gdp_usd_trillions']]
+                                                                            * 1000000) * 100)
 
-        return df[[self.col_country_merged, self.revenue_to_gdp]]
+        return df[[self.col_merged['country'], self.countries_financial_summary_table['revenue_to_gdp']]]
 
 
     def get_real_interest_rate(self) -> pd.DataFrame:
@@ -97,9 +53,10 @@ class Model:
 
         df = self.repo.merged_data.copy()
 
-        df[self.real_interest_rate] = df[self.col_interest] - df[self.col_inflation]
+        df[self.countries_financial_summary_table['real_interest_rate']] = (df[self.col_merged['interest_rate']]
+                                                                            - df[self.col_merged['inflation_rate']])
 
-        return df[[self.col_country_merged, self.real_interest_rate]]
+        return df[[self.col_merged['country'], self.countries_financial_summary_table['real_interest_rate']]]
 
 
     def get_average_contribution_to_public_finances(self) -> pd.DataFrame:
@@ -111,15 +68,15 @@ class Model:
         df = self.repo.merged_data.copy()
 
         # Estimate public contribution: (tax rate * revenue) / GDP
-        df[self.average_contrib_to_pub_fin] = ((df[self.col_tax_rate_merged] / 100) * df[
-                                                  self.col_mean_revenue_merged]
-                                                      / (df[self.col_gdp_merged] * 1000000)
-                                              ) * 100
+        df[self.countries_financial_summary_table['average_contrib_to_pub_fin']] = (
+                                                (df[self.col_merged['corporate_tax_rate']] / 100) *
+                                                df[self.col_merged['mean_revenue']]
+                                                      / (df[self.col_merged['gdp_usd_trillions']] * 1000000)) * 100
 
-        return df[[self.col_country_merged,self.average_contrib_to_pub_fin]]
+        return df[[self.col_merged['country'], self.countries_financial_summary_table['average_contrib_to_pub_fin']]]
 
 
-    def get_average_ROA_per_country(self) -> pd.DataFrame:
+    def get_average_roa_per_country(self) -> pd.DataFrame:
         """
         Computes the average Return on Assets (ROA) per country.
 
@@ -130,15 +87,16 @@ class Model:
         df = self.repo.merged_data.copy()
 
         # ROA = Net Income / Total Assets
-        df=compute_ratio(df=df, num=self.col_net_income_merged, denom=self.col_total_asset_merged,
-                         result=self.average_roa, x=100)
+        df=compute_ratio(df=df, num=self.col_merged['mean_net_income'], denom=self.col_merged['mean_total_asset'],
+                         result=self.countries_financial_summary_table['average_roa'], x=100)
 
         # Filter extreme outliers using 5th and 95th percentiles
-        q1 = df[self.average_roa].quantile(0.05)
-        q2 = df[self.average_roa].quantile(0.95)
-        df = df[(df[self.average_roa] >= q1) & (df[self.average_roa] <= q2)]
+        q1 = df[self.countries_financial_summary_table['average_roa']].quantile(0.05)
+        q2 = df[self.countries_financial_summary_table['average_roa']].quantile(0.95)
+        df = df[(df[self.countries_financial_summary_table['average_roa']] >= q1) & (
+                df[self.countries_financial_summary_table['average_roa']] <= q2)]
 
-        return df[[self.col_country_merged, self.average_roa]]
+        return df[[self.col_merged['country'], self.countries_financial_summary_table['average_roa']]]
 
 
     def get_firms_financial_summary(self) -> pd.DataFrame:
@@ -152,14 +110,15 @@ class Model:
         df = self.repo.largest_companies.copy()
 
         # Efficiency = Revenue / Assets
-        df = compute_ratio(df=df, num=self.col_revenue, denom=self.col_total_asset,
-                                       result=self.asset_efficiency)
+        df = compute_ratio(df=df, num=self.col['revenue_usd_millions'], denom=self.col['total_asset_usd_millions'],
+                                       result=self.firms_financial_summary_table['asset_efficiency'])
 
         # ROA = Net Income / Assets
-        df = compute_ratio(df=df, num=self.col_net_income, denom=self.col_total_asset,
-                          result=self.return_on_assets, x=100)
+        df = compute_ratio(df=df, num=self.col['net_income_usd_millions'], denom=self.col['total_asset_usd_millions'],
+                          result=self.firms_financial_summary_table['return_on_assets'], x=100)
 
-        df = df[[self.col_company, self.return_on_assets, self.asset_efficiency]].round(3)
+        df = df[[self.col['company'], self.firms_financial_summary_table['asset_efficiency'],
+                 self.firms_financial_summary_table['return_on_assets']]].round(3)
 
         return  df
 
@@ -175,19 +134,19 @@ class Model:
         df2 = self.get_revenue_to_gdp()
         df3 = self.get_real_interest_rate()
         df4 = self.get_average_contribution_to_public_finances()
-        df5 = self.get_average_ROA_per_country()
+        df5 = self.get_average_roa_per_country()
 
         # Merge datasets step-by-step on the country column
-        df = df2.merge(df3, on=self.col_country_merged)
-        df = df.merge(df4, on=self.col_country_merged)
-        df = df.merge(df5, on=self.col_country_merged)
+        df = df2.merge(df3, on=self.col_merged['country'])
+        df = df.merge(df4, on=self.col_merged['country'])
+        df = df.merge(df5, on=self.col_merged['country'])
 
         df = df.round(3)
 
         return df
 
 
-    def export_datasets_toSQLite(self, database_path: str) -> None:
+    def export_datasets_to_sqlite(self, database_path: str) -> None:
         """
         Exports the summarized country and firm financial datasets to a SQLite database.
 

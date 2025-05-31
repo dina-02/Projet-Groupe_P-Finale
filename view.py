@@ -67,7 +67,7 @@ class View:
             df,
             x=self.config['firms_financial_summary_table']['asset_efficiency'],
             y=self.config['firms_financial_summary_table']['return_on_assets'],
-            text=self.config['columns']['largest_companies']['Company'],
+            text=self.config['firms_financial_summary_table']['company'],
             title=self.config['plot_roa_vs_efficiency']['title'],
             labels=self.config['plot_roa_vs_efficiency']['labels']
         )
@@ -89,7 +89,8 @@ class View:
 
         # Get financial summary, sort by ROA, and select top 10
         df=self.model.get_firms_financial_summary()
-        df=df.sort_values(by=self.model.return_on_assets, ascending=False).head(10).round(2)  #arrorndi car illisible
+        df=df.sort_values(by=self.model.firms_financial_summary_table['return_on_assets'],
+                          ascending=False).head(10).round(2)  #arrorndi car illisible
 
         # Create bar chart
         fig = px.bar(
@@ -148,8 +149,15 @@ class View:
 
         # Get country-level data and compute correlation matrix
         df = self.model.get_country_financial_summary()
-        df = df.set_index(self.model.col_country_merged)
+        df = df.set_index(self.model.countries_financial_summary_table['country'])
         corr_df= df.corr()
+
+        rename_dict = {
+            self.model.countries_financial_summary_table[key]: self.config['plot_macro_correlation_heatmap']['labels'][key]
+            for key in self.config['plot_macro_correlation_heatmap']['labels']
+        }
+
+        corr_df = corr_df.rename(index=rename_dict, columns=rename_dict)
 
         # Create heatmap with Plotly
         fig = px.imshow(
@@ -174,4 +182,32 @@ class View:
 
         # Add description below the chart
         st.markdown(self.config['plot_macro_correlation_heatmap']['markdown'])
+
+    def display_country_table(self) -> pd.DataFrame:
+        """
+        :return: the dataset with the renamed columns
+        """
+        df = self.model.get_country_financial_summary()
+
+        rename_dict = {
+            self.model.countries_financial_summary_table[key]: self.config['display_country_table'][key]
+            for key in self.config['display_country_table']
+        }
+
+        return df.rename(columns=rename_dict)
+
+
+    def display_firms_table(self) -> pd.DataFrame:
+        """
+        :return: the dataset with the rename columns
+        """
+
+        df = self.model.get_firms_financial_summary()
+
+        rename_dict = {
+            self.model.firms_financial_summary_table[key]: self.config['display_firms_table'][key]
+            for key in self.config['display_firms_table']
+        }
+
+        return df.rename(columns=rename_dict)
 
